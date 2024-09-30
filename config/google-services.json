@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539840046268",
+    "project_id": "trips-nd-fare",
+    "storage_bucket": "trips-nd-fare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539840046268:android:ec2715232c022d56b79cb9",
+        "android_client_info": {
+          "package_name": "com.webiq.tripsndfare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsdZC02Gh0y4ye7GTLEGcA-XUBl74eLaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
