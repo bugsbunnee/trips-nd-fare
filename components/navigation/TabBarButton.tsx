@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import Animated, { interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { StyleSheet, Pressable, PressableProps, View } from 'react-native';
 
-import { TAB_ICONS } from '@/utils/constants';
-import { colors } from '@/constants';
+import { colors, icons } from '@/constants';
 
 interface Props extends PressableProps {
   routeName: string;
@@ -35,7 +34,7 @@ const TabBarButton: React.FC<Props> = ({ onLongPress, onPress, color, isFocused,
         style={styles.tab}
       >
         <Animated.View style={[iconStyle, styles.content]}>
-          {TAB_ICONS[routeName as keyof typeof TAB_ICONS]({ color })}
+          {icons.TAB_ICONS[routeName as keyof typeof icons.TAB_ICONS]({ color })}
         </Animated.View>
       </Pressable>
   );
