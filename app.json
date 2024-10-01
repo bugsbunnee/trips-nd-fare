@@ -33,7 +33,13 @@
     "plugins": [
       "expo-router",
       "@react-native-google-signin/google-signin",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos so that you can update your profile."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

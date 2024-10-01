@@ -16,7 +16,7 @@ const AccountVerified = () => {
       </Link>
 
       <Animated.View entering={SlideInDown} style={styles.content}>
-        <MaterialCommunityIcons name='check-circle' color={APP_COLORS.SUCCESS} size={icons.SIZES.X_LARGE} />
+        <MaterialCommunityIcons name='check-circle' color={APP_COLORS.SUCCESS} size={icons.SIZES.XX_LARGE} />
         <View style={styles.contentInner}>
           <Text type='subtitle' style={{ textAlign: 'center' }}>Verified!</Text>
           <Text type='default' style={styles.description}>You have successfully verified your account.</Text>

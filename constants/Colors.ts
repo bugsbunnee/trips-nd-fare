@@ -24,6 +24,7 @@ export const APP_COLORS = {
   PRIMARY_LIGHT: '#FFEDE9',
   SHADOW: 'rgba(100, 100, 111, 0.8)',
   SUCCESS: '#0CC25F',
+  SUCCESS_LIGHT: '#E7F9EF',
   WHITE: '#FFF',
 };
 
@@ -46,6 +47,7 @@ const colors = {
     primaryLight: APP_COLORS.PRIMARY_LIGHT,
     shadow: APP_COLORS.SHADOW,
     success: APP_COLORS.SUCCESS,
+    successLight: APP_COLORS.SUCCESS_LIGHT,
     text: APP_COLORS.WHITE,
     tint: tintColorLight,
     tabIconDefault: '#687076',
@@ -69,6 +71,7 @@ const colors = {
     primary: APP_COLORS.PRIMARY,
     shadow: APP_COLORS.SHADOW,
     success: APP_COLORS.SUCCESS,
+    successLight: APP_COLORS.SUCCESS_LIGHT,
     text: APP_COLORS.WHITE,
     tint: tintColorLight,
     tabIconDefault: '#687076',

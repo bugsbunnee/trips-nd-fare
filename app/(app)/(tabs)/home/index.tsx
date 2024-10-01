@@ -1,12 +1,12 @@
 import { FlatList, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-import { Text } from "@/components/ui";
-import { colors, icons } from "@/constants";
+import { router } from "expo-router";
 
 import DashboardTrips from '@/components/lists/DashboardTrip';
-import { router } from "expo-router";
+
+import { Notification, Text } from "@/components/ui";
+import { colors } from "@/constants";
+
 
 const CTAs = [
     { 
@@ -50,14 +50,7 @@ const HomeIndexPage = () => {
           <View style={[styles.header, { height: height * 0.18 }]}>
             <View style={styles.rowBetween}>
                 <Text type='subtitle' style={styles.greeting}>Welcome, Joseph</Text>
-                <TouchableOpacity style={styles.notification}>
-                    <View style={styles.dot} />
-                    <Ionicons 
-                        name='notifications-outline' 
-                        size={icons.SIZES.NORMAL} 
-                        color={colors.light.dark} 
-                    />
-                </TouchableOpacity>
+                <Notification hasUnread />
             </View>
           </View>
 
@@ -142,14 +135,12 @@ const styles = StyleSheet.create({
     ctaImage: { width: 76, height: 47, resizeMode: 'contain' },
     ctaImageContainer: { justifyContent: 'center', alignItems: 'flex-end', marginTop: 17 },
     ctaTitle: { fontSize: 12, lineHeight: 14, letterSpacing: 0.25, textTransform: 'capitalize' },
-    dot: { width: 6, height: 6, borderRadius: 6, backgroundColor: colors.light.primary, position: 'absolute', top: 8, right: 13 },
     greeting: { color: colors.light.white , fontSize: 22, lineHeight: 26, letterSpacing: 0.25},
     header: { 
         padding: 16,         
         zIndex: 10,
         elevation: 20 
     },
-    notification: { width: 40, height: 40, backgroundColor: colors.light.white, borderRadius: 40, justifyContent: 'center', alignItems: 'center' },
     rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     separator: { width: 17 },
     subtitle: { color: colors.light.dark, marginTop: 24, marginBottom: 14, fontSize: 18, lineHeight: 21, maxWidth: 212 },

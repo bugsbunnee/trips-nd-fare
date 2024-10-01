@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { TextInput, StyleSheet, View, TextInputProps, Platform, NativeSyntheticEvent, TextInputFocusEventData, DimensionValue, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TextInput, StyleSheet, View, TextInputProps, Platform, NativeSyntheticEvent, TextInputFocusEventData, DimensionValue, TouchableOpacity, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
  
 import ErrorMessage from '@/components/forms/ErrorMessage';
 import Text from './Text';
 
-import { icons, styles as defaultStyles } from '@/constants';
-import { APP_COLORS } from '@/constants/colors';
+import { colors, icons, styles as defaultStyles } from '@/constants';
 
 export interface AppTextInputProps extends TextInputProps {
 	icon?: string;
@@ -15,6 +14,7 @@ export interface AppTextInputProps extends TextInputProps {
 	label?: string;
 	error?: string;
 	containerStyle?: StyleProp<ViewStyle>;
+	labelStyle?: StyleProp<TextStyle>
 }
 
 const AppTextInput: React.FC<AppTextInputProps> = ({
@@ -23,19 +23,21 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	label,
 	icon,
 	containerStyle,
+	labelStyle,
 	onBlur,
 	onFocus,
 	...otherProps
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
 	const [isVisible, setVisible] = useState(true);
+	const [isEditable, setEditable] = useState(otherProps.editable);
 
 	const getFocusedStyle = () => {
 		return {
 			width,
 			borderColor: isFocused
-				? APP_COLORS.BORDER
-				: error ? APP_COLORS.DANGER_LIGHT : APP_COLORS.INPUT,
+				? colors.light.border
+				: error ? colors.light.dangerLight : colors.light.input,
 		};
 	};
 
@@ -49,13 +51,20 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 		setIsFocused(true);
 	};
 
+	const handleSetEditable = () => {
+		const newEditable = !isEditable;
+		if (newEditable) setIsFocused(true);
+		
+		setEditable(newEditable);
+	};
+
 	useEffect(() => {
 		setVisible(!otherProps.secureTextEntry);
-	}, [otherProps.secureTextEntry])
+	}, [otherProps.secureTextEntry]);
 
 	return (
 		<View style={[styles.containerMargin, { width }]}>
-			{label && <Text type='default-semibold' style={styles.label}>{label}</Text>}
+			{label && <Text type='default-semibold' style={[styles.label, labelStyle]}>{label}</Text>}
 
 			<View style={[styles.container, { width }, getFocusedStyle(), containerStyle]}>
 				{icon && (
@@ -63,15 +72,16 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						<MaterialCommunityIcons 
 							name={icon as any} 
 							size={icons.SIZES.NORMAL} 
-							color={APP_COLORS.GRAY} />
+							color={colors.light.gray} />
 					</View>
 				)}
 
 				<TextInput
 					{...otherProps}
+					editable={isEditable}
 					style={styles.text}
-					placeholderTextColor={APP_COLORS.PLACEHOLDER}
-					selectionColor={APP_COLORS.PRIMARY}
+					placeholderTextColor={colors.light.placeholder}
+					selectionColor={colors.light.primary}
 					onFocus={handleFocus}
 					onBlur={handleBlur}
 					secureTextEntry={!isVisible}
@@ -82,9 +92,21 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						<MaterialCommunityIcons 
 							name={isVisible ? 'eye-outline' : 'eye-off-outline'}
 							size={icons.SIZES.NORMAL} 
-							color={APP_COLORS.BLACK} />
+							color={colors.light.black} />
 					</TouchableOpacity>
 				)}
+				
+				{otherProps.editable 
+					? null 
+					: (
+						<TouchableOpacity style={styles.iconContainer} onPress={() => handleSetEditable()}>
+							<FontAwesome
+								name='pencil-square-o'
+								size={icons.SIZES.NORMAL} 
+								color={colors.light.primary} />
+						</TouchableOpacity>
+					)}
+				
 			</View>
 
 			<ErrorMessage isVisible={!!error} errorMessage={error} />
@@ -96,8 +118,8 @@ const styles = StyleSheet.create({
 	container: {
 		borderWidth: 1,
 		borderRadius: 100,
-		borderColor: APP_COLORS.BORDER,
-		backgroundColor: APP_COLORS.INPUT,
+		borderColor: colors.light.border,
+		backgroundColor: colors.light.input,
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingVertical: 12,
@@ -110,13 +132,13 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	label: {
-		color: APP_COLORS.DARK,
+		color: colors.light.dark,
 		fontSize: 17,
 		lineHeight: 24,
 		marginBottom: 6,
 	},
 	text: {
-		color: APP_COLORS.DARK,
+		color: colors.light.dark,
 		fontSize: 15,
 		flex: 1,
 		fontFamily: defaultStyles.semibold.fontFamily,

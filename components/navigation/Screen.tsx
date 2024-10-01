@@ -20,7 +20,9 @@ const Screen: React.FC<Props> = ({ children, style }) => {
 
     return ( 
         <View style={[styles.container, insetStyles, style]}>
-            {children}
+            <View style={[styles.container, style]}>
+                {children}
+            </View>
         </View>
      );
 }

@@ -8,6 +8,8 @@ const AppLayout = () => {
         return null;
     }
 
+    console.log(auth)
+
     if (!auth.user) {
         return <Redirect href='/(auth)/' />
     }

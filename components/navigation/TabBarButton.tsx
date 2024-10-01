@@ -18,6 +18,7 @@ const TabBarButton: React.FC<Props> = ({ onLongPress, onPress, color, isFocused,
     colorList: [colors.light.primary, colors.light.primaryLight],
   });
 
+  console.log(routeName)
   return (
       <Pressable
         onPress={onPress}

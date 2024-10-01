@@ -76,7 +76,7 @@ const SignUpPage = () => {
             <FormError error={auth.error} />
 
             <FormField 
-                autoCapitalize="none" 
+                autoCapitalize="words"
                 icon='account-outline' 
                 name="name" 
                 label='Name' 
