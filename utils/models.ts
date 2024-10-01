@@ -12,3 +12,20 @@ export interface User {
     name: string;
     email: string;
 }
+
+export interface UserRide {
+    id: string;
+    carSeats: number;
+    date: string;
+    driverName: string;
+    status: 'paid' | 'pending';
+    toAddress: string;
+    fromAddress: string;
+    price: number;
+    type: 'jetty' | 'bus' | 'bike' | 'train' | 'ferry'
+}
+
+export interface PickerItemModel {
+    label: string; 
+    value: string;
+}

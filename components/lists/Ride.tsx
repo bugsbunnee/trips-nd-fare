@@ -3,20 +3,19 @@ import React from 'react';
 import { Octicons } from '@expo/vector-icons';
 import { Image, StyleSheet, View } from 'react-native';
 
-import { colors, icons, styles as defaultStyles } from '@/constants';
+import { colors, icons } from '@/constants';
 import { Text } from '../ui';
 import { formatDate } from '@/utils/lib';
+import { UserRide } from '@/utils/models';
 
-interface UserRide {
-    carSeats: number;
-    date: string;
-    driverName: string;
-    status: 'paid' | 'pending';
-    toAddress: string;
-    fromAddress: string;
+interface Props {
+    ride: UserRide,
+    backgroundColor?: string;
 }
 
-const Ride: React.FC<UserRide> = ({ carSeats, date, driverName, status, toAddress, fromAddress }) => {
+const Ride: React.FC<Props> = ({ ride, backgroundColor = colors.light.primaryLight }) => {
+    const { carSeats, date, driverName, status, toAddress, fromAddress } = ride;
+
     return ( 
         <View style={[styles.container]}>
             <View style={styles.location}>
@@ -45,7 +44,7 @@ const Ride: React.FC<UserRide> = ({ carSeats, date, driverName, status, toAddres
                 </View>
             </View>
 
-            <View style={styles.metadata}>
+            <View style={[styles.metadata, { backgroundColor }]}>
                 <View style={[styles.metadataRow, { paddingTop: 0 }]}>
                     <Text type='default' style={styles.metadataLabel}>Date & Time</Text>
                     <Text type='default-semibold' style={styles.metadataValue}>{formatDate(date)}</Text>

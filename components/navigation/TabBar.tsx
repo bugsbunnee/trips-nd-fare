@@ -5,58 +5,62 @@ import { View, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 import { colors } from '@/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
+  const { bottom } = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
-      {state.routes.map((route, index) => {
-        const isFocused = state.index === index;
+    <View style={[styles.container, { bottom: 0, paddingBottom: bottom }]}>
+      <View style={styles.content}>
+        {state.routes.map((route, index) => {
+          const isFocused = state.index === index;
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, route.params);
-          }
-        };
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
 
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
 
-        return (
-          <TabBarButton
-            key={route.key}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            isFocused={isFocused}
-            routeName={route.name}
-            color={isFocused ? colors.light.primary : colors.light.primaryLight}
-          />
-        );
-      })}
+          return (
+            <TabBarButton
+              key={route.key}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              isFocused={isFocused}
+              routeName={route.name}
+              color={isFocused ? colors.light.primary : colors.light.primaryLight}
+            />
+          );
+        })}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    container: { backgroundColor: colors.light.white, borderTopColor: colors.light.borderLight, borderTopWidth: 1, paddingTop: 21, position: 'absolute', width: '100%', justifyContent: 'center', alignItems: 'center' },
+    content: {
         flex: 1,
-        position: 'absolute',
-        bottom: 30,
+        height: 65,
+        width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: colors.light.primary,
-        marginHorizontal: 16,
-        padding: 20,
         borderRadius: 60
     },
 });

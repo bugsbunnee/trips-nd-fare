@@ -29,13 +29,10 @@ const authSlice = createSlice({
             state.isAuthenticating = true;
         })
         .addCase(loginUser.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.user = action.payload as User;
             state.isAuthenticating = false;
         })
         .addCase(loginUser.rejected, (state, action) => {
-            console.log('ex', action)
-
             if (action.error && action.error.message) state.error = action.error.message;
             state.isAuthenticating = false;
         });

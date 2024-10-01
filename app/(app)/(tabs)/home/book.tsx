@@ -9,18 +9,18 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { colors, icons } from "@/constants";
+import { app, colors, icons } from "@/constants";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/auth/slice";
 
-const BookRide = () => {
-    const dispatch = useAppDispatch();
+const BookRidePage = () => {
     const auth = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
     const insets = useSafeAreaInsets();
 
     const handleLogout = useCallback(() => {
-      dispatch(logout());
-      router.push('/(auth)/')
+        dispatch(logout());
+        router.push('/(auth)/');
     }, [dispatch]);
 
     return ( 
@@ -59,17 +59,14 @@ const BookRide = () => {
               </View>
             </View>
 
-            <View style={{ marginBottom: 130}}>
+            <View style={styles.ridesSection}>
               <Text type='subtitle' style={styles.subtitle}>Recent Rides</Text>
 
-              <Ride 
-                  driverName="Albert Akang"
-                  carSeats={4}
-                  date="2023-10-20 04:55"
-                  status='paid'
-                  fromAddress="Ogombo road, Ajah"
-                  toAddress="Lekki scheme 2. Lagos"
-              />
+              {app.RIDES.map((ride) => (
+                <View key={ride.id} style={styles.separator}>
+                    <Ride ride={ride} />
+                </View>
+              ))}
             </View>
           </KeyboardAwareScrollView>
       </View>
@@ -83,7 +80,9 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16 },
   input: { backgroundColor: colors.light.white, borderColor: colors.light.grayLight, marginTop: 16 },
   image: { borderRadius: 16, height: 380, width: '100%', resizeMode: 'cover' },
-  logout: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.light.white, borderRadius: 40 }
+  logout: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.light.white, borderRadius: 40 },
+  ridesSection: { marginBottom: 130},
+  separator: { marginBottom: 10 }
 });
  
-export default BookRide;
+export default BookRidePage;

@@ -7,9 +7,8 @@ export const SIZES = {
 };
 
 export const TAB_ICONS = {
-    index: (props: { color: string; }) => <Foundation name='home' size={SIZES.LARGE} color={props.color} />,
-    book: (props: { color: string; }) => <Octicons name='log' size={SIZES.LARGE} color={props.color} />,
-    account: (props: { color: string; }) => <Octicons name='person' size={SIZES.LARGE} color={props.color} />,
+    home: (props: { color: string; }) => <Foundation name='home' size={SIZES.LARGE} color={props.color} />,
+    history: (props: { color: string; }) => <Octicons name='log' size={SIZES.LARGE} color={props.color} />,
 };
 
 export default { SIZES, TAB_ICONS }

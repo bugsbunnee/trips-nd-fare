@@ -21,7 +21,7 @@ const AccountVerified = () => {
           <Text type='subtitle' style={{ textAlign: 'center' }}>Verified!</Text>
           <Text type='default' style={styles.description}>You have successfully verified your account.</Text>
         </View>
-        <Button label='Browse Home' onPress={() => router.push('/(app)/(tabs)/')} />
+        <Button label='Browse Home' onPress={() => router.push('/home')} />
       </Animated.View>
     </Animated.View>
   );
