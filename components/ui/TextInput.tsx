@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { TextInput, StyleSheet, View, TextInputProps, Platform, NativeSyntheticEvent, TextInputFocusEventData, DimensionValue, TouchableOpacity, StyleProp, ViewStyle, TextStyle } from 'react-native';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { TextInput, StyleSheet, View, TextInputProps, NativeSyntheticEvent, TextInputFocusEventData, DimensionValue, TouchableOpacity, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { FontAwesome, Octicons, SimpleLineIcons } from '@expo/vector-icons';
  
 import ErrorMessage from '@/components/forms/ErrorMessage';
 import Text from './Text';
@@ -26,11 +26,12 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	labelStyle,
 	onBlur,
 	onFocus,
+	editable = true,
 	...otherProps
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
 	const [isVisible, setVisible] = useState(true);
-	const [isEditable, setEditable] = useState(otherProps.editable);
+	const [isEditable, setEditable] = useState(editable);
 
 	const getFocusedStyle = () => {
 		return {
@@ -54,7 +55,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	const handleSetEditable = () => {
 		const newEditable = !isEditable;
 		if (newEditable) setIsFocused(true);
-		
+
 		setEditable(newEditable);
 	};
 
@@ -69,7 +70,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 			<View style={[styles.container, { width }, getFocusedStyle(), containerStyle]}>
 				{icon && (
 					<View style={styles.iconContainer}>
-						<MaterialCommunityIcons 
+						<SimpleLineIcons 
 							name={icon as any} 
 							size={icons.SIZES.NORMAL} 
 							color={colors.light.gray} />
@@ -89,14 +90,14 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 
 				{otherProps.secureTextEntry && (
 					<TouchableOpacity style={styles.iconContainer} onPress={() => setVisible((prev) => !prev)}>
-						<MaterialCommunityIcons 
-							name={isVisible ? 'eye-outline' : 'eye-off-outline'}
+						<Octicons 
+							name={isVisible ? 'eye' : 'eye-closed'}
 							size={icons.SIZES.NORMAL} 
 							color={colors.light.black} />
 					</TouchableOpacity>
 				)}
 				
-				{otherProps.editable 
+				{editable 
 					? null 
 					: (
 						<TouchableOpacity style={styles.iconContainer} onPress={() => handleSetEditable()}>
@@ -140,9 +141,10 @@ const styles = StyleSheet.create({
 	text: {
 		color: colors.light.dark,
 		fontSize: 15,
+		letterSpacing: 0.25,
 		flex: 1,
-		fontFamily: defaultStyles.semibold.fontFamily,
-		fontWeight: defaultStyles.semibold.fontWeight,
+		fontFamily: defaultStyles.medium.fontFamily,
+		fontWeight: defaultStyles.medium.fontWeight,
 	},
 });
 

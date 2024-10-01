@@ -12,7 +12,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     error: '',
-    isAuthenticating: false,
+    isAuthenticating: true,
     user: null,
 }
 
@@ -20,6 +20,9 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        setAuthenticating: (state, action: PayloadAction<boolean>) => {
+            state.isAuthenticating = action.payload
+        },
         setUser: (state, action: PayloadAction<User | null>) => {
             state.user = action.payload;
         }
@@ -44,5 +47,5 @@ export const logout = () => async (dispatch: AppDispatch) => {
     await storage.removeUser();
 };
 
-export const { setUser } = authSlice.actions;
+export const { setAuthenticating, setUser } = authSlice.actions;
 export default authSlice.reducer;

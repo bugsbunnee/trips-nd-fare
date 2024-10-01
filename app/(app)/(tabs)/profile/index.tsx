@@ -49,7 +49,7 @@ const EditProfilePage = () => {
       </View>
 
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <Form initialValues={{ firstName: '', lastName: '', email: '', phoneNumber: '', images: [] }} onSubmit={handleSubmit} validationSchema={profileSchema}>
+        <Form initialValues={{ firstName: auth.user!.name.split(' ')[0], lastName: auth.user!.name.split(' ')[1], email: auth.user!.email, phoneNumber: '', images: [] }} onSubmit={handleSubmit} validationSchema={profileSchema}>
             <ActivityIndicator visible={auth.isAuthenticating} />
             
             <FormError error={auth.error} />
@@ -61,7 +61,6 @@ const EditProfilePage = () => {
             <View style={styles.content}>
               <FormField 
                   autoCapitalize="words"
-                  icon='account-outline' 
                   name="firstName" 
                   editable={false}
                   labelStyle={styles.label}
@@ -72,7 +71,6 @@ const EditProfilePage = () => {
               
               <FormField 
                   autoCapitalize="words"
-                  icon='account-outline' 
                   name="lastName" 
                   editable={false}
                   labelStyle={styles.label}

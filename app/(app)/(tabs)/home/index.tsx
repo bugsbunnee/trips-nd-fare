@@ -59,7 +59,7 @@ const HomeIndexPage = () => {
                 <View style={styles.cardDetails}>
                     <Text type='default' style={styles.cardTitle}>Are you ready for a <Text type='default-semibold' style={styles.cardTitleBold}>smooth ride?</Text></Text>
                     <Text type='default' style={styles.cardDescription}>Sit back, relax and enjoy rides from your comfort.</Text>
-                    <TouchableOpacity style={styles.cardButton}>
+                    <TouchableOpacity style={styles.cardButton} onPress={() => router.push('/home/book')}>
                         <Text type='default-semibold' style={styles.cardButtonText}>Ride with Trips & Fair</Text>
                     </TouchableOpacity>
                 </View>

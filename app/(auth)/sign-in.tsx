@@ -48,7 +48,7 @@ const SignInPage = () => {
             <Form initialValues={{ email: '', password: '' }} onSubmit={handleSubmit} validationSchema={authSchema}>
                 <FormField 
                     autoCapitalize="none" 
-                    icon='email-outline' 
+                    icon='envelope' 
                     name="email" 
                     label='Email' 
                     placeholder="Enter email address"
@@ -56,7 +56,7 @@ const SignInPage = () => {
                 />
 
                 <FormField 
-                    icon='lock-outline' 
+                    icon='lock' 
                     name="password" 
                     label='Password' 
                     placeholder="Enter password"
