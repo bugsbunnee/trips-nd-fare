@@ -41,7 +41,7 @@ const BookRidePage = () => {
             </View>
 
             <TextInput 
-              icon='magnify' 
+              icon='magnifier' 
               width='100%' 
               placeholder='Where do you want to go?'
               containerStyle={styles.input} 
