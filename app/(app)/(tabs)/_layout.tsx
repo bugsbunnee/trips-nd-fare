@@ -1,7 +1,7 @@
 import React from 'react';
 import TabBar from '@/components/navigation/TabBar';
 
-import { Tabs } from 'expo-router';
+import { Tabs, useSegments } from 'expo-router';
 import { colors } from '@/constants';
 import { useColorScheme } from '@/hooks/useColorScheme';
 

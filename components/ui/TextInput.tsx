@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { TextInput, StyleSheet, View, TextInputProps, NativeSyntheticEvent, TextInputFocusEventData, DimensionValue, TouchableOpacity, StyleProp, ViewStyle, TextStyle } from 'react-native';
-import { FontAwesome, Octicons, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, Octicons, SimpleLineIcons } from '@expo/vector-icons';
  
 import ErrorMessage from '@/components/forms/ErrorMessage';
 import Text from './Text';
@@ -9,7 +9,8 @@ import Text from './Text';
 import { colors, icons, styles as defaultStyles } from '@/constants';
 
 export interface AppTextInputProps extends TextInputProps {
-	icon?: string;
+	primaryIcon?: string;
+	trailingButtonParams?: { icon: string; onPress: () => void; };
 	width?: DimensionValue;
 	label?: string;
 	error?: string;
@@ -21,7 +22,8 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	width = '100%',
 	error,
 	label,
-	icon,
+	primaryIcon,
+	trailingButtonParams,
 	containerStyle,
 	labelStyle,
 	onBlur,
@@ -68,10 +70,10 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 			{label && <Text type='default-semibold' style={[styles.label, labelStyle]}>{label}</Text>}
 
 			<View style={[styles.container, { width }, getFocusedStyle(), containerStyle]}>
-				{icon && (
+				{primaryIcon && (
 					<View style={styles.iconContainer}>
 						<SimpleLineIcons 
-							name={icon as any} 
+							name={primaryIcon as any} 
 							size={icons.SIZES.NORMAL} 
 							color={colors.light.gray} />
 					</View>
@@ -94,6 +96,15 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 							name={isVisible ? 'eye' : 'eye-closed'}
 							size={icons.SIZES.NORMAL} 
 							color={colors.light.black} />
+					</TouchableOpacity>
+				)}
+				
+				{trailingButtonParams && (
+					<TouchableOpacity style={styles.iconContainer} onPress={trailingButtonParams.onPress}>
+						<Ionicons
+							name={trailingButtonParams.icon as any}
+							size={icons.SIZES.NORMAL} 
+							color={colors.light.dark} />
 					</TouchableOpacity>
 				)}
 				

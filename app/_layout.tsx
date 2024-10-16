@@ -7,6 +7,7 @@ import AppProvider from '@/components/authentication/Provider';
 import useInitializeApp from '@/hooks/useInitializeApp';
 
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const AppLoading = () => {
   const isInitialized = useInitializeApp();
@@ -15,14 +16,18 @@ const AppLoading = () => {
     return null;
   }
 
-  return <Slot />;
+  return (
+    <GestureHandlerRootView>
+      <Slot />
+    </GestureHandlerRootView>
+  );
 };
 
 const RootLayout = () => {
   return (
-    <AppProvider>
-      <AppLoading />
-    </AppProvider>
+      <AppProvider>
+        <AppLoading />
+      </AppProvider>
   );
 };
 

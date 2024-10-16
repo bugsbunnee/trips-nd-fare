@@ -5,6 +5,7 @@ const HomeLayout = () => {
         <Stack screenOptions={{ animation: 'flip', headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="book" />
+            <Stack.Screen name="ride" />
         </Stack>
      );
 };

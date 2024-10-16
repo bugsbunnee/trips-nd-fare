@@ -41,10 +41,11 @@ const BookRidePage = () => {
             </View>
 
             <TextInput 
-              icon='magnifier' 
+              primaryIcon='magnifier' 
               width='100%' 
               placeholder='Where do you want to go?'
               containerStyle={styles.input} 
+              onPress={() => router.push('/home/ride')}
             />
 
             <View>

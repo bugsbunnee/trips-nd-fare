@@ -3,15 +3,20 @@ import TabBarButton from './TabBarButton';
 
 import { View, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSegments } from 'expo-router';
 
 import { colors } from '@/constants';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
+const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation, ...others }) => {
   const { bottom } = useSafeAreaInsets();
+  const segments = useSegments();
+
+  const pagesToHide = ['ride'];
+  const screenName = segments.at(-1) as string;
 
   return (
-    <View style={[styles.container, { bottom: 0, paddingBottom: bottom }]}>
+    <View style={[styles.container, { display: pagesToHide.includes(screenName) ? 'none' : 'flex', bottom: 0, paddingBottom: bottom }]}>
       <View style={styles.content}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;

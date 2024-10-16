@@ -77,7 +77,7 @@ const SignUpPage = () => {
 
             <FormField 
                 autoCapitalize="words"
-                icon='user' 
+                primaryIcon='user' 
                 name="name" 
                 label='Name' 
                 placeholder="Enter name"
@@ -86,7 +86,7 @@ const SignUpPage = () => {
 
             <FormField 
                 autoCapitalize="none" 
-                icon='envelope' 
+                primaryIcon='envelope' 
                 name="email" 
                 label='Email' 
                 placeholder="Enter email address"
@@ -94,7 +94,7 @@ const SignUpPage = () => {
             />
 
             <FormField 
-                icon='lock' 
+                primaryIcon='lock' 
                 name="password" 
                 label='Password' 
                 placeholder="Enter password"
