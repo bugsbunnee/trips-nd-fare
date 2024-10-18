@@ -22,7 +22,7 @@ export interface UserRide {
     toAddress: string;
     fromAddress: string;
     price: number;
-    type: 'jetty' | 'bus' | 'bike' | 'train' | 'ferry'
+    type: 'jetty' | 'bus' | 'bike' | 'train' | 'ferry' | 'car'
 }
 
 export interface PickerItemModel {

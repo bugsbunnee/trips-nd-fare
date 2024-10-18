@@ -12,7 +12,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation, ...others }) =
   const { bottom } = useSafeAreaInsets();
   const segments = useSegments();
 
-  const pagesToHide = ['ride'];
+  const pagesToHide = ['ride', 'choose-rider'];
   const screenName = segments.at(-1) as string;
 
   return (

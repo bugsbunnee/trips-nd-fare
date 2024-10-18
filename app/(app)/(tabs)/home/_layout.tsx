@@ -6,6 +6,7 @@ const HomeLayout = () => {
             <Stack.Screen name="index" />
             <Stack.Screen name="book" />
             <Stack.Screen name="ride" />
+            <Stack.Screen name="choose-rider" />
         </Stack>
      );
 };

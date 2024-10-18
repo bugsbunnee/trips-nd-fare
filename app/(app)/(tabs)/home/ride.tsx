@@ -4,14 +4,18 @@ import { View,  StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomSheetModal, BottomSheetScrollView, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { router } from 'expo-router';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import * as yup from 'yup';
 
 import { colors, icons, styles as defaultStyles } from '@/constants';
 import { Text } from '@/components/ui';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Form, FormField, SubmitButton } from '@/components/forms';
-import { router } from 'expo-router';
+
+import { useAppDispatch } from '@/store/hooks';
+import { setLocationDetails } from '@/store/ride/slice';
+
 import useLocation from '@/hooks/useLocation';
 
 interface FormValues {
@@ -28,11 +32,21 @@ const RidePage = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['40%', '60%'], []);
 
-  const insets = useSafeAreaInsets();
   const location = useLocation();
+  const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (location: FormValues) => {
-    console.log(location);
+    dispatch(setLocationDetails(location));
+    router.push('/home/choose-rider');
+  };
+
+  const handleInputFocus = () => {
+    bottomSheetModalRef.current?.snapToIndex(2);
+  };
+
+  const handleInputBlur = () => {
+    bottomSheetModalRef.current?.snapToIndex(1);
   };
 
   useEffect(() => {
@@ -54,7 +68,7 @@ const RidePage = () => {
             <Ionicons name='locate' size={icons.SIZES.NORMAL} color={colors.light.white} />
         </TouchableOpacity>
 
-        <BottomSheetModal style={styles.curved} animateOnMount ref={bottomSheetModalRef} index={1} snapPoints={snapPoints}>
+        <BottomSheetModal style={styles.curved} animateOnMount enablePanDownToClose={false} ref={bottomSheetModalRef} index={1} snapPoints={snapPoints}>
             <KeyboardAwareScrollView>
                 <BottomSheetScrollView style={styles.contentContainer}>
                     <Form initialValues={{ from: '', to: '' }} onSubmit={handleSubmit} validationSchema={locationSchema}>
@@ -64,6 +78,8 @@ const RidePage = () => {
                             label='From'
                             name='from'
                             width='100%' 
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                             trailingButtonParams={{ icon: 'locate', onPress: () => {} }}
                             placeholder='From location'
                             containerStyle={styles.input} 
@@ -74,6 +90,8 @@ const RidePage = () => {
                             label='To'
                             name='to'
                             width='100%' 
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                             trailingButtonParams={{ icon: 'map-outline', onPress: () => {} }}
                             placeholder='To location'
                             containerStyle={styles.input} 
