@@ -50,7 +50,14 @@ const HomeIndexPage = () => {
           <View style={[styles.header, { height: height * 0.18 }]}>
             <View style={styles.rowBetween}>
                 <Text type='subtitle' style={styles.greeting}>Welcome, Joseph</Text>
-                <Notification hasUnread />
+
+                <View style={styles.headerRight}>
+                    <View style={styles.balance}>
+                        <Text type='default-semibold' style={styles.balanceText}>{process.env.EXPO_PUBLIC_CURRENCY}60000</Text>
+                    </View>
+
+                    <Notification hasUnread />
+                </View>
             </View>
           </View>
 
@@ -60,7 +67,7 @@ const HomeIndexPage = () => {
                     <Text type='default' style={styles.cardTitle}>Are you ready for a <Text type='default-semibold' style={styles.cardTitleBold}>smooth ride?</Text></Text>
                     <Text type='default' style={styles.cardDescription}>Sit back, relax and enjoy rides from your comfort.</Text>
                     <TouchableOpacity style={styles.cardButton} onPress={() => router.push('/home/book')}>
-                        <Text type='default-semibold' style={styles.cardButtonText}>Ride with Trips & Fair</Text>
+                        <Text type='default-semibold' style={styles.cardButtonText}>Ride with ClickRide</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.cardImageContainer}>
@@ -106,6 +113,8 @@ const HomeIndexPage = () => {
 };
 
 const styles = StyleSheet.create({
+    balance: { backgroundColor: colors.light.white, paddingVertical: 5, paddingHorizontal: 7, borderRadius: 11 },
+    balanceText: { fontSize: 15, lineHeight: 18, color: colors.light.black },
     body: { flex: 1, zIndex: 1, elevation: 0, backgroundColor: colors.light.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 16 },
     card: { 
         width: '100%', 
@@ -141,6 +150,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
         elevation: 20 
     },
+    headerRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     separator: { width: 17 },
     subtitle: { color: colors.light.dark, marginTop: 24, marginBottom: 14, fontSize: 18, lineHeight: 21, maxWidth: 212 },

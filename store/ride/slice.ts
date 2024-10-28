@@ -1,15 +1,18 @@
+import { Rider } from "@/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface RideState {
     from: string;
     to: string;
-    rider: number;
+    rider: Rider | null;
+    rideID: string;
 }
 
 const initialState: RideState = {
     from: '',
     to: '',
-    rider: 0
+    rider: null,
+    rideID: ''
 }
 
 const authSlice = createSlice({
@@ -20,8 +23,14 @@ const authSlice = createSlice({
             state.from = action.payload.from;
             state.to = action.payload.to;
         },
+        setRider: (state, action: PayloadAction<Rider>) => {
+            state.rider = action.payload;
+        },
+        setRideID: (state, action: PayloadAction<string>) => {
+            state.rideID = action.payload;
+        }
     },
 });
 
-export const { setLocationDetails } = authSlice.actions;
+export const { setLocationDetails, setRider, setRideID } = authSlice.actions;
 export default authSlice.reducer;

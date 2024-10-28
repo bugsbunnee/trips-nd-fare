@@ -6,7 +6,7 @@ import rideReducer from '@/store/ride/slice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    rider: rideReducer,
+    ride: rideReducer,
   }
 });
 

@@ -16,8 +16,6 @@ import { Form, FormField, SubmitButton } from '@/components/forms';
 import { useAppDispatch } from '@/store/hooks';
 import { setLocationDetails } from '@/store/ride/slice';
 
-import useLocation from '@/hooks/useLocation';
-
 interface FormValues {
     from: string;
     to: string;
@@ -32,7 +30,6 @@ const RidePage = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['40%', '60%'], []);
 
-  const location = useLocation();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
 
@@ -121,7 +118,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: 'grey',
+        backgroundColor: colors.light.modalOpaque,
     },
     contentContainer: {
         flex: 1,

@@ -7,27 +7,28 @@ import { BottomSheetModal, BottomSheetModalProvider, BottomSheetFlatList } from 
 import { router } from 'expo-router';
 
 import Rider from '@/components/lists/Rider';
-import useLocation from '@/hooks/useLocation';
 
 import { colors, icons, styles as defaultStyles } from '@/constants';
 import { Button, Text } from '@/components/ui';
-import { UserRide } from '@/utils/models';
-
+import { Rider as RiderModel, UserRide } from '@/utils/models';
+import { useAppDispatch } from '@/store/hooks';
+import { setRider } from '@/store/ride/slice';
 
 const ChooseRiderPage = () => {
-    const [selectedRider, setSelectedRider] = useState(0);
+    const [selectedRider, setSelectedRider] = useState<RiderModel | null>(null);
 
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => ['60%'], []);
 
     const insets = useSafeAreaInsets();
-    const location = useLocation();
+    const dispatch = useAppDispatch();
 
-    const handleSubmitRider = (location: FormValues) => {
-        router.push({
-            pathname: '/home/[rider]',
-            params: { rider: selectedRider }
-        })
+    const handleSubmitRider = () => {
+        if (!selectedRider) return;
+
+        dispatch(setRider(selectedRider));
+        
+        router.push('/home/ride-information')
     };
 
     useEffect(() => {
@@ -56,8 +57,8 @@ const ChooseRiderPage = () => {
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 renderItem={({ item }) => (
                     <Rider 
-                        isSelected={item.id === selectedRider}
-                        onSelect={() => setSelectedRider(item.id)}
+                        isSelected={item.id === selectedRider?.id}
+                        onSelect={() => setSelectedRider(item)}
                         uri={item.uri}
                         name={item.name}
                         rating={item.rating}
@@ -70,7 +71,7 @@ const ChooseRiderPage = () => {
             />
 
             <View style={{ padding: 16, paddingBottom: insets.bottom }}>
-                <Button label='Select Ride' disabled={!selectedRider} onPress={() => {}} />
+                <Button label='Select Ride' disabled={!selectedRider} onPress={handleSubmitRider} />
             </View>
         </BottomSheetModal>
       </View>
@@ -78,7 +79,7 @@ const ChooseRiderPage = () => {
   );
 };
 
-const RIDERS = [
+const RIDERS: RiderModel[] = [
     {
         id: 1,
         uri: 'https://picsum.photos/200/300' ,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: 'grey',
+        backgroundColor: colors.light.modalOpaque,
     },
     contentContainer: {
         flex: 1,

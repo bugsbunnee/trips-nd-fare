@@ -25,6 +25,17 @@ export interface UserRide {
     type: 'jetty' | 'bus' | 'bike' | 'train' | 'ferry' | 'car'
 }
 
+export interface Rider {
+    id: string | number;
+    uri: string;
+    name: string;
+    rating: number;
+    price: number;
+    timeToLocation: string;
+    numberOfSeats: number;
+    type: UserRide['type']
+}
+
 export interface PickerItemModel {
     label: string; 
     value: string;

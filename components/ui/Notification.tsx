@@ -23,8 +23,8 @@ const Notification: React.FC<Props> = ({ hasUnread }) => {
 }
 
 const styles = StyleSheet.create({
-    dot: { width: 6, height: 6, borderRadius: 6, backgroundColor: colors.light.primary, position: 'absolute', top: 8, right: 13 },
-    notification: { width: 40, height: 40, backgroundColor: colors.light.white, borderRadius: 40, justifyContent: 'center', alignItems: 'center' },
+    dot: { width: 6, height: 6, borderRadius: 6, backgroundColor: colors.light.primary, position: 'absolute', top: 2, left: 14, elevation: 10, zIndex: 10 },
+    notification: { width: 28, height: 28, backgroundColor: colors.light.white, borderRadius: 40, justifyContent: 'center', alignItems: 'center' },
 })
  
 export default Notification;
