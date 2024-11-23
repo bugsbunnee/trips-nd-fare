@@ -1,4 +1,6 @@
+export { default as Image } from './Image';
 export { default as Button } from './Button';
+export { default as DatePicker } from './DatePicker';
 export { default as GoogleSignInButton } from './GoogleSignInButton';
 export { default as OrDivider } from './OrDivider';
 export { default as Text } from './Text';

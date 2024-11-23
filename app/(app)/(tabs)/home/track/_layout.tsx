@@ -1,6 +1,7 @@
+import React from "react";
 import { Stack } from "expo-router";
 
-const TrackLayout = () => {
+const TrackLayout: React.FC = () => {
     return ( 
         <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" options={{ presentation: "modal" }} />

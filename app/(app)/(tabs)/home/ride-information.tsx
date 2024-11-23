@@ -10,6 +10,7 @@ import { colors, icons, styles as defaultStyles } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Button, Text } from '@/components/ui';
 import { setRideID } from '@/store/ride/slice';
+import { formatAmount } from '@/utils/lib';
 
 const RideInformationPage = () => {
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -67,7 +68,7 @@ const RideInformationPage = () => {
                 <View style={styles.metadata}>
                     <View style={[styles.metadataRow, { paddingTop: 0 }]}>
                         <Text type='default' style={styles.metadataLabel}>Ride Price</Text>
-                        <Text type='default-semibold' style={[styles.metadataLabel, { color: colors.light.primary }]}>{process.env.EXPO_PUBLIC_CURRENCY} 6000</Text>
+                        <Text type='default-semibold' style={[styles.metadataLabel, { color: colors.light.primary }]}>{formatAmount(6000)}</Text>
                     </View>
                     <View style={styles.metadataRow}>
                         <Text type='default' style={styles.metadataLabel}>Pickup Time</Text>
@@ -158,8 +159,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: 28,
         color: colors.light.dark,
-        fontFamily: defaultStyles.semibold.fontFamily,
-        fontWeight: defaultStyles.semibold.fontWeight,
+        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
     },
 
 });

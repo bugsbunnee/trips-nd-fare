@@ -1,41 +1,65 @@
 import { StyleSheet } from "react-native";
 import { APP_COLORS } from "./colors";
 
-const fonts = StyleSheet.create({
-    regular: {
+const jakartaFonts = StyleSheet.create({
+    jakartaRegular: {
         fontFamily: 'PlusJakartaSansRegular',
         fontWeight: '400',
     },
-    medium: {
+    jakartaMedium: {
         fontFamily: 'PlusJakartaSansMedium',
         fontWeight: '500',
     },
-    semibold: {
+    jakartaSemibold: {
         fontFamily: 'PlusJakartaSansSemiBold',
         fontWeight: '600',
     },
-    bold: {
+    jakartaBold: {
         fontFamily: 'PlusJakartaSansBold',
         fontWeight: '700',
     },
-    extra: {
+    jakartaExtra: {
         fontFamily: 'PlusJakartaSansExtraBold',
         fontWeight: '800',
     },
 });
 
+const urbanistFonts = StyleSheet.create({
+    urbanistRegular: {
+        fontFamily: 'UrbanistRegular',
+        fontWeight: '400',
+    },
+    urbanistMedium: {
+        fontFamily: 'UrbanistMedium',
+        fontWeight: '500',
+    },
+    urbanistSemibold: {
+        fontFamily: 'UrbanistSemiBold',
+        fontWeight: '600',
+    },
+    urbanistBold: {
+        fontFamily: 'UrbanistBold',
+        fontWeight: '700',
+    },
+    urbanistExtra: {
+        fontFamily: 'UrbanistExtraBold',
+        fontWeight: '800',
+    },
+});
+
 const styles = StyleSheet.create({
-    ...fonts,
+    ...jakartaFonts,
+    ...urbanistFonts,
     title: {
-        fontFamily: fonts.semibold.fontFamily,
-        fontWeight: fonts.semibold.fontWeight,
+        fontFamily: jakartaFonts.jakartaSemibold.fontFamily,
+        fontWeight: jakartaFonts.jakartaSemibold.fontWeight,
         lineHeight: 33,
         fontSize: 28,
         letterSpacing: 0.1
     },
     body: {
-        fontFamily: fonts.medium.fontFamily,
-        fontWeight: fonts.medium.fontWeight,
+        fontFamily: jakartaFonts.jakartaMedium.fontFamily,
+        fontWeight: jakartaFonts.jakartaMedium.fontWeight,
         color: APP_COLORS.GRAY,
         textAlign: 'center',
         lineHeight: 24,

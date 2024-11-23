@@ -1,10 +1,11 @@
+import React from "react";
 import { Stack } from "expo-router";
 
 export const unstable_settings = {
     initialRouteName: '(tabs)',
 };
 
-const AppLayout = () => {
+const AppLayout: React.FC = () => {
     return ( 
         <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

@@ -1,171 +1,219 @@
-import { StyleSheet, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import * as yup from 'yup';
-import 'yup-phone';
+import React from 'react';
+import _ from 'lodash';
+
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 
 import { useAppSelector } from '@/store/hooks';
 import { colors, styles as defaultStyles, icons } from '@/constants';
+import { Image, Text } from '@/components/ui';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
 import Screen from '@/components/navigation/Screen';
-
-import { Form, FormError, FormField, FormImagePicker, SubmitButton } from '@/components/forms';
-import { Notification, Text } from '@/components/ui';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
-interface FormValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-    images: string[];
-    phoneNumber: string;
-}
+const ROUTES = [
+  {
+    label: 'Profile',
+    icon: 'account-circle' as const
+  },
+  {
+    label: 'Messages',
+    icon: 'chat-processing' as const
+  },
+  {
+    label: 'Buy Bus Ticket',
+    icon: 'ticket' as const
+  },
+  {
+    label: 'Local Trips',
+    icon: 'rickshaw-electric' as const
+  },
+  {
+    label: 'Ferry Tickets',
+    icon: 'ferry' as const
+  },
+  {
+    label: 'Settings',
+    icon: 'cog' as const
+  },
+];
 
-const profileSchema = yup.object<FormValues>().shape({
-  firstName: yup.string().min(5, (data) => `First name must be at least ${data.min} characters`).required().label('Name'),
-  lastName: yup.string().min(5, (data) => `Last name must be at least ${data.min} characters`).required().label('Name'),
-	email: yup.string().email().required().label('Email Address'),
-  images: yup.array().min(1, "Please select at least one image."),
-  phoneNumber: yup.string().required()
-});
-
-const EditProfilePage = () => {
+const ProfilePage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
-
-  const handleSubmit = async (auth: FormValues) => {
-    router.push('/account-verified');
-  };
+  const insets = useSafeAreaInsets();
 
   return (
-    <Screen style={styles.screen}>
-      <StatusBar backgroundColor={colors.light.input} animated />
-      <View style={styles.rowBetween}>
-          <Text type='subtitle' style={styles.greeting}>Your profile</Text>
-          <Notification hasUnread />
-      </View>
-
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-        <Form initialValues={{ firstName: auth.user!.name.split(' ')[0], lastName: auth.user!.name.split(' ')[1], email: auth.user!.email, phoneNumber: '', images: [] }} onSubmit={handleSubmit} validationSchema={profileSchema}>
-            <ActivityIndicator visible={auth.isAuthenticating} />
+    <Screen style={[styles.screen, { paddingTop: insets.top }]}>
+      <View style={styles.header}>
+        <View style={styles.intro}>
+          <View style={{ flex: 1 }}>
+            <Text type='default-semibold' style={styles.fullName}>
+              {auth.user!.name}
+            </Text>
             
-            <FormError error={auth.error} />
+            <View style={styles.overview}>
+              {_.range(1, 6).map((range) => (
+                <MaterialCommunityIcons 
+                  key={range}
+                  name='star' 
+                  color={colors.light.yellow} 
+                  size={icons.SIZES.SMALL} 
+                />
+              ))}
 
-            <View style={styles.image}>
-              <FormImagePicker name='images' />
+              <Text type='default-semibold' style={styles.rating}>5.0</Text>
             </View>
+          </View>
 
-            <View style={styles.content}>
-              <FormField 
-                  autoCapitalize="words"
-                  name="firstName" 
-                  editable={false}
-                  labelStyle={styles.label}
-                  label='First name' 
-                  placeholder="Enter first name"
-                  keyboardType='name-phone-pad'
-              />
-              
-              <FormField 
-                  autoCapitalize="words"
-                  name="lastName" 
-                  editable={false}
-                  labelStyle={styles.label}
-                  label='Last name' 
-                  placeholder="Enter last name"
-                  keyboardType='name-phone-pad'
-              />
+          <View style={defaultStyles.shadow}>
+            <Image
+                src={require('../../../../assets/images/map.png')}
+                style={styles.image}
+            />
+          </View>
+        </View>
 
-              <FormField 
-                  labelStyle={styles.label}
-                  autoCapitalize="none" 
-                  name="email" 
-                  editable={false}
-                  label='Email' 
-                  placeholder="Enter email address"
-                  keyboardType='email-address'
-              />
+        <View style={styles.cardContainer}>
+          <TouchableOpacity style={styles.card}>
+            <MaterialCommunityIcons 
+              name='wallet'
+              size={icons.SIZES.NORMAL}
+              color={colors.light.black}
+            />
 
-              <View style={{ width: '100%', marginBottom: 16 }}>
-                <Text type='default' style={styles.label}>Email status</Text>
-                <View style={styles.emailStatus}>
+            <Text type='default-semibold' style={styles.cardText}>
+              Wallet
+            </Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.card}>
+            <Ionicons 
+              name='receipt'
+              size={icons.SIZES.NORMAL}
+              color={colors.light.black}
+            />
 
-                  <View style={styles.emailStatusVerified}>
-                    <MaterialCommunityIcons name='check' size={icons.SIZES.SMALL} color={colors.light.dark}  />
-                    <Text type='default' style={styles.emailStatusText}>Verified</Text>
-                  </View>
-                </View>
-              </View>
+            <Text type='default-semibold' style={styles.cardText}>
+              Trips
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-              <FormField 
-                  labelStyle={styles.label}
-                  autoCapitalize="none" 
-                  name="phoneNumber" 
-                  editable={false}
-                  label='Phone number' 
-                  placeholder="Enter phone number"
-                  keyboardType='phone-pad'
-              />
-            </View>
+      </View>
+      
+      <View style={styles.screenSeparator} />
 
-            <View style={styles.button}>
-              <SubmitButton label='Save changes' />
-            </View>
-        </Form>
-      </KeyboardAwareScrollView>
+      <View style={styles.bottom}>
+        <FlatList
+              data={ROUTES}
+              keyExtractor={(route) => route.label}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              renderItem={({ item }) => (
+                <Link href='/profile/edit-profile' asChild>
+                  <TouchableOpacity style={styles.route}>
+                    <MaterialCommunityIcons 
+                      name={item.icon}
+                      size={icons.SIZES.NORMAL}
+                      color={colors.light.black}
+                    />
+
+                    <Text type='default' style={styles.routeLabel}>{item.label}</Text>
+                  </TouchableOpacity>
+                </Link>
+              )}
+            />
+      </View>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-    button: { marginTop: 30, marginBottom: 130 },
-    content: { backgroundColor: colors.light.white, borderRadius: 16, padding: 16, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', width: '100%' },
-    greeting: { color: colors.light.dark , letterSpacing: 0.25 },
-    headerContainer: { height: '100%', width: '100%' },
-    label: { 
-      color: colors.light.gray,
-      fontSize: 15, 
-      lineHeight: 20, 
-      textAlign: 'left',
-      marginBottom: 6,
-      fontFamily: defaultStyles.medium.fontFamily, 
-      fontWeight: defaultStyles.medium.fontWeight 
-    },
-    emailStatus: {
-      borderWidth: 1,
-      borderRadius: 100,
-      borderColor: colors.light.input,
-      backgroundColor: colors.light.input,
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      width: '100%'
-    },
-    emailStatusVerified: { 
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      alignSelf: 'flex-start',
-      gap: 4,
-      paddingVertical: 3,
-      paddingHorizontal: 16,
-      backgroundColor: colors.light.successLight,
-      borderWidth: 1,
-      borderColor: colors.light.success, 
-      borderRadius: 30 
-    },
-    emailStatusText: {
-      color: colors.light.dark,
-      fontSize: 15,
-    },
-    rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-    screen: { backgroundColor: colors.light.input, padding: 16 },
-    signinContainer: { marginVertical: 40 },
-    image: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 12, marginBottom: 32 }
+  bottom: {
+    paddingVertical: 21.9,
+    paddingHorizontal: 33,
+  },
+  card: {
+    backgroundColor: colors.light.dew,
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 12,
+    minHeight: 74,
+    flex: 1
+  },
+  cardContainer: {
+    marginTop: 30,
+    columnGap: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  cardText: {
+    color: colors.light.black,
+    fontSize: 15,
+    lineHeight: 18,
+    marginTop: 3
+  },
+  fullName: { 
+    textTransform: "capitalize", 
+    color: colors.light.black,
+    fontWeight: defaultStyles.jakartaBold.fontWeight,
+    fontSize: 25,
+    lineHeight: 28
+  },
+  header: {
+    paddingHorizontal: 33,
+    paddingBottom: 0
+  },
+  image: {
+    width: 67,
+    height: 67,
+    borderRadius: 67,
+    borderWidth: 2,
+    borderColor: colors.light.white,
+  },
+  intro: { 
+    flexDirection: "row", 
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  overview: { 
+    flexDirection: "row", 
+    alignItems: "center", 
+    justifyContent: "flex-start",
+    alignSelf: "flex-start",
+    backgroundColor: colors.light.dew,
+    borderRadius: 4,
+    padding: 4,
+    marginTop: 9,
+    gap: 1
+  },
+  rating: {
+    color: colors.light.black,
+    lineHeight: 15,
+    fontSize: 12,
+  },
+  route: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: 20 },
+  routeLabel: {
+    color: colors.light.black,
+    fontSize: 17,
+    fontWeight: defaultStyles.jakartaMedium.fontWeight,
+  },
+  screen: { 
+    backgroundColor: colors.light.white, 
+  },
+  screenSeparator: {
+    height: 15,
+    width: "100%",
+    backgroundColor: colors.light.dew,
+    marginTop: 20
+  },
+  separator: {
+    height: 21,
+    width: "100%"
+  }
 });
 
-export default EditProfilePage;
+export default ProfilePage;

@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: 28,
         color: colors.light.dark,
-        fontFamily: defaultStyles.semibold.fontFamily,
-        fontWeight: defaultStyles.semibold.fontWeight,
+        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
     },
 });
 

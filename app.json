@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -21,6 +22,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyADwNi9utUXmZA6jCPGRf1HVjjvb5PL42E"
+        }
       },
       "package_name": "com.webiq.tripsndfare",
       "googleServicesFile": "./config/google-services.json"
@@ -39,7 +45,8 @@
         {
           "photosPermission": "The app accesses your photos so that you can update your profile."
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

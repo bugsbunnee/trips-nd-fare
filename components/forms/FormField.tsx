@@ -5,13 +5,14 @@ import TextInput, { AppTextInputProps } from '@/components/ui/TextInput';
 
 interface Props extends AppTextInputProps {
 	name: string;
+	Component?: React.FC;
 }
 
-const FormField: React.FC<Props> = ({ name, width, ...otherProps }) => {
+const FormField: React.FC<Props> = ({ name, width, Component = TextInput,  ...otherProps }) => {
 	const { setFieldTouched, setFieldValue, errors, touched, values } = useFormikContext();
 
 	return (
-		<TextInput
+		<Component
 			onBlur={() => setFieldTouched(name)}
 			onChangeText={(text: string) => setFieldValue(name, text)}
 			value={(values as FormikValues)[name]}

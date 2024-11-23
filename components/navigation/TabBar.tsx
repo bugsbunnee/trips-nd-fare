@@ -8,7 +8,9 @@ import { useSegments } from 'expo-router';
 
 import { colors } from '@/constants';
 
-const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation, ...others }) => {
+type TabBarProps = Pick<BottomTabBarProps, 'state' | 'navigation'>;
+
+const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   const { bottom } = useSafeAreaInsets();
   const segments = useSegments();
 

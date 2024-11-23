@@ -1,3 +1,4 @@
+import React from 'react';
 import { Text, type TextProps, StyleSheet, StyleProp, TextStyle } from 'react-native';
 import { PropsWithChildren, useMemo } from 'react';
 
@@ -40,27 +41,27 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 20,
         lineHeight: 20,
-        fontFamily: defaultStyles.semibold.fontFamily,
-        fontWeight: defaultStyles.semibold.fontWeight,
+        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
     },
     link: {
         lineHeight: 30,
         fontSize: 16,
         color: '#0a7ea4',
-        fontFamily: defaultStyles.medium.fontFamily,
-        fontWeight: defaultStyles.medium.fontWeight,
+        fontFamily: defaultStyles.jakartaMedium.fontFamily,
+        fontWeight: defaultStyles.jakartaMedium.fontWeight,
     },
     default: {
         fontSize: 16,
         lineHeight: 24,
-        fontFamily: defaultStyles.regular.fontFamily,
-        fontWeight: defaultStyles.regular.fontWeight,
+        fontFamily: defaultStyles.jakartaRegular.fontFamily,
+        fontWeight: defaultStyles.jakartaRegular.fontWeight,
     },
     defaultSemibold: {
         fontSize: 16,
         lineHeight: 24,
-        fontFamily: defaultStyles.semibold.fontFamily,
-        fontWeight: defaultStyles.semibold.fontWeight,
+        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
     },
 });
 

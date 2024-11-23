@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		letterSpacing: 0.25,
 		flex: 1,
-		fontFamily: defaultStyles.medium.fontFamily,
-		fontWeight: defaultStyles.medium.fontWeight,
+		fontFamily: defaultStyles.jakartaMedium.fontFamily,
+		fontWeight: defaultStyles.jakartaMedium.fontWeight,
 	},
 });
 

@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, icons } from '@/constants';
 import { Text } from '@/components/ui';
 import { UserRide } from '@/utils/models';
+import { formatAmount } from '@/utils/lib';
 
 import car from '@/assets/images/car.png';
 
@@ -33,7 +34,7 @@ const Rider: React.FC<Props> = ({ uri, name, rating, price, type, numberOfSeats,
                     <Text type='default' style={styles.rating}>{rating}</Text>
                 </View>
                 <View style={styles.bottomContent}>
-                    <Text type='default' style={styles.price}>{process.env.EXPO_PUBLIC_CURRENCY}{price}</Text>
+                    <Text type='default' style={styles.price}>{formatAmount(price)}</Text>
                     <View style={styles.separator} />
                     <Text type='default' style={styles.time}>{timeToLocation}</Text>
                     <View style={styles.separator} />

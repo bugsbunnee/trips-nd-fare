@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from 'react';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikHelpers, FormikValues } from 'formik';
 
 interface FormProps extends PropsWithChildren {
 	initialValues: FormikValues;
-	onSubmit: (values: any) => void;
+	onSubmit: (values: any, helpers: FormikHelpers<any>) => void;
 	validationSchema: unknown;
 }
 

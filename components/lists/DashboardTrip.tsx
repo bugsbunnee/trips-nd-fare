@@ -1,8 +1,9 @@
+
+import React, { useState } from "react";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+
 import Animated from "react-native-reanimated";
 import dayjs from "dayjs";
-
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
 
 import { Text } from "@/components/ui";
 import { colors, app } from "@/constants";
@@ -32,7 +33,7 @@ const TableHeaderCell: React.FC<TableCellProps> = ({ isActive, label, onPress })
     )
 };
 
-const DashboardTrips = () => {
+const DashboardTrips: React.FC = () => {
     const [orderBy, setOrderBy] = useState('date');
 
     return ( 

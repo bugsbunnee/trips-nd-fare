@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_600SemiBold, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold } from '@expo-google-fonts/plus-jakarta-sans';
+import { Urbanist_400Regular, Urbanist_500Medium, Urbanist_600SemiBold, Urbanist_700Bold, Urbanist_800ExtraBold } from "@expo-google-fonts/urbanist";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/auth/slice";
 
@@ -24,6 +25,11 @@ const useInitializeApp = () => {
                     PlusJakartaSansSemiBold: PlusJakartaSans_600SemiBold,
                     PlusJakartaSansBold: PlusJakartaSans_700Bold,
                     PlusJakartaSansExtraBold: PlusJakartaSans_800ExtraBold,
+                    UrbanistRegular: Urbanist_400Regular,
+                    UrbanistMedium: Urbanist_500Medium,
+                    UrbanistSemiBold: Urbanist_600SemiBold,
+                    UrbanistBold: Urbanist_700Bold,
+                    UrbanistExtraBold: Urbanist_800ExtraBold,
                 });
 
                 const user = await storage.retrieveUser();

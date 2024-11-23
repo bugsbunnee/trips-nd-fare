@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Text } from "@/components/ui";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -11,7 +11,7 @@ import { colors } from "@/constants";
 import { PickerItemModel, UserRide } from "@/utils/models";
 import { RIDES, SORT_ORDER } from "@/constants/app";
 
-const HistoryIndexPage = () => {
+const HistoryIndexPage : React.FC= () => {
     const [selectedOrder, setSelectedOrder] = useState<PickerItemModel | null>(null);
     const insets = useSafeAreaInsets();
 
@@ -19,7 +19,7 @@ const HistoryIndexPage = () => {
       <View style={[styles.container, { paddingTop: insets.top }]}>
           <View>
             <View style={styles.header}>
-              <Text type='subtitle' style={styles.subtitle}>Popular Rides</Text>
+              <Text type='subtitle' style={styles.subtitle}>Popular Car</Text>
 
               <View style={styles.pickerContainer}>
                 <Picker

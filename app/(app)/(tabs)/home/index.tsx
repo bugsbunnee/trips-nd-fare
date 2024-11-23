@@ -1,3 +1,5 @@
+import React from "react";
+
 import { FlatList, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -6,6 +8,7 @@ import DashboardTrips from '@/components/lists/DashboardTrip';
 
 import { Notification, Text } from "@/components/ui";
 import { colors } from "@/constants";
+import { formatAmount } from "@/utils/lib";
 
 
 const CTAs = [
@@ -41,7 +44,7 @@ const CTAs = [
     },
 ];
 
-const HomeIndexPage = () => {
+const HomeIndexPage: React.FC = () => {
     const { top } = useSafeAreaInsets();
     const { height } = useWindowDimensions();
    
@@ -53,7 +56,7 @@ const HomeIndexPage = () => {
 
                 <View style={styles.headerRight}>
                     <View style={styles.balance}>
-                        <Text type='default-semibold' style={styles.balanceText}>{process.env.EXPO_PUBLIC_CURRENCY}60000</Text>
+                        <Text type='default-semibold' style={styles.balanceText}>{formatAmount(6000)}</Text>
                     </View>
 
                     <Notification hasUnread />

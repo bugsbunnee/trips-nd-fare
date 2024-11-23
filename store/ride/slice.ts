@@ -15,7 +15,7 @@ const initialState: RideState = {
     rideID: ''
 }
 
-const authSlice = createSlice({
+const riderSlice = createSlice({
     name: 'ride',
     initialState,
     reducers: {
@@ -32,5 +32,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { setLocationDetails, setRider, setRideID } = authSlice.actions;
-export default authSlice.reducer;
+export const { setLocationDetails, setRider, setRideID } = riderSlice.actions;
+export default riderSlice.reducer;

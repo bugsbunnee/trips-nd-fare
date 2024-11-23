@@ -1,5 +1,5 @@
+import { ImageSource } from "expo-image";
 import { ImageURISource } from "react-native";
-
 export interface OnboardingSlide {
     title: string;
     description: string;
@@ -39,4 +39,13 @@ export interface Rider {
 export interface PickerItemModel {
     label: string; 
     value: string;
+}
+
+export interface Ticket {
+    location: string;
+    destination: string;
+    departureDate: Date | string,
+    arrivalDate: Date | string,
+    company: ImageSource;
+    amount: number;
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Foundation, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 
 export const SIZES = {
@@ -10,6 +11,7 @@ export const SIZES = {
 
 export const TAB_ICONS = {
     home: (props: { color: string; }) => <Foundation name='home' size={SIZES.LARGE} color={props.color} />,
+    booking: (props: { color: string; }) => <MaterialCommunityIcons name='newspaper' size={SIZES.LARGE} color={props.color} />,
     history: (props: { color: string; }) => <Octicons name='log' size={SIZES.LARGE} color={props.color} />,
     profile: (props: { color: string; }) => <MaterialCommunityIcons name='account-circle-outline' size={SIZES.LARGE} color={props.color} />,
 };
