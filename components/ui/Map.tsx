@@ -50,7 +50,7 @@ const Map: React.FC<Props> = ({ showCurrentLocation, markers }) => {
                     <MapViewDirections
                         origin={markers[0].coordinate}
                         destination={markers[markers.length - 1].coordinate}
-                        apikey={Constants.expoConfig!.android!.config!.googleMaps!.apiKey as string}
+                        apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY as string}
                         strokeWidth={5}
                         strokeColor={colors.light.danger}
                     />
