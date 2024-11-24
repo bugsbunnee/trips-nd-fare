@@ -1,9 +1,8 @@
 import React from "react";
 
-import { NotificationContentInput, NotificationRequestInput, scheduleNotificationAsync } from "expo-notifications";
+import { NotificationContentInput, scheduleNotificationAsync } from "expo-notifications";
 import { LocationObjectCoords } from "expo-location";
 import { captureRef } from 'react-native-view-shot';
-import { PixelRatio } from "react-native";
 
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
@@ -60,13 +59,7 @@ export const getLocationCode = (location: string) => {
 };
 
 export const generateScreenshot = (view: number | React.RefObject<unknown>) => {
-    const targetPixelCount = 1080; 
-    const pixelRatio = PixelRatio.get(); 
-    const pixels = targetPixelCount / pixelRatio;
-
     return captureRef(view, {
-        height: pixels,
-        width: pixels,
         quality: 1,
         format: 'png',
     })
