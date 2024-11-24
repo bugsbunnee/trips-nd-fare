@@ -22,7 +22,7 @@ const FormError: React.FC<Props> = ({ error }) => {
               size={icons.SIZES.NORMAL} 
             />
 
-            <Text type='default-semibold' style={styles.text}>{error}</Text>
+            <Text type='default-semibold' style={styles.text} numberOfLines={2}>{error}</Text>
         </Animated.View>
     );
 };
@@ -40,7 +40,9 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         letterSpacing: 0.25,
-        color: colors.light.danger
+        color: colors.light.danger,
+        flex: 1,
+        alignItems: "flex-start"
     }
 })
  

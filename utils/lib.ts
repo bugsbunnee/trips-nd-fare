@@ -1,7 +1,14 @@
-import { CURRENCY } from "@/constants/app";
+import React from "react";
+
+import { NotificationContentInput, NotificationRequestInput, scheduleNotificationAsync } from "expo-notifications";
+import { LocationObjectCoords } from "expo-location";
+import { captureRef } from 'react-native-view-shot';
+import { PixelRatio } from "react-native";
+
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import { LocationObjectCoords } from "expo-location";
+
+import { CURRENCY } from "@/constants/app";
 
 dayjs.extend(duration);
 
@@ -50,4 +57,22 @@ export const getTimeFromDate = (date: string | Date | number) => {
 
 export const getLocationCode = (location: string) => {
     return location.substring(0, 3).toUpperCase();
-}
+};
+
+export const generateScreenshot = (view: number | React.RefObject<unknown>) => {
+    const targetPixelCount = 1080; 
+    const pixelRatio = PixelRatio.get(); 
+    const pixels = targetPixelCount / pixelRatio;
+
+    return captureRef(view, {
+        height: pixels,
+        width: pixels,
+        quality: 1,
+        format: 'png',
+    })
+};
+
+export const sendLocalNotification = (content: NotificationContentInput) => {
+    scheduleNotificationAsync({ content, trigger: null });
+};
+

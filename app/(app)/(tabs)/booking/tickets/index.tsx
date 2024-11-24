@@ -3,13 +3,13 @@ import React from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 import { TICKETS } from "@/utils/data";
 import { colors, icons, styles as defaultStyles } from "@/constants";
 import { Text } from "@/components/ui";
 
 import TicketItem from "@/components/lists/Ticket";
-import { router } from "expo-router";
 
 const AvailableTicketsPage: React.FC = () => {
     const insets = useSafeAreaInsets();

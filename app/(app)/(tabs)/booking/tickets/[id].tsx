@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import _ from "lodash";
 
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -113,8 +113,6 @@ const TicketDetailsPage: React.FC = () => {
                                     </View>
                                 ))}
                             </View>
-
-
                         </View>
 
                         <View style={styles.seats}>
@@ -132,7 +130,7 @@ const TicketDetailsPage: React.FC = () => {
                             <Text type="default-semibold" style={styles.dateValue}>{formatDate(ticket!.departureDate, 'MMM. DD, YYYY')}</Text>
                         </View>
 
-                        <Button label="Buy ticket" disabled={!selectedSeat} onPress={() => {}} />
+                        <Button label="Buy ticket" disabled={!selectedSeat} onPress={() => router.push('/booking/tickets/receipt')} />
                     </View>
                 </ScrollView>
             </View>

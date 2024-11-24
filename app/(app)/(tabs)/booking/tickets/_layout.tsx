@@ -6,6 +6,7 @@ const TicketsLayout: React.FC = () => {
         <Stack screenOptions={{ animation: 'flip', headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="[id]" getId={() => String(Date.now())} />
+            <Stack.Screen name="receipt" />
         </Stack>
      );
 };
