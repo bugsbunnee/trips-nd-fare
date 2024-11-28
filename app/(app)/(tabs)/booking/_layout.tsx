@@ -6,6 +6,7 @@ const BookingLayout: React.FC = () => {
         <Stack screenOptions={{ animation: 'flip', headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="tickets" />
+            <Stack.Screen name="local-trips" />
         </Stack>
      );
 };

@@ -11,7 +11,7 @@ export default function TabLayout() {
   return (
     <Tabs
       initialRouteName="home"
-      tabBar={(props) => <TabBar state={props.state} navigation={props.navigation} />}
+      tabBar={(props) => <TabBar state={props.state} navigation={props.navigation} descriptors={props.descriptors} />}
       screenOptions={{
         tabBarActiveTintColor: colors[colorScheme ?? 'light'].tint,
         headerShown: false,
@@ -19,6 +19,8 @@ export default function TabLayout() {
       <Tabs.Screen name="home" options={{ title: 'Home' }} />
       <Tabs.Screen name="booking" options={{ title: 'Booking' }} />
       <Tabs.Screen name="history" options={{ title: 'History' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+      <Tabs.Screen name="local-trips" options={{ title: 'Local Trips', href: null }} />
     </Tabs>
   );
 }

@@ -6,9 +6,9 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSegments } from 'expo-router';
 
-import { colors } from '@/constants';
+import { colors, icons } from '@/constants';
 
-type TabBarProps = Pick<BottomTabBarProps, 'state' | 'navigation'>;
+type TabBarProps = Omit<BottomTabBarProps, 'insets'>;
 
 const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   const { bottom } = useSafeAreaInsets();
@@ -20,38 +20,40 @@ const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   return (
     <View style={[styles.container, { display: pagesToHide.includes(screenName) ? 'none' : 'flex', bottom: 0, paddingBottom: bottom }]}>
       <View style={styles.content}>
-        {state.routes.map((route, index) => {
-          const isFocused = state.index === index;
+        {state.routes
+          .filter((route) => icons.TAB_ICONS[route.name as unknown as keyof typeof icons.TAB_ICONS])
+          .map((route, index) => {
+              const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
+              const onPress = () => {
+                const event = navigation.emit({
+                  type: 'tabPress',
+                  target: route.key,
+                  canPreventDefault: true,
+                });
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params);
-            }
-          };
+                if (!isFocused && !event.defaultPrevented) {
+                  navigation.navigate(route.name, route.params);
+                }
+              };
 
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          };
+              const onLongPress = () => {
+                navigation.emit({
+                  type: 'tabLongPress',
+                  target: route.key,
+                });
+              };
 
-          return (
-            <TabBarButton
-              key={route.key}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              isFocused={isFocused}
-              routeName={route.name}
-              color={isFocused ? colors.light.primary : colors.light.primaryLight}
-            />
-          );
+              return (
+                <TabBarButton
+                  key={route.key}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  isFocused={isFocused}
+                  routeName={route.name}
+                  color={isFocused ? colors.light.primary : colors.light.primaryLight}
+                />
+              );
         })}
       </View>
     </View>

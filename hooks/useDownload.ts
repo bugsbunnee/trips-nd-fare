@@ -22,6 +22,10 @@ const useDownload = () => {
         setInitTimer(true);
     }, []);
 
+    const resetProgress = useCallback(() => {
+        setDownloadProgress(0);
+    }, []);
+
     useEffect(() => {
         if (initTimer) {
             const interval = setInterval(() => {
@@ -39,7 +43,7 @@ const useDownload = () => {
         }
     }, [initTimer, downloadProgress]);
 
-    return { downloadProgress, onDownload, simulateDownload };
+    return { downloadProgress, onDownload, resetProgress, simulateDownload };
 };
  
 export default useDownload;

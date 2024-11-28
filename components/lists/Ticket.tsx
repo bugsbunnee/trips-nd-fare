@@ -130,7 +130,7 @@ const styles  = StyleSheet.create({
     company: { 
         width: 35,
         height: 15,
-        resizeMode: "contain"
+        contentFit: "contain"
     },
     container: {
         width: "100%",
@@ -156,7 +156,7 @@ const styles  = StyleSheet.create({
         textTransform: "uppercase",
     },
     flex: { flex: 1 },
-    image: { width: 18, height: 18, resizeMode: "contain" },
+    image: { width: 18, height: 18, contentFit: "contain" },
     imageContainer: { 
         width: 35, 
         height: 35,

@@ -1,6 +1,7 @@
+import React from "react";
 import { Stack } from "expo-router";
 
-const HomeLayout = () => {
+const HomeLayout: React.FC = () => {
     return ( 
         <Stack screenOptions={{ animation: 'flip', headerShown: false }}>
             <Stack.Screen name="index" />

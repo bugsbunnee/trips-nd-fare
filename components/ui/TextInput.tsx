@@ -14,6 +14,7 @@ export interface AppTextInputProps extends TextInputProps {
 	width?: DimensionValue;
 	label?: string;
 	error?: string;
+	primaryIconColor?: string;
 	containerStyle?: StyleProp<ViewStyle>;
 	labelStyle?: StyleProp<TextStyle>
 }
@@ -23,6 +24,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	error,
 	label,
 	primaryIcon,
+	primaryIconColor,
 	trailingButtonParams,
 	containerStyle,
 	labelStyle,
@@ -75,7 +77,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 						<SimpleLineIcons 
 							name={primaryIcon as any} 
 							size={icons.SIZES.NORMAL} 
-							color={colors.light.gray} />
+							color={primaryIconColor ?? colors.light.gray} />
 					</View>
 				)}
 

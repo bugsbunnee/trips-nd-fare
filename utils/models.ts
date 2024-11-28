@@ -49,3 +49,10 @@ export interface Ticket {
     company: ImageSource;
     amount: number;
 }
+
+export interface Destination {
+    id: number;
+    image: ImageSource;
+    label: string;
+    minimumCost: number;
+}

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     image: { 
         width: 20,
         height: 20,
-        resizeMode: 'contain',
+        contentFit: 'contain',
         marginRight: 10
     },
     text: {

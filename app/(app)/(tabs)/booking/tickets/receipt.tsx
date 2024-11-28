@@ -5,7 +5,9 @@ import AppProgress from "@/components/ui/Progress";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
+import { FormError } from "@/components/forms";
 import { colors, styles as defaultStyles } from "@/constants";
 import { Image, Text } from "@/components/ui";
 import { TICKETS } from "@/utils/data";
@@ -14,8 +16,7 @@ import { formatAmount, formatDate, generateScreenshot, getCountDown, getLocation
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
 import useDownload from "@/hooks/useDownload";
 import useMediaPermission from "@/hooks/useMediaPermission";
-import { router } from "expo-router";
-import { FormError } from "@/components/forms";
+
 
 const TicketDownloadPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -52,9 +53,9 @@ const TicketDownloadPage: React.FC = () => {
             body: "Your receipt has been downloaded successfully!"
         });
 
-        console.log('all done')
+        download.resetProgress();
 
-        router.push('/booking');
+        router.push('/booking/tickets/confirmation');
     }, []);
 
     return ( 

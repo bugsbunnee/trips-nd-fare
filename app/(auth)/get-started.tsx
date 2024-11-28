@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         width: '100%',
         bottom: 0,
         left: 0,
-        resizeMode: 'cover',
+        contentFit: 'cover',
         position: 'absolute',
     },
     signinContainer: { marginVertical: 40 },

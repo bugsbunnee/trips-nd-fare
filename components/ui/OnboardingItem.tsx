@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     },
     image: { 
         width: '100%',
-        resizeMode: 'contain',
+        contentFit: 'contain',
     },
     description: {
         color: APP_COLORS.GRAY,

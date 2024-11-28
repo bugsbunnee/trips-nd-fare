@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import DashboardTrips from '@/components/lists/DashboardTrip';
 
 import { Notification, Text } from "@/components/ui";
-import { colors } from "@/constants";
+import { colors, styles as defaultStyles } from "@/constants";
 import { formatAmount } from "@/utils/lib";
 
 
@@ -28,7 +28,7 @@ const CTAs = [
         backgroundColor: '#E8E8D3',
         title: 'Local Trips', 
         description: 'Call a local rider from around your area', 
-        image: require('@/assets/images/bike.png') 
+        image: require('@/assets/images/keke.png') 
     },
     { 
         backgroundColor: '#E8DED3',
@@ -40,7 +40,7 @@ const CTAs = [
         backgroundColor: '#71C3FF',
         title: 'Ferry', 
         description: 'Buy your ferry ticket', 
-        image: require('@/assets/images/bus.png') 
+        image: require('@/assets/images/ferry.png') 
     },
 ];
 
@@ -117,7 +117,13 @@ const HomeIndexPage: React.FC = () => {
 
 const styles = StyleSheet.create({
     balance: { backgroundColor: colors.light.white, paddingVertical: 5, paddingHorizontal: 7, borderRadius: 11 },
-    balanceText: { fontSize: 15, lineHeight: 18, color: colors.light.black },
+    balanceText: { 
+        fontSize: 15, 
+        lineHeight: 18, 
+        color: colors.light.black,
+        fontWeight: defaultStyles.urbanistBold.fontWeight,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+    },
     body: { flex: 1, zIndex: 1, elevation: 0, backgroundColor: colors.light.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 16 },
     card: { 
         width: '100%', 
@@ -129,13 +135,42 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     cardButton: { padding: 10, backgroundColor: colors.light.primary, marginTop: 10, borderRadius: 8, alignSelf: 'flex-start' },
-    cardButtonText: { color: colors.light.text, fontSize: 10, lineHeight: 12, letterSpacing: 0.25 },
-    cardDescription: { fontSize: 10, lineHeight: 12, color: colors.light.graySemi, marginTop: 4, textAlign: 'left' },
+    cardButtonText: { 
+        color: colors.light.text, 
+        fontSize: 10, 
+        lineHeight: 12, 
+        letterSpacing: 0.25,
+        fontWeight: defaultStyles.urbanistBold.fontWeight,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+    },
+    cardDescription: { 
+        fontSize: 10, 
+        lineHeight: 12, 
+        color: colors.light.graySemi, 
+        marginTop: 4, 
+        textAlign: 'left',
+        fontWeight: defaultStyles.urbanistRegular.fontWeight,
+        fontFamily: defaultStyles.urbanistRegular.fontFamily,
+    },
     cardDetails: { flex: 1 },
     cardImageContainer: { justifyContent: 'center', alignItems: 'center' },
     cardImage: { width: 137, height: 121, resizeMode: 'contain' },
-    cardTitle: { fontSize: 18, lineHeight: 30, letterSpacing: 0.25, color: colors.light.dark, textAlign: 'left' },
-    cardTitleBold: { fontSize: 22, color: colors.light.dark },
+    cardTitle: {
+        fontSize: 18, 
+        lineHeight: 21, 
+        letterSpacing: 0.25, 
+        color: colors.light.dark, 
+        textAlign: 'left',
+        fontWeight: defaultStyles.urbanistSemibold.fontWeight,
+        fontFamily: defaultStyles.urbanistSemibold.fontFamily,
+    },
+    cardTitleBold: { 
+        fontSize: 22, 
+        lineHeight: 30,
+        color: colors.light.dark,
+        fontWeight: defaultStyles.urbanistExtra.fontWeight,
+        fontFamily: defaultStyles.urbanistExtra.fontFamily,
+    },
     container: { flex: 1, backgroundColor: colors.light.primary },
     cta: { 
         backgroundColor: '#FFDCD4',
@@ -143,11 +178,34 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: 112
     },
-    ctaDescription: { textAlign: 'left', marginTop: 10, color: colors.light.dark, fontSize: 8, lineHeight: 10, letterSpacing: 0.25 },
+    ctaDescription: { 
+        textAlign: 'left', 
+        marginTop: 10, 
+        color: colors.light.dark, 
+        fontSize: 8, 
+        lineHeight: 10, 
+        letterSpacing: 0.25,
+        fontWeight: defaultStyles.urbanistRegular.fontWeight,
+        fontFamily: defaultStyles.urbanistRegular.fontFamily,
+    },
     ctaImage: { width: 76, height: 47, resizeMode: 'contain' },
     ctaImageContainer: { justifyContent: 'center', alignItems: 'flex-end', marginTop: 17 },
-    ctaTitle: { fontSize: 12, lineHeight: 14, letterSpacing: 0.25, textTransform: 'capitalize' },
-    greeting: { color: colors.light.white , fontSize: 22, lineHeight: 26, letterSpacing: 0.25},
+    ctaTitle: { 
+        fontSize: 12, 
+        lineHeight: 14, 
+        letterSpacing: 0.25, 
+        textTransform: 'capitalize',
+        fontWeight: defaultStyles.urbanistBold.fontWeight,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+    },
+    greeting: { 
+        color: colors.light.white, 
+        fontSize: 22, 
+        lineHeight: 26, 
+        letterSpacing: 0.25,
+        fontWeight: defaultStyles.urbanistBold.fontWeight,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+    },
     header: { 
         padding: 16,         
         zIndex: 10,
@@ -156,7 +214,16 @@ const styles = StyleSheet.create({
     headerRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     separator: { width: 17 },
-    subtitle: { color: colors.light.dark, marginTop: 24, marginBottom: 14, fontSize: 18, lineHeight: 21, maxWidth: 212 },
+    subtitle: { 
+        fontWeight: defaultStyles.urbanistSemibold.fontWeight,
+        fontFamily: defaultStyles.urbanistSemibold.fontFamily,
+        color: colors.light.black, 
+        marginTop: 24, 
+        marginBottom: 14, 
+        fontSize: 18, 
+        lineHeight: 21, 
+        maxWidth: 212 
+    },
     tableRow: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, alignItems: 'center' },
     tableHeader: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, gap: 4, alignItems: 'center', backgroundColor: colors.light.primaryLight, marginBottom: 10 },
     tableHeaderActive: { paddingHorizontal: 11, paddingVertical: 5, backgroundColor: colors.light.primary, borderRadius: 4, flex: 1 },

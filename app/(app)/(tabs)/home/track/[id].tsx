@@ -139,9 +139,9 @@ const styles = StyleSheet.create({
     rating: { fontSize: 15, lineHeight: 20, color: colors.light.dark },
     ratingContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2},
     riderDetails: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 12 },
-    riderImage: { width: 100, height: 100, resizeMode: 'cover', borderRadius: 100 },
+    riderImage: { width: 100, height: 100, contentFit: 'cover', borderRadius: 100 },
     separator: { height: 1, backgroundColor: colors.light.grayLight, width: '100%' },
-    vehicleImage: { width: 128, height: 72, resizeMode: 'contain' },
+    vehicleImage: { width: 128, height: 72, contentFit: 'contain' },
     title: {
         fontSize: 24,
         lineHeight: 28,

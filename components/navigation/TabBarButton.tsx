@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Animated from 'react-native-reanimated';
 
-import { StyleSheet, Pressable, PressableProps, View } from 'react-native';
+import { StyleSheet, Pressable, PressableProps } from 'react-native';
 import { colors, icons } from '@/constants';
 
 import useFluidButtonStyle from '@/hooks/useFluidButtonStyle';

@@ -3,7 +3,7 @@ import React from 'react';
 import { Octicons } from '@expo/vector-icons';
 import { Image, StyleSheet, View } from 'react-native';
 
-import { colors, icons } from '@/constants';
+import { colors, icons, styles as defaultStyles } from '@/constants';
 import { Text } from '../ui';
 import { formatDate } from '@/utils/lib';
 import { UserRide } from '@/utils/models';
@@ -27,6 +27,7 @@ const Ride: React.FC<Props> = ({ ride, backgroundColor = colors.light.primaryLig
                             name='paper-airplane' 
                             size={icons.SIZES.NORMAL} 
                             color={colors.light.dark} 
+                            style={styles.icon}
                         />
 
                         <Text type='default' style={styles.address}>{fromAddress}</Text>
@@ -37,6 +38,7 @@ const Ride: React.FC<Props> = ({ ride, backgroundColor = colors.light.primaryLig
                             name='location'
                             size={icons.SIZES.NORMAL} 
                             color={colors.light.dark} 
+                            style={styles.icon}
                         />
 
                         <Text type='default' style={styles.address}>{toAddress}</Text>
@@ -67,15 +69,35 @@ const Ride: React.FC<Props> = ({ ride, backgroundColor = colors.light.primaryLig
 };
 
 const styles = StyleSheet.create({
-    address: { color: colors.light.dark, fontSize: 13, lineHeight: 18 },
+    address: { 
+        fontWeight: defaultStyles.urbanistMedium.fontWeight,
+        fontFamily: defaultStyles.urbanistMedium.fontFamily,
+        color: colors.light.dark, 
+        fontSize: 13, 
+        lineHeight: 18 
+    },
     container: { padding: 14,  backgroundColor: colors.light.white,  borderRadius: 16 },
+    icon: { width: 24 },
     location: { flexDirection: 'row', alignItems: 'center', gap: 16 },
     locationItem: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
     image: { width: 79, height: 90, resizeMode: 'contain' },
     metadata: { padding: 16, marginTop: 16, borderRadius: 16, backgroundColor: colors.light.dangerLight },
     metadataRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.light.white },
-    metadataLabel: { color: colors.light.gray, fontSize: 15, lineHeight: 20 },
-    metadataValue: { color: colors.light.dark, fontSize: 15, lineHeight: 20, textTransform: 'capitalize' },
+    metadataLabel: { 
+        fontWeight: defaultStyles.urbanistMedium.fontWeight,
+        fontFamily: defaultStyles.urbanistMedium.fontFamily,
+        color: colors.light.gray, 
+        fontSize: 15, 
+        lineHeight: 20 
+    },
+    metadataValue: { 
+        color: colors.light.dark, 
+        fontSize: 15, 
+        lineHeight: 20, 
+        textTransform: 'capitalize',
+        fontWeight: defaultStyles.urbanistSemibold.fontWeight,
+        fontFamily: defaultStyles.urbanistSemibold.fontFamily,
+    },
 });
  
 export default Ride;

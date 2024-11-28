@@ -17,27 +17,33 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const ROUTES = [
   {
     label: 'Profile',
-    icon: 'account-circle' as const
+    icon: 'account-circle' as const,
+    route: '/profile/edit-profile',
   },
   {
     label: 'Messages',
-    icon: 'chat-processing' as const
+    icon: 'chat-processing' as const,
+    route: '/booking/local-trips',
   },
   {
     label: 'Buy Bus Ticket',
-    icon: 'ticket' as const
+    icon: 'ticket' as const,
+    route: '/booking/local-trips',
   },
   {
     label: 'Local Trips',
-    icon: 'rickshaw-electric' as const
+    icon: 'rickshaw-electric' as const,
+    route: '/local-trips',
   },
   {
     label: 'Ferry Tickets',
-    icon: 'ferry' as const
+    icon: 'ferry' as const,
+    route: '/booking/local-trips',
   },
   {
     label: 'Settings',
-    icon: 'cog' as const
+    icon: 'cog' as const,
+    route: '/booking/local-trips',
   },
 ];
 
@@ -112,7 +118,7 @@ const ProfilePage: React.FC = () => {
               keyExtractor={(route) => route.label}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               renderItem={({ item }) => (
-                <Link href='/profile/edit-profile' asChild>
+                <Link href={item.route as any} asChild>
                   <TouchableOpacity style={styles.route}>
                     <MaterialCommunityIcons 
                       name={item.icon}

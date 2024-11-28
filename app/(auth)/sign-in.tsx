@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -22,7 +24,7 @@ const authSchema = yup.object<FormValues>().shape({
 	password: yup.string().required().label('Password'),
 });
 
-const SignInPage = () => {
+const SignInPage: React.FC = () => {
   const handleSubmit = (auth: FormValues) => {
     console.log(auth);
   };

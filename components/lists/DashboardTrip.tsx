@@ -6,7 +6,7 @@ import Animated from "react-native-reanimated";
 import dayjs from "dayjs";
 
 import { Text } from "@/components/ui";
-import { colors, app } from "@/constants";
+import { colors, app, styles as defaultStyles } from "@/constants";
 
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
 
@@ -26,7 +26,7 @@ const TableHeaderCell: React.FC<TableCellProps> = ({ isActive, label, onPress })
 
     return (
         <AnimatedTouchable style={[isActive ? styles.tableHeaderActive : styles.tableHeaderInactive, style]} onPress={onPress}>
-            <Text type='default-semibold' style={isActive ? styles.tableHeaderActiveText : styles.tableHeaderInactiveText}>
+            <Text type='default-semibold' style={[styles.tableHeaderText, isActive ? styles.tableHeaderActiveText : styles.tableHeaderInactiveText]}>
                 {label}
             </Text>
         </AnimatedTouchable>
@@ -81,9 +81,28 @@ const styles = StyleSheet.create({
     tableHeader: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, gap: 5, alignItems: 'center', backgroundColor: colors.light.primaryLight, marginBottom: 10 },
     tableHeaderActive: { paddingHorizontal: 11, paddingVertical: 5, backgroundColor: colors.light.primary, borderRadius: 4, flex: 1 },
     tableHeaderInactive: { paddingHorizontal: 11, paddingVertical: 5, backgroundColor: 'transparent', borderRadius: 4, flex: 1 },
-    tableHeaderActiveText: { color: colors.light.white, fontSize: 14, lineHeight: 16, textAlign: 'center' },
-    tableHeaderInactiveText: { color: colors.light.dark, fontSize: 14, lineHeight: 16, textAlign: 'center' },
-    tableRowText: { color: colors.light.graySemi, fontSize: 14, lineHeight: 16, flex: 1, textAlign: 'center' }
+    tableHeaderText: { 
+        fontWeight: defaultStyles.urbanistBold.fontWeight,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+        fontSize: 14, 
+        lineHeight: 16, 
+        textAlign: 'center' 
+    },
+    tableHeaderActiveText: { 
+        color: colors.light.white, 
+    },
+    tableHeaderInactiveText: { 
+        color: colors.light.dark, 
+    },
+    tableRowText: { 
+        color: colors.light.graySemi,
+        fontSize: 14, 
+        lineHeight: 16, 
+        flex: 1, 
+        textAlign: 'center',
+        fontWeight: defaultStyles.urbanistSemibold.fontWeight,
+        fontFamily: defaultStyles.urbanistSemibold.fontFamily,
+    }
 });
  
 export default DashboardTrips;
