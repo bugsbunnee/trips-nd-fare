@@ -41,14 +41,13 @@ const styles = StyleSheet.create({
         padding: 6,
         alignSelf: 'flex-start',
         backgroundColor: colors.light.white,
-        width: "100%",
-        flex: 1
+        flex: 1,
+        width: 129
     },
     image: { width: "100%", height: 91, borderRadius: 5, resizeMode: 'cover' },
     label: {
         fontSize: 12,
         lineHeight: 14,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
         marginBottom: 8,
@@ -58,7 +57,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         lineHeight: 12,
         textAlign: "left",
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         marginTop: 8,
         color: colors.light.grayDeep

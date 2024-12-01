@@ -16,11 +16,9 @@ const jakartaFonts = StyleSheet.create({
     },
     jakartaBold: {
         fontFamily: 'PlusJakartaSansBold',
-        fontWeight: '700',
     },
     jakartaExtra: {
         fontFamily: 'PlusJakartaSansExtraBold',
-        fontWeight: '800',
     },
 });
 
@@ -39,11 +37,9 @@ const urbanistFonts = StyleSheet.create({
     },
     urbanistBold: {
         fontFamily: 'UrbanistBold',
-        fontWeight: '700',
     },
     urbanistExtra: {
         fontFamily: 'UrbanistExtraBold',
-        fontWeight: '800',
     },
 });
 

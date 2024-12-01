@@ -49,10 +49,9 @@ const ROUTES = [
 
 const ProfilePage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
-  const insets = useSafeAreaInsets();
 
   return (
-    <Screen style={[styles.screen, { paddingTop: insets.top }]}>
+    <Screen style={styles.screen}>
       <View style={styles.header}>
         <View style={styles.intro}>
           <View style={{ flex: 1 }}>

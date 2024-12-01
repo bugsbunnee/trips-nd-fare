@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
     cta: {
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.primary
     },
@@ -188,7 +187,6 @@ const styles = StyleSheet.create({
         marginRight: 8
     },
     rideTypeText: {
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         fontSize: 18,
         lineHeight: 28,
@@ -199,7 +197,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         lineHeight: 24,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
         textTransform: "capitalize"

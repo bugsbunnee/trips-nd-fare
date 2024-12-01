@@ -12,6 +12,7 @@ import { Destination as DestinationModel } from "@/utils/models";
 
 import AvailableRider from "@/components/lists/AvailableRider";
 import Destination from "@/components/lists/Destination";
+import Screen from "@/components/navigation/Screen";
 
 const LocalTripsIndexPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -45,7 +46,8 @@ const LocalTripsIndexPage : React.FC= () => {
     ];
 
     return ( 
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <Screen style={[styles.container, { paddingTop: insets.top }]}>
+            
             <View style={styles.horizontalPadding}>
                 <View style={styles.row}>
                     <TouchableOpacity style={styles.button} onPress={() => router.back()}>
@@ -78,7 +80,7 @@ const LocalTripsIndexPage : React.FC= () => {
                 </View>
 
                 <View style={styles.rides}>
-                    <ScrollView horizontal>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {RIDE_TYPES.map((rideType) => (
                             <TouchableOpacity key={rideType} style={styles.rideType}>
                                 <Text type="default-semibold" style={styles.rideTypeText}>{rideType}</Text>
@@ -88,7 +90,7 @@ const LocalTripsIndexPage : React.FC= () => {
                 </View>
             </View>
 
-            <View style={styles.bottom}>
+            <View style={[styles.bottom, styles.horizontalPadding]}>
                 <View style={[styles.row, { marginBottom: 18 }]}>
                     <Text type="default-semibold" style={styles.title}>Popular Destinations</Text>
                     <TouchableOpacity>
@@ -131,17 +133,14 @@ const LocalTripsIndexPage : React.FC= () => {
                         )}
                     />
                 </View>
-            </View>
-
-           
-      </View>
+            </View>   
+      </Screen>
     );
 };
 
 const styles = StyleSheet.create({
     bottom: { 
         backgroundColor: colors.light.dew, 
-        paddingHorizontal: 18, 
         paddingTop: 38, 
         flex: 1, 
         borderTopRightRadius: 20, 
@@ -164,7 +163,6 @@ const styles = StyleSheet.create({
     cta: {
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.primary
     },
@@ -181,7 +179,6 @@ const styles = StyleSheet.create({
         marginRight: 8
     },
     rideTypeText: {
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         fontSize: 18,
         lineHeight: 28,
@@ -192,7 +189,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         lineHeight: 24,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
         textTransform: "capitalize"

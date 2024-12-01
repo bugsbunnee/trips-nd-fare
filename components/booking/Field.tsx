@@ -66,12 +66,10 @@ const styles = StyleSheet.create({
         color: colors.light.dark,
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     label: {
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontSize: 10,
         lineHeight: 12,
         color: colors.light.grayDeep

@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -20,6 +21,8 @@ const Screen: React.FC<Props> = ({ children, style }) => {
 
     return ( 
         <View style={[styles.container, insetStyles, style]}>
+            <StatusBar style="light" />
+
             <View style={[styles.container, style]}>
                 {children}
             </View>

@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     distance: {
         fontSize: 10,
         lineHeight: 12,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark
     },
@@ -54,7 +53,6 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark
     },
@@ -62,7 +60,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         lineHeight: 12,
         marginTop: 4,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.grayDeep
     },

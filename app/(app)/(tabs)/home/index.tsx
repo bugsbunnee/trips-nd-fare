@@ -1,10 +1,10 @@
 import React from "react";
 
 import { FlatList, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
 import DashboardTrips from '@/components/lists/DashboardTrip';
+import Screen from "@/components/navigation/Screen";
 
 import { Notification, Text } from "@/components/ui";
 import { colors, styles as defaultStyles } from "@/constants";
@@ -45,11 +45,10 @@ const CTAs = [
 ];
 
 const HomeIndexPage: React.FC = () => {
-    const { top } = useSafeAreaInsets();
     const { height } = useWindowDimensions();
    
     return ( 
-      <View style={[styles.container, { paddingTop: top }]}>
+      <Screen style={styles.container}>
           <View style={[styles.header, { height: height * 0.18 }]}>
             <View style={styles.rowBetween}>
                 <Text type='subtitle' style={styles.greeting}>Welcome, Joseph</Text>
@@ -111,7 +110,7 @@ const HomeIndexPage: React.FC = () => {
                 <DashboardTrips />
             </View>
           </View>
-      </View>
+      </Screen>
     );
 };
 
@@ -168,7 +167,6 @@ const styles = StyleSheet.create({
         fontSize: 22, 
         lineHeight: 30,
         color: colors.light.dark,
-        fontWeight: defaultStyles.urbanistExtra.fontWeight,
         fontFamily: defaultStyles.urbanistExtra.fontFamily,
     },
     container: { flex: 1, backgroundColor: colors.light.primary },

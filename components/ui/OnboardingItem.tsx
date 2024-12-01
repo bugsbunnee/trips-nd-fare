@@ -1,11 +1,10 @@
 import React from 'react';
-import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { OnboardingSlide } from '@/utils/models';
 import { styles as defaultStyles } from '@/constants';
 import { APP_COLORS } from '@/constants/colors';
-import { Text } from '@/components/ui';
 import useThemeColor from '@/hooks/useThemeColor';
 
 interface Props {
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     },
     image: { 
         width: '100%',
-        contentFit: 'contain',
+        resizeMode: 'contain',
     },
     description: {
         color: APP_COLORS.GRAY,
