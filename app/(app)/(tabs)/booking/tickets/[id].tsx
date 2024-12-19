@@ -13,8 +13,8 @@ import { Button, Text } from "@/components/ui";
 import { TICKETS } from "@/utils/data";
 import { formatDate } from "@/utils/lib";
 
+import RouteMap from "@/components/maps/RouteMap";
 import TicketItem from "@/components/lists/Ticket";
-import Map from "@/components/ui/Map";
 
 
 const TicketDetailsPage: React.FC = () => {
@@ -44,7 +44,7 @@ const TicketDetailsPage: React.FC = () => {
         <View style={[styles.container, { paddingTop, paddingBottom }]}>
             <View style={styles.flex}>
                 <View style={styles.header}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity onPress={() => router.back()} style={styles.button}>
                         <MaterialCommunityIcons 
                             name='arrow-left'
                             size={icons.SIZES.NORMAL}
@@ -67,26 +67,15 @@ const TicketDetailsPage: React.FC = () => {
                     </TouchableOpacity>
                 </View>
 
-                <Map 
-                    showCurrentLocation={false}
-                    markers={[
-                        {
-                            title: "From",
-                            description: "Current Location",
-                            coordinate: {
-                                latitude: 6.4393028,
-                                longitude: 3.3487916,
-                            }
-                        },
-                        {
-                            title: "To",
-                            description: "Destination",
-                            coordinate: {
-                                latitude: 6.4739524,
-                                longitude: 3.3916235,
-                            }
-                        },
-                    ]}
+                <RouteMap
+                    origin={{
+                        latitude: 6.473992801063133, 
+                        longitude: 3.579008049806905
+                    }}
+                    destination={{
+                        latitude: 6.4643061,
+                        longitude: 3.5339421
+                    }}
                 />
             </View>
 
@@ -190,7 +179,6 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         color: colors.light.dark,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         textAlign: "left",
         marginTop: 3
     },
@@ -240,7 +228,6 @@ const styles = StyleSheet.create({
         lineHeight: 12,
         color: colors.light.black,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         textAlign: "center",
     },
     select: {
@@ -248,14 +235,12 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         color: colors.light.dark,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
     },
     row: { flexDirection: "row", alignItems: "center", justifyContent: "center" },
     title: {
         fontSize: 20,
         lineHeight: 28,
         color: colors.light.dark,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         textAlign: "center"
     },

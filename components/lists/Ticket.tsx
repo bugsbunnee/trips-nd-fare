@@ -97,7 +97,6 @@ const styles  = StyleSheet.create({
         color: colors.light.primary,
         fontSize: 18,
         lineHeight: 22,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     amountLabel: {
@@ -123,7 +122,6 @@ const styles  = StyleSheet.create({
         color: colors.light.primary,
         fontSize: 16,
         lineHeight: 26,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         textTransform: "uppercase"
     },
@@ -187,7 +185,6 @@ const styles  = StyleSheet.create({
         color: colors.light.graySemi,
         fontSize: 10,
         lineHeight: 26,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         textTransform: "uppercase"
     },

@@ -4,7 +4,6 @@
  */
 
 const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
 
 export const APP_COLORS = {
   MODAL_OPAQUE: '#00000040',
@@ -12,8 +11,8 @@ export const APP_COLORS = {
   BORDER: '#0286FF',
   BORDER_LIGHT: '#F2F2F2',
   BORDER_MID: '#B7B7B7',
-  DANGER: 'rgba(188, 15, 18, 0.8)',
-  DANGER_LIGHT: '#FFEDE9',
+  DANGER: '#A80000',
+  DANGER_LIGHT: '#F2D6D7',
   DEW: '#F5F5F5',
   DEW_MID: '#f7f8fa',
   DEW_DARK: '#D9D9D9',
@@ -28,9 +27,13 @@ export const APP_COLORS = {
   PLACEHOLDER: '#ADADAD',
   PRIMARY: '#F58634',
   PRIMARY_LIGHT: '#FFF3EA',
+  ROUTE: '#5285ec',
   SHADOW: 'rgba(100, 100, 111, 0.8)',
+  SKELETON: '#DDDDDD',
   SUCCESS: '#0CC25F',
   SUCCESS_LIGHT: '#E7F9EF',
+  SUCCESS_MID: '#D6F2E1',
+  SUCCESS_DARK: '#00A835',
   WHITE: '#FFF',
   YELLOW: '#FFCC00',
 };
@@ -59,9 +62,13 @@ const colors = {
     placeholder: APP_COLORS.PLACEHOLDER,
     primary: APP_COLORS.PRIMARY,
     primaryLight: APP_COLORS.PRIMARY_LIGHT,
+    route: APP_COLORS.ROUTE,
     shadow: APP_COLORS.SHADOW,
+    skeleton: APP_COLORS.SKELETON,
     success: APP_COLORS.SUCCESS,
     successLight: APP_COLORS.SUCCESS_LIGHT,
+    successMid: APP_COLORS.SUCCESS_MID,
+    successDark: APP_COLORS.SUCCESS_DARK,
     text: APP_COLORS.WHITE,
     tint: tintColorLight,
     tabIconDefault: '#687076',
@@ -91,9 +98,13 @@ const colors = {
     modalOpaque: APP_COLORS.MODAL_OPAQUE,
     placeholder: APP_COLORS.PLACEHOLDER,
     primary: APP_COLORS.PRIMARY,
+    route: APP_COLORS.ROUTE,
     shadow: APP_COLORS.SHADOW,
+    skeleton: APP_COLORS.SKELETON,
     success: APP_COLORS.SUCCESS,
     successLight: APP_COLORS.SUCCESS_LIGHT,
+    successMid: APP_COLORS.SUCCESS_MID,
+    successDark: APP_COLORS.SUCCESS_DARK,
     text: APP_COLORS.WHITE,
     tint: tintColorLight,
     tabIconDefault: '#687076',

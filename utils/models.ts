@@ -1,5 +1,18 @@
 import { ImageSource } from "expo-image";
 import { ImageURISource } from "react-native";
+
+export interface Coordinates {
+    latitude: number;
+    longitude: number;
+}
+
+export interface Destination {
+    id: number;
+    image: ImageSource;
+    label: string;
+    minimumCost: number;
+}
+
 export interface OnboardingSlide {
     title: string;
     description: string;
@@ -33,7 +46,8 @@ export interface Rider {
     price: number;
     timeToLocation: string;
     numberOfSeats: number;
-    type: UserRide['type']
+    type: UserRide['type'];
+    coordinates: Coordinates;
 }
 
 export interface PickerItemModel {
@@ -50,9 +64,11 @@ export interface Ticket {
     amount: number;
 }
 
-export interface Destination {
+export interface Transaction {
     id: number;
-    image: ImageSource;
-    label: string;
-    minimumCost: number;
+    amount: number;
+    status: 'success' | 'failed' | 'pending';
+    description: string;
+    date: string | number | Date;
+    transactionType: 'deposit' | 'withdrawal';
 }

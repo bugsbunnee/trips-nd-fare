@@ -49,3 +49,7 @@ export const CURRENCY = {
     SYMBOL: '₦'
   }
 };
+
+export const DATE_FORMAT = {
+  DATE_MID: 'MMM. DD, YYYY',
+}

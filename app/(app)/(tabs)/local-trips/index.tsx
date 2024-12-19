@@ -47,7 +47,6 @@ const LocalTripsIndexPage : React.FC= () => {
 
     return ( 
       <Screen style={[styles.container, { paddingTop: insets.top }]}>
-            
             <View style={styles.horizontalPadding}>
                 <View style={styles.row}>
                     <TouchableOpacity style={styles.button} onPress={() => router.back()}>
@@ -91,48 +90,46 @@ const LocalTripsIndexPage : React.FC= () => {
             </View>
 
             <View style={[styles.bottom, styles.horizontalPadding]}>
-                <View style={[styles.row, { marginBottom: 18 }]}>
-                    <Text type="default-semibold" style={styles.title}>Popular Destinations</Text>
-                    <TouchableOpacity>
-                        <Text type="default-semibold" style={styles.cta}>View all</Text>
-                    </TouchableOpacity>
-                </View>
+                <ScrollView>
+                    <View style={[styles.row, { marginBottom: 18 }]}>
+                        <Text type="default-semibold" style={styles.title}>Popular Destinations</Text>
+                        <TouchableOpacity>
+                            <Text type="default-semibold" style={styles.cta}>View all</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                <View>
-                    <FlatList
-                        data={DESTINATIONS}
-                        horizontal
-                        keyExtractor={(item) => item.id.toString()}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                        renderItem={({ item }) => <Destination destination={item} onPress={() => {}} />}
-                    />
-                </View>
-                
-                <View style={[styles.row, { marginBottom: 18, marginTop: 30 }]}>
-                    <Text type="default-semibold" style={styles.title}>Available Riders</Text>
-                    <TouchableOpacity>
-                        <Text type="default-semibold" style={styles.cta}>View all</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <FlatList
-                        data={AVAILABLE_RIDERS}
-                        horizontal
-                        keyExtractor={(item) => item.id.toString()}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                        renderItem={({ item }) => (
-                            <AvailableRider 
-                                onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: item.id }})}
-                                firstName={item.firstName}
-                                lastName={item.lastName}
-                                location={item.location}
-                                distanceInKm={item.distanceInKm}
-                                image={item.image}
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {DESTINATIONS.map((destination) => (
+                            <Destination 
+                                key={destination.id} 
+                                style={{ marginRight: 16 }}
+                                destination={destination} 
+                                onPress={() => {}} 
                             />
-                        )}
-                    />
-                </View>
+                        ))}
+                    </ScrollView>
+                    
+                    <View style={[styles.row, styles.sectionMargin]}>
+                        <Text type="default-semibold" style={styles.title}>Available Riders</Text>
+                        <TouchableOpacity>
+                            <Text type="default-semibold" style={styles.cta}>View all</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {AVAILABLE_RIDERS.map((rider) => (
+                            <AvailableRider 
+                                key={rider.id}
+                                onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider.id }})}
+                                firstName={rider.firstName}
+                                lastName={rider.lastName}
+                                location={rider.location}
+                                distanceInKm={rider.distanceInKm}
+                                image={rider.image}
+                            />
+                        ))}
+                    </ScrollView>
+                </ScrollView>
             </View>   
       </Screen>
     );
@@ -146,7 +143,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20, 
         borderTopLeftRadius: 20, 
         marginTop: -20,
-        paddingBottom: 70 
+        paddingBottom: 98
     },
     button: {
         width: 40,
@@ -185,7 +182,7 @@ const styles = StyleSheet.create({
         color: colors.light.primary,
         textTransform: 'capitalize'
     },
-    separator: { width: 16 },
+    sectionMargin: { marginBottom: 18, marginTop: 30 },
     title: {
         fontSize: 20,
         lineHeight: 24,

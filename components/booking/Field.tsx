@@ -13,7 +13,8 @@ export interface Props extends TextInputProps {
 }
 
 const BookingField: React.FC<Props> = ({
-	width = '100%',
+    width = '100%',
+    numberOfLines = 1,
 	label,
 	error,
 	...otherProps
@@ -26,6 +27,7 @@ const BookingField: React.FC<Props> = ({
                 <View style={styles.input}>
                     <TextInput
                         {...otherProps}
+                        numberOfLines={numberOfLines}
                         style={styles.text}
                         placeholderTextColor={colors.light.placeholder}
                         selectionColor={colors.light.primary}
@@ -48,6 +50,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.light.dew,
 		paddingVertical: 8,
 		paddingHorizontal: 12,
+        height: 70
 	},
     error: {
 		color: colors.light.danger,
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     input: {
-        marginTop: 7
+        marginTop: 7,
     },
 	text: {
         color: colors.light.dark,

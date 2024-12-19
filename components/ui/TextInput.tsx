@@ -9,6 +9,7 @@ import Text from './Text';
 import { colors, icons, styles as defaultStyles } from '@/constants';
 
 export interface AppTextInputProps extends TextInputProps {
+	InputComponent?: React.FC;
 	primaryIcon?: string;
 	trailingButtonParams?: { icon: string; onPress: () => void; };
 	width?: DimensionValue;
@@ -31,6 +32,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 	onBlur,
 	onFocus,
 	editable = true,
+	InputComponent = TextInput,
 	...otherProps
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
@@ -81,7 +83,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 					</View>
 				)}
 
-				<TextInput
+				<InputComponent
 					{...otherProps}
 					editable={isEditable}
 					style={styles.text}
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.light.input,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 12,
+		height: 48,
 		paddingHorizontal: 16,
 	},
 	containerMargin: {

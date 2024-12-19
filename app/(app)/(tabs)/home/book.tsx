@@ -2,10 +2,12 @@
 import React, { useCallback } from "react";
 import { Text, TextInput } from "@/components/ui";
 import { router } from "expo-router";
+import { MapMarkerProps } from "react-native-maps";
 
+import CurrentLocationMap from "@/components/maps/CurrentLocationMap";
 import Ride from "@/components/lists/Ride";
 
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Keyboard, StyleSheet, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -45,19 +47,18 @@ const BookRidePage: React.FC = () => {
               primaryIcon='magnifier' 
               width='100%' 
               placeholder='Where do you want to go?'
-              containerStyle={styles.input} 
-              onPress={() => router.push('/home/ride')}
+              containerStyle={styles.input}
+              onEndEditing={() => {
+                Keyboard.dismiss();
+                router.push('/home/ride');
+              }} 
             />
 
             <View>
               <Text type='subtitle' style={styles.subtitle}>Your current location</Text>
 
-              <View>
-                <Image
-                  source={require('@/assets/images/map-large.png')} 
-                  alt='Map' 
-                  style={styles.image} 
-                />
+              <View style={styles.map}>
+                <CurrentLocationMap markers={nearbyRiders} />
               </View>
             </View>
 
@@ -75,20 +76,42 @@ const BookRidePage: React.FC = () => {
     );
 };
 
+const nearbyRiders: MapMarkerProps[] = [
+  {
+    identifier: 'joseph-ahmed',
+    title: 'Joseph Ahmed',
+    description: 'Currently at Ajah',
+    image: require('@/assets/images/rider-map-pin.png'),
+    coordinate: {
+      latitude: 6.4683108,
+      longitude: 3.5237379
+    },
+  },
+  {
+    identifier: 'michael-rako',
+    title: 'Michael Rako',
+    description: 'Currently at Abraham Adesanya',
+    image: require('@/assets/images/rider-map-pin.png'),
+    coordinate: {
+      latitude: 6.4657128,
+      longitude: 3.5489286
+    },
+  },
+];
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F6F8FA', paddingHorizontal: 16 },
   subtitle: { fontSize: 20, color: colors.light.dark, letterSpacing: 0.05, marginBottom: 20, marginTop: 30 },
   greeting: { 
     fontSize: 22, 
     color: colors.light.dark, 
-    fontWeight: defaultStyles.urbanistBold.fontWeight,
     fontFamily: defaultStyles.urbanistBold.fontFamily,
     lineHeight: 26, 
     letterSpacing: 0.05 
   },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16 },
   input: { backgroundColor: colors.light.white, borderColor: colors.light.grayLight, marginTop: 16 },
-  image: { borderRadius: 16, height: 380, width: '100%', objectFit: 'cover' },
+  map: { borderRadius: 16, height: 380, width: '100%', overflow: 'hidden' },
   logout: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.light.white, borderRadius: 40 },
   ridesSection: { marginBottom: 130},
   separator: { marginBottom: 10 }

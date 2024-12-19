@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.light.dew,
 		paddingVertical: 8,
 		paddingHorizontal: 12,
+        height: 70
 	},
     error: {
 		color: colors.light.danger,
@@ -104,7 +105,6 @@ const styles = StyleSheet.create({
         color: colors.light.dark,
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
 	placeholder: {
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     },
     label: {
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontSize: 10,
         lineHeight: 12,
         color: colors.light.grayDeep

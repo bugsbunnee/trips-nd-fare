@@ -20,6 +20,7 @@ export default function TabLayout() {
       <Tabs.Screen name="booking" options={{ title: 'Booking' }} />
       <Tabs.Screen name="history" options={{ title: 'History' }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+      <Tabs.Screen name="wallet" options={{ title: 'Wallet', href: null }} />
       <Tabs.Screen name="local-trips" options={{ title: 'Local Trips', href: null }} />
     </Tabs>
   );

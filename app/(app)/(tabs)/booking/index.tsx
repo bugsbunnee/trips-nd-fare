@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: colors.light.white,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         lineHeight: 21,
     },
     question: { marginTop: 18, marginBottom: 22 },
@@ -140,7 +139,6 @@ const styles = StyleSheet.create({
     schedulesLabel: {
         fontSize: 20,
         lineHeight: 24,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
     },
@@ -170,17 +168,15 @@ const styles = StyleSheet.create({
         color: colors.light.grayDark,
         fontSize: 12,
         lineHeight: 14,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     tickets: { 
         marginTop: 22,
-        marginBottom: 120
+        paddingBottom: 92
     },
     viewAll: {
         fontSize: 15,
         lineHeight: 18,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.primary,
     },

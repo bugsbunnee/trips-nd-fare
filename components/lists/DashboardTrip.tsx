@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 import { Text } from "@/components/ui";
 import { colors, app, styles as defaultStyles } from "@/constants";
+import { formatAmount } from "@/utils/lib";
 
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
 
@@ -45,7 +46,7 @@ const DashboardTrips: React.FC = () => {
                     <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.date).format('DD MMM.')}</Text>
                     <Text type='default-semibold' style={styles.tableRowText}>{item.type}</Text>
                     <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.date).format('HH:mm A')}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{process.env.EXPO_PUBLIC_CURRENCY}{item.price}</Text>
+                    <Text type='default-semibold' style={styles.tableRowText}>{process.env.EXPO_PUBLIC_CURRENCY}{formatAmount(item.price)}</Text>
                 </View>
             )}
             ListHeaderComponent={() => (

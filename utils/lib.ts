@@ -8,15 +8,17 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
 import { CURRENCY } from "@/constants/app";
+import { colors } from "@/constants";
+import { Transaction } from "./models";
 
 dayjs.extend(duration);
 
-export const formatDate = (date: string | Date, format: string = 'DD MMMM YYYY, HH:mm A') => {
+export const formatDate = (date: string | number |  Date, format: string = 'DD MMMM YYYY, HH:mm A') => {
     return dayjs(date).format(format);
 };
 
 export const formatAmount = (amount: number) => {
-    const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: CURRENCY.NGN.CODE }).format(amount);
+    const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: CURRENCY.NGN.CODE, unitDisplay: 'narrow' }).format(amount);
     return formattedAmount.replace(CURRENCY.NGN.CODE, CURRENCY.NGN.SYMBOL);
 };
 
@@ -63,6 +65,34 @@ export const generateScreenshot = (view: number | React.RefObject<unknown>) => {
         quality: 1,
         format: 'png',
     })
+};
+
+export const getTransactionStatusColors = (status: Transaction['status']) => {
+    switch(status) {
+        case 'success':
+            return {
+                bg: colors.light.successMid,
+                text: colors.light.successDark
+            };
+        
+        case 'failed':
+            return {
+                bg: colors.light.dangerLight,
+                text: colors.light.danger
+            };
+        
+        case 'pending':
+            return {
+                bg: colors.light.primaryLight,
+                text: colors.light.primary
+            };
+    
+        default:
+            return {
+                bg: colors.light.successMid,
+                text: colors.light.successDark
+            };
+    }
 };
 
 export const sendLocalNotification = (content: NotificationContentInput) => {

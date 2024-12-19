@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
         fontSize: 15, 
         lineHeight: 18, 
         color: colors.light.black,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     body: { flex: 1, zIndex: 1, elevation: 0, backgroundColor: colors.light.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 16 },
@@ -139,7 +138,6 @@ const styles = StyleSheet.create({
         fontSize: 10, 
         lineHeight: 12, 
         letterSpacing: 0.25,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     cardDescription: { 
@@ -193,7 +191,6 @@ const styles = StyleSheet.create({
         lineHeight: 14, 
         letterSpacing: 0.25, 
         textTransform: 'capitalize',
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     greeting: { 
@@ -201,7 +198,6 @@ const styles = StyleSheet.create({
         fontSize: 22, 
         lineHeight: 26, 
         letterSpacing: 0.25,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     header: { 

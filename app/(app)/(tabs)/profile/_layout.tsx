@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 
 const ProfileLayout: React.FC = () => {
     return ( 
-        <Stack screenOptions={{ animation: 'slide_from_left', headerShown: false }}>
+        <Stack screenOptions={{ animation: 'slide_from_right', headerShown: false }}>
             <Stack.Screen name="index" />
         </Stack>
      );

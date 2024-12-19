@@ -11,8 +11,6 @@ import { colors, styles as defaultStyles, icons } from '@/constants';
 import { Image, Text } from '@/components/ui';
 
 import Screen from '@/components/navigation/Screen';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 
 const ROUTES = [
   {
@@ -82,17 +80,19 @@ const ProfilePage: React.FC = () => {
         </View>
 
         <View style={styles.cardContainer}>
-          <TouchableOpacity style={styles.card}>
-            <MaterialCommunityIcons 
-              name='wallet'
-              size={icons.SIZES.NORMAL}
-              color={colors.light.black}
-            />
+         <Link href='/wallet' asChild>
+            <TouchableOpacity style={styles.card}>
+              <MaterialCommunityIcons 
+                name='wallet'
+                size={icons.SIZES.NORMAL}
+                color={colors.light.black}
+              />
 
-            <Text type='default-semibold' style={styles.cardText}>
-              Wallet
-            </Text>
-          </TouchableOpacity>
+              <Text type='default-semibold' style={styles.cardText}>
+                Wallet
+              </Text>
+            </TouchableOpacity>
+         </Link>
           
           <TouchableOpacity style={styles.card}>
             <Ionicons 
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
   fullName: { 
     textTransform: "capitalize", 
     color: colors.light.black,
-    fontWeight: defaultStyles.jakartaBold.fontWeight,
     fontSize: 25,
     lineHeight: 28
   },

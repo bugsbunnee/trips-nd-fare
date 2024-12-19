@@ -77,7 +77,7 @@ const SingleRiderPage : React.FC= () => {
             </View>
 
         <View style={styles.bottom}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
                     <Text type="default-semibold" style={styles.name}>Aminu Gabriel</Text>
                     <View style={styles.bullets}>
@@ -107,8 +107,8 @@ const SingleRiderPage : React.FC= () => {
                 <View style={[styles.row, { marginBottom: 18 }]}>
                     <Text type="default-semibold" style={styles.title}>Routes</Text>
                 </View>
-
-                <ScrollView horizontal>
+                
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {ROUTES.map((route) => (
                         <View key={route.id} style={{ marginRight: 16 }}>
                             <Destination destination={route} onPress={() => {}} />
@@ -120,7 +120,7 @@ const SingleRiderPage : React.FC= () => {
                     <Text type="default-semibold" style={styles.title}>Similar Riders</Text>
                 </View>
 
-                <ScrollView horizontal>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {SIMILAR_RIDERS.map((rider) => (
                         <View key={rider.id} style={{ marginRight: 16 }}>
                             <AvailableRider 
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 100, 
         borderTopLeftRadius: 100, 
         marginTop: -60,
-        paddingBottom: 150,
+        paddingBottom: 100,
         overflow: "hidden"
     },
     button: {
@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         lineHeight: 24,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
         textTransform: "capitalize"

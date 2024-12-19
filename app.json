@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.webiq.tripsndfare",
-      "googleServicesFile": "./config/GoogleService-Info.plist"
+      "googleServicesFile": "./config/GoogleService-Info.plist",
     },
     "android": {
       "adaptiveIcon": {

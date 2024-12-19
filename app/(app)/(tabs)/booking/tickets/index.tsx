@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         lineHeight: 28,
         color: colors.light.dark,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         textAlign: "center"
     },

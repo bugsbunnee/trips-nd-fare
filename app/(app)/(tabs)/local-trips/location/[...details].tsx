@@ -108,44 +108,46 @@ const LocationDetailsPage : React.FC= () => {
             </ImageBackground>
             
             <View style={styles.bottom}>
-                <View style={styles.locationContainer}>
-                    <Text type="default-semibold" style={styles.location}>Ajah, under bridge</Text>
-                </View>
+                <ScrollView>
+                    <View style={styles.locationContainer}>
+                        <Text type="default-semibold" style={styles.location}>Ajah, under bridge</Text>
+                    </View>
 
-                <View style={styles.riders}>
-                    <Text type="default-semibold" style={styles.ridersText}>Riders around location</Text>
+                    <View style={styles.riders}>
+                        <Text type="default-semibold" style={styles.ridersText}>Riders around location</Text>
 
-                    <ScrollView style={styles.riderList} horizontal>
-                        {AVAILABLE_RIDERS.map((rider) => (
-                            <TouchableOpacity key={rider.id} style={styles.rider}>
-                                <Image
-                                    src={rider.image}
-                                    style={styles.riderImage}
-                                />
+                        <ScrollView style={styles.riderList} horizontal showsHorizontalScrollIndicator={false}>
+                            {AVAILABLE_RIDERS.map((rider) => (
+                                <TouchableOpacity key={rider.id} style={styles.rider}>
+                                    <Image
+                                        src={rider.image}
+                                        style={styles.riderImage}
+                                    />
 
-                                <View style={styles.riderDetails}>
-                                    <Text type="default-semibold" style={styles.riderName}>{rider.firstName}</Text>
-                                    <Text type="default-semibold" style={styles.riderVehicle}>Keke Rider</Text>
-                                    <Text type="default-semibold" style={[styles.riderVehicle, { color: colors.light.primary }]}>{rider.distanceInKm} km away</Text>
-                                </View>
-                            </TouchableOpacity>
+                                    <View style={styles.riderDetails}>
+                                        <Text type="default-semibold" style={styles.riderName}>{rider.firstName}</Text>
+                                        <Text type="default-semibold" style={styles.riderVehicle}>Keke Rider</Text>
+                                        <Text type="default-semibold" style={[styles.riderVehicle, { color: colors.light.primary }]}>{rider.distanceInKm} km away</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </View>
+
+                    <View style={[styles.row, { marginBottom: 11 }]}>
+                        <Text type="default-semibold" style={styles.title}>Other localities</Text>
+                    </View>
+
+                    <ScrollView horizontal contentContainerStyle={{ alignSelf: "flex-start" }} showsHorizontalScrollIndicator={false}>
+                        {DESTINATIONS.map((destination) => (
+                            <Destination 
+                                key={destination.id}
+                                style={styles.locality}
+                                destination={destination} 
+                                onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}
+                            />
                         ))}
                     </ScrollView>
-                </View>
-
-                <View style={[styles.row, { marginBottom: 11 }]}>
-                    <Text type="default-semibold" style={styles.title}>Other localities</Text>
-                </View>
-
-                <ScrollView horizontal contentContainerStyle={{ alignSelf: "flex-start"}}>
-                    {DESTINATIONS.map((destination) => (
-                        <Destination 
-                            key={destination.id}
-                            style={styles.locality}
-                            destination={destination} 
-                            onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}
-                        />
-                    ))}
                 </ScrollView>
             </View>
       </View>
@@ -157,8 +159,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light.dew, 
         paddingHorizontal: 17, 
         paddingTop: 13, 
+        marginBottom: 95,
         flex: 1, 
-        paddingBottom: 130 
     },
     button: {
         width: 40,
@@ -215,7 +217,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 15,
         lineHeight: 16,
-        fontWeight: defaultStyles.urbanistBold.fontWeight,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark,
         textTransform: "capitalize"
