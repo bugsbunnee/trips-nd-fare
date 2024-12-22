@@ -1,15 +1,15 @@
 import React from 'react';
-import { useImage, Image, ImageStyle, ImageSource } from 'expo-image';
+import { useImage, Image, ImageStyle, ImageSource, ImageProps } from 'expo-image';
 import { StyleProp, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, icons } from '../../constants';
 
-interface Props {
-    src: ImageSource;
+interface Props extends ImageProps {
+    src: ImageSource | string;
     style: StyleProp<ImageStyle>
 }
 
-const AppImage: React.FC<Props> = ({ src, style }) => {
+const AppImage: React.FC<Props> = ({ src, style, ...rest }) => {
   const image = useImage(src, {
     onError(error, retry) {
       console.error('Loading failed:', error.message);
@@ -26,6 +26,7 @@ const AppImage: React.FC<Props> = ({ src, style }) => {
     <Image
       source={image}
       style={style}
+      {...rest}
     />
   );
 };

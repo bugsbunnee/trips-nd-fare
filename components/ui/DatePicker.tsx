@@ -18,7 +18,7 @@ export interface DatePickerProps {
     format: string;
     mode: "date" | "datetime" | "countdown" | "time";
     onPress: () => void;
-    onChange: (value: Date) => void;
+    onDateChange: (value: Date) => void;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -31,7 +31,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
     const handleChange = useCallback((event: DateTimePickerEvent, selectedDate?: Date) => {
         setPickerVisible(false);
-        if (selectedDate) otherProps.onChange(selectedDate);
+        if (selectedDate) otherProps.onDateChange(selectedDate);
     }, []);
 
     const handleTap = useCallback(() => {

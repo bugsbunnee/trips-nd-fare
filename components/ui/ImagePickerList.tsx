@@ -9,7 +9,7 @@ interface Props {
     onRemoveImage: (imageUri: string) => void;
 }
 
-const AppImagePickerList: React.FC<Props> = ({ imageUris = [], onRemoveImage, onAddImage}) => {
+const AppImagePickerList: React.FC<Props> = ({ imageUris = [], onRemoveImage, onAddImage }) => {
   const scrollView = useRef<ScrollView>(null);
 
   return (

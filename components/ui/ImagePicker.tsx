@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Image, View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
 import * as ImagePicker from 'expo-image-picker';
+
+import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from '@/components/ui';
 
 import { colors, icons } from '@/constants';
 
@@ -24,7 +25,7 @@ const AppImagePicker: React.FC<Props> = ({ imageUri, onChangeImage }) => {
     const selectImage = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                mediaTypes: ['images'],
                 quality: 1,
             });
     
@@ -48,7 +49,7 @@ const AppImagePicker: React.FC<Props> = ({ imageUri, onChangeImage }) => {
         <View style={styles.container}>
             <View style={styles.imageContainer}>
                 {imageUri 
-                    ? <Image source={{ uri: imageUri }} style={styles.image} /> 
+                    ? <Image src={imageUri} style={styles.image} /> 
                     : <Ionicons name='camera' size={icons.SIZES.X_LARGE} color={colors.light.gray} />}
             </View>
             

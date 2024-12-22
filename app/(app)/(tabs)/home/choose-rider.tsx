@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
         lineHeight: 28,
         color: colors.light.dark,
         fontFamily: defaultStyles.jakartaSemibold.fontFamily,
-        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
     },
 });
 
