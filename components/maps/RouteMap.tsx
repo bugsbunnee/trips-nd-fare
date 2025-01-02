@@ -7,12 +7,12 @@ import { Platform, StyleSheet, View } from 'react-native';
 import _ from 'lodash';
 
 import { colors } from '@/constants';
-import { Coordinates } from '@/utils/models';
+import { Location } from '@/utils/models';
 import { getCoords } from '@/utils/lib';
 
 interface Props {
-    origin: Coordinates;
-    destination: Coordinates;
+    origin: Location;
+    destination: Location;
 }
 
 const RouteMap: React.FC<Props> = ({ origin, destination }) => {
@@ -35,6 +35,7 @@ const RouteMap: React.FC<Props> = ({ origin, destination }) => {
                 zoomEnabled
                 ref={mapRef}
                 initialRegion={getCoords({
+                    address: origin.address,
                     latitude: origin.latitude,
                     longitude: origin.longitude,
                     accuracy: 10,

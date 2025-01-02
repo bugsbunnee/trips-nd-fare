@@ -1,46 +1,63 @@
-import { Coordinates, Rider } from "@/utils/models";
+import { Booking, Location } from "@/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { bookRide } from "./actions";
+import { getMessageFromError } from "@/utils/lib";
 
 interface RideState {
-    origin: Coordinates | undefined;
-    destination: Coordinates | undefined;
-    from: string;
-    to: string;
-    rider: Rider | null;
-    rideID: string;
+    error: string;
+    isLoading: boolean;
+    selectedService: string;
+    from: Location | null;
+    to: Location | null;
+    rider: string;
+    booking: Booking | null;
 }
 
 const initialState: RideState = {
-    destination: undefined,
-    origin: undefined,
-    from: '',
-    to: '',
-    rider: null,
-    rideID: ''
-}
+    isLoading: false,
+    error: '',
+    selectedService: '',
+    from: null,
+    to: null,
+    rider: '',
+    booking: null,
+};
 
 const riderSlice = createSlice({
     name: 'ride',
     initialState,
     reducers: {
-        setOrigin: (state, action: PayloadAction<Coordinates>) => {
-            state.origin = action.payload;
+        setSelectedService: (state, action: PayloadAction<string>) => {
+            state.selectedService = action.payload;
         },
-        setDestination: (state, action: PayloadAction<Coordinates>) => {
-            state.destination = action.payload;
+        setLocationFrom: (state, action: PayloadAction<Location>) => {
+            state.from = action.payload;
+        },
+        setLocationTo: (state, action: PayloadAction<Location>) => {
+            state.to = action.payload;
         },
         setLocationDetails: (state, action: PayloadAction<Pick<RideState, 'from' | 'to'>>) => {
             state.from = action.payload.from;
             state.to = action.payload.to;
         },
-        setRider: (state, action: PayloadAction<Rider>) => {
+        setRider: (state, action: PayloadAction<string>) => {
             state.rider = action.payload;
-        },
-        setRideID: (state, action: PayloadAction<string>) => {
-            state.rideID = action.payload;
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(bookRide.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(bookRide.fulfilled, (state, action) => {
+            state.booking = action.payload!;
+            state.isLoading = false;
+        })
+        .addCase(bookRide.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
     },
 });
 
-export const { setDestination, setLocationDetails, setRider, setRideID, setOrigin } = riderSlice.actions;
+export const { setLocationDetails, setLocationFrom, setLocationTo, setRider, setSelectedService } = riderSlice.actions;
 export default riderSlice.reducer;

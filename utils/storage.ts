@@ -1,11 +1,30 @@
 import * as SecureStore from 'expo-secure-store';
-import { User } from './models';
+import { Platform } from 'react-native';
+import { TokenCache } from '@clerk/clerk-expo/dist/cache';
+import { AuthResponse } from '@/store/auth/actions';
 
 const key = "trips-nd-fare-user";
 
-const storeUser = async (user: User) => {
+const createTokenCache = (): TokenCache => {
+    return {
+      getToken: async (key: string) => {
+        try {
+          const item = await SecureStore.getItemAsync(key);
+          return item;
+        } catch (error) {
+          await SecureStore.deleteItemAsync(key);
+          return null
+        }
+      },
+      saveToken: (key: string, token: string) => {
+        return SecureStore.setItemAsync(key, token);
+      },
+    }
+};
+
+const storeUser = async (session: AuthResponse) => {
     try {
-        await SecureStore.setItemAsync(key, JSON.stringify(user));
+        await SecureStore.setItemAsync(key, JSON.stringify(session));
     } catch (error) {
         console.log('Error storing the user', error);
     }
@@ -13,8 +32,8 @@ const storeUser = async (user: User) => {
 
 const retrieveUser = async () => {
     try {
-        const user =  await SecureStore.getItemAsync(key);
-        if (user) return JSON.parse(user);
+        const session =  await SecureStore.getItemAsync(key);
+        if (session) return JSON.parse(session);
 
         return null;
     } catch (error) {
@@ -30,5 +49,6 @@ const removeUser = async () => {
     }
 };
 
+export const tokenCache = Platform.OS !== 'web' ? createTokenCache() : undefined;
 export default { storeUser, retrieveUser, removeUser };
 

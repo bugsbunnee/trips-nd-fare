@@ -1,15 +1,16 @@
-import { useCallback, useState } from "react";
-import { ImageURISource, StyleSheet, View, ViewToken } from "react-native";
-
+import React, { useCallback, useState } from "react";
 import Animated, { useAnimatedRef, useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+
+import { ImageURISource, StyleSheet, View, ViewToken } from "react-native";
+import { Link } from "expo-router";
+
 import { OnboardingSlide } from "@/utils/models";
+import { Text } from "@/components/ui";
 
 import OnboardingItem from "@/components/ui/OnboardingItem";
-import Screen from "@/components/navigation/Screen";
-import PaginationDot from "@/components/ui/PaginationDot";
-import { Button, Text } from "@/components/ui";
 import OnboardingCTAButton from "@/components/ui/OnboardingCTAButton";
-import { Link } from "expo-router";
+import PaginationDot from "@/components/ui/PaginationDot";
+import Screen from "@/components/navigation/Screen";
 
 interface ListItem { 
     item: OnboardingSlide; 
@@ -35,7 +36,7 @@ const SLIDES: OnboardingSlide[] = [
     },
 ];
 
-const IndexPage = () => {
+const IndexPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     
     const x = useSharedValue(0);

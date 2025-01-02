@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { FormikHelpers, FormikProps } from 'formik';
 
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Link } from 'expo-router';
+import { useOAuth, useSignIn, useSignUp } from '@clerk/clerk-expo';
+import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 
 import { ThemedView } from '@/components/ThemedView';
-import { Form, FormField, SubmitButton } from '@/components/forms';
+import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
 import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui';
 
-import { APP_COLORS } from '@/constants/colors';
-import { Link } from 'expo-router';
+import { colors } from '@/constants';
+import { loginUser } from '@/store/auth/actions';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import ActivityIndicator from '@/components/ui/ActivityIndicator';
+import { getFieldErrorsFromError, getMessageFromError } from '@/utils/lib';
+import storage from '@/utils/storage';
+
 
 interface FormValues {
     email: string;
@@ -25,13 +34,49 @@ const authSchema = yup.object<FormValues>().shape({
 });
 
 const SignInPage: React.FC = () => {
-  const handleSubmit = (auth: FormValues) => {
-    console.log(auth);
+  // const authFlow = useSignIn();
+  const oauth = useOAuth({ strategy: 'oauth_google' });
+  
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth);
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+
+  const handleGoogleSignUp = async () => {
+    // if (!authFlow.isLoaded || !authFlow.signIn) return;
+ 
+    // try {
+    //   const auth = formikRef.current!.values;
+      
+    //   const attempt = await authFlow.signIn.create({
+    //     identifier: auth.email,
+    //     password: auth.password,
+    //   });
+
+    //   if (attempt.status === 'complete') {
+    //     console.log(attempt.createdSessionId)
+    //     // attempt.createdSessionId
+    //     // auth.email
+
+    //     // send email and session id to the backend for persistence
+    //   }
+    // } catch (err: any) {
+     
+    // }
+  };
+
+  const handleSubmit = async (auth: FormValues, helpers: FormikHelpers<FormValues>) => {
+    try {
+      const result = await dispatch(loginUser(auth)).unwrap();
+      if (result) storage.storeUser(result);
+    } catch (error) {
+      const fieldErrors = getFieldErrorsFromError(error);
+      if (fieldErrors) helpers.setErrors(fieldErrors);
+    }
   };
 
   return (
     <ParallaxScrollView
-        headerBackgroundColor={{ light: APP_COLORS.WHITE, dark: APP_COLORS.WHITE }}
+        headerBackgroundColor={{ light: colors.light.white, dark: colors.light.white, }}
         headerImage={
             <View style={styles.headerContainer}>
                 <Image
@@ -47,7 +92,8 @@ const SignInPage: React.FC = () => {
         }
     >
         <KeyboardAwareScrollView>
-            <Form initialValues={{ email: '', password: '' }} onSubmit={handleSubmit} validationSchema={authSchema}>
+          <ActivityIndicator visible={auth.isAuthenticating} />
+            <Form ref={formikRef} initialValues={{ email: '', password: '' }} onSubmit={handleSubmit} validationSchema={authSchema}>
                 <FormField 
                     autoCapitalize="none" 
                     primaryIcon='envelope' 
@@ -64,13 +110,17 @@ const SignInPage: React.FC = () => {
                     placeholder="Enter password"
                     secureTextEntry
                 />
+
+                <FormError error={auth.error} />
                 
                 <View style={styles.buttonContainer}>
                     <SubmitButton label="Sign In" />
                     
                     <OrDivider />  
                     
-                    <GoogleSignInButton />
+                    <GoogleSignInButton 
+                      label='Login with Google' 
+                    />
 
                     <Link href='/sign-up' asChild>
                         <TouchableOpacity style={styles.signinContainer}>
@@ -90,10 +140,10 @@ const styles = StyleSheet.create({
     buttonContainer: { marginTop: 14 },
     headerContainer: { height: '100%', width: '100%' },
     signinContainer: { marginVertical: 40 },
-    signinText: { color: APP_COLORS.GRAY, textAlign: 'center' },
-    sigininTextCTA: { color: APP_COLORS.PRIMARY },
+    signinText: { color: colors.light.gray, textAlign: 'center' },
+    sigininTextCTA: { color: colors.light.primary },
     title: { 
-      color: APP_COLORS.WHITE, 
+      color: colors.light.white, 
       letterSpacing: 0.7,
     },
     titleContainer: {

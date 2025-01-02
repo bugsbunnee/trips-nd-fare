@@ -49,7 +49,7 @@ const CurrentLocationMap: React.FC<Props> = ({ markers = [] }) => {
                         <Marker
                             key={marker.title}
                             identifier={marker.identifier}
-                            image={marker.image}
+                            image={require('@/assets/images/rider-map-pin.png')}
                             coordinate={marker.coordinate}
                             title={marker.title}
                             description={marker.description}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pin: { width: 30, height: 42, resizeMode: 'contain' },
-  skeleton: { justifyContent: 'center', alignItems: 'center' },
+  skeleton: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default CurrentLocationMap;

@@ -3,9 +3,10 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from '@/components/ui';
-
 import { colors, icons } from '@/constants';
+
+import Image from './Image';
+
 
 interface Props {
     imageUri: string;

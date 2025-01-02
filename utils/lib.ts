@@ -1,4 +1,5 @@
 import React from "react";
+import { ApiErrorResponse } from 'apisauce';
 
 import { NotificationContentInput, scheduleNotificationAsync } from "expo-notifications";
 import { LocationObjectCoords } from "expo-location";
@@ -9,11 +10,11 @@ import duration from "dayjs/plugin/duration";
 
 import { CURRENCY } from "@/constants/app";
 import { colors } from "@/constants";
-import { Transaction } from "./models";
+import { Location, Transaction } from "./models";
 
 dayjs.extend(duration);
 
-export const formatDate = (date: string | number |  Date, format: string = 'DD MMMM YYYY, HH:mm A') => {
+export const formatDate = (date: string | number |  Date, format: string = 'DD MMMM YYYY, HH:mm a') => {
     return dayjs(date).format(format);
 };
 
@@ -36,13 +37,13 @@ export const getCountDown = (startDate: string | Date | number, endDate: string 
     return { days, hours, minutes, seconds };
 };
 
-export const getCoords = ({ latitude, longitude, accuracy, speed, ...others }: LocationObjectCoords) => {
+export const getCoords = ({ latitude, longitude, accuracy, speed, ...others }: LocationObjectCoords & Location) => {
     const oneDegreeOfLatitudeInMeters = 111.32 * 1000;
     const latitudeDelta = accuracy! / oneDegreeOfLatitudeInMeters;
     const longitudeDelta = accuracy! / (oneDegreeOfLatitudeInMeters * Math.cos(latitude * (Math.PI / 180)));
   
     return {
-    ...others,
+      ...others,
       latitude,
       longitude,
       latitudeDelta,
@@ -50,6 +51,30 @@ export const getCoords = ({ latitude, longitude, accuracy, speed, ...others }: L
       accuracy,
       speed,
     };
+};
+
+export const getFieldErrorsFromError = (error: unknown) => {
+    const parsedError: any = error;
+   
+    if (parsedError.response && parsedError.response.data && parsedError.response.data.fieldErrors) {
+        return parsedError.response.data.fieldErrors;
+    }
+
+    return null;
+};
+
+export const getMessageFromError = (error: any) => {
+    if (error) {
+        if (error.response && error.response.data) {
+            return error.response.data.message;
+        }
+
+        if (error.error) {
+            return error.error;
+        }
+    }
+
+    return '';
 };
 
 export const getTimeFromDate = (date: string | Date | number) => {

@@ -4,12 +4,16 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Animated from "react-native-reanimated";
 import dayjs from "dayjs";
+import _ from 'lodash';
 
-import { Text } from "@/components/ui";
-import { colors, app, styles as defaultStyles } from "@/constants";
+import Conditional from "../common/Conditional";
+
+import { Skeleton, Text } from "@/components/ui";
+import { colors, styles as defaultStyles } from "@/constants";
 import { formatAmount } from "@/utils/lib";
 
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
+import useBookings from "@/hooks/useRecentBookings";
 
 interface TableCellProps {
     isActive: boolean;
@@ -36,48 +40,66 @@ const TableHeaderCell: React.FC<TableCellProps> = ({ isActive, label, onPress })
 
 const DashboardTrips: React.FC = () => {
     const [orderBy, setOrderBy] = useState('date');
+    const bookings = useBookings();
 
     return ( 
-        <FlatList
-            data={app.RIDES}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-                <View style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? colors.light.borderLight : colors.light.background }]}>
-                    <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.date).format('DD MMM.')}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{item.type}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.date).format('HH:mm A')}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{process.env.EXPO_PUBLIC_CURRENCY}{formatAmount(item.price)}</Text>
-                </View>
-            )}
-            ListHeaderComponent={() => (
-                <View style={styles.tableHeader}>
-                    <TableHeaderCell 
-                        isActive={orderBy === 'date'} 
-                        label="Date" 
-                        onPress={() => setOrderBy('date')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'type'} 
-                        label="Location" 
-                        onPress={() => setOrderBy('type')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'time'} 
-                        label="Time" 
-                        onPress={() => setOrderBy('time')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'price'} 
-                        label="Price" 
-                        onPress={() => setOrderBy('price')}
-                    />
-                </View>
-            )}
-        />
+        <>
+            <Conditional visible={bookings.isLoading}>
+                {_.range(1, 5).map((fill) => (
+                    <View key={fill} style={[styles.tableRow, styles.skeletonContainer]}>
+                        <Skeleton style={styles.skeleton} />
+                        <Skeleton style={styles.skeleton} />
+                        <Skeleton style={styles.skeleton} />
+                        <Skeleton style={styles.skeleton} />
+                    </View>
+                ))}
+            </Conditional>
+        
+            <FlatList
+                data={bookings.bookings.slice(0, 5)}
+                refreshing={bookings.isLoading}
+                onRefresh={bookings.onRefresh}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item, index }) => (
+                    <View style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? colors.light.borderLight : colors.light.background }]}>
+                        <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('DD MMM.')}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{item.driver.serviceCode}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('HH:mm A')}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{formatAmount(item.price)}</Text>
+                    </View>
+                )}
+                ListHeaderComponent={() => (
+                    <View style={styles.tableHeader}>
+                        <TableHeaderCell 
+                            isActive={orderBy === 'date'} 
+                            label="Date" 
+                            onPress={() => setOrderBy('date')}
+                        />
+                        <TableHeaderCell 
+                            isActive={orderBy === 'type'} 
+                            label="Location" 
+                            onPress={() => setOrderBy('type')}
+                        />
+                        <TableHeaderCell 
+                            isActive={orderBy === 'time'} 
+                            label="Time" 
+                            onPress={() => setOrderBy('time')}
+                        />
+                        <TableHeaderCell 
+                            isActive={orderBy === 'price'} 
+                            label="Price" 
+                            onPress={() => setOrderBy('price')}
+                        />
+                    </View>
+                )}
+            />
+        </>
      );
 };
 
 const styles = StyleSheet.create({
+    skeleton: { height: 10, flex: 1, borderRadius: 2 },
+    skeletonContainer: { backgroundColor: colors.light.background, gap: 10 },
     tableRow: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, alignItems: 'center' },
     tableHeader: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, gap: 5, alignItems: 'center', backgroundColor: colors.light.primaryLight, marginBottom: 10 },
     tableHeaderActive: { paddingHorizontal: 11, paddingVertical: 5, backgroundColor: colors.light.primary, borderRadius: 4, flex: 1 },

@@ -1,12 +1,14 @@
-import { Link, router } from "expo-router";
-import { Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import React from "react";
 
-import { Button, GoogleSignInButton, OrDivider, Text } from "@/components/ui";
+import { Link, router } from "expo-router";
+import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
+
+import { Button, GoogleSignInButton, Image, OrDivider, Text } from "@/components/ui";
 import { APP_COLORS } from "@/constants/colors";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 
-const GetStartedPage = () => {
+const GetStartedPage: React.FC = () => {
     const { height } = useWindowDimensions();
 
     return ( 
@@ -15,7 +17,8 @@ const GetStartedPage = () => {
             headerBackgroundColor={{ light: APP_COLORS.WHITE, dark: APP_COLORS.WHITE }}
             headerImage={
                 <Image
-                    source={require('@/assets/images/welcome.png')}
+                    contentFit='cover'
+                    src={require('@/assets/images/welcome.png')}
                     style={styles.image}
                 />
             }
@@ -30,7 +33,7 @@ const GetStartedPage = () => {
                 
                 <OrDivider />  
                 
-                <GoogleSignInButton />
+                <GoogleSignInButton label='Login with Google' />
 
                 <Link href='/sign-in' asChild>
                     <TouchableOpacity style={styles.signinContainer}>
@@ -57,7 +60,6 @@ const styles = StyleSheet.create({
         width: '100%',
         bottom: 0,
         left: 0,
-        contentFit: 'cover',
         position: 'absolute',
     },
     signinContainer: { marginVertical: 40 },

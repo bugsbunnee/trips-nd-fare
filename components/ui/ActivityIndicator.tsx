@@ -12,21 +12,12 @@ interface Props {
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 const ActivityIndicator: React.FC<Props> = ({ visible = false }) => {
+  const style = useAnimatedStyle(() => ({
+    width: withSpring(150),
+    height: 150
+  }));
+
   if (!visible) return null;
-
-  const width = useSharedValue(0);
-
-  const config = {
-    duration: 500,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
-
-  const style = useAnimatedStyle(() => {
-    return {
-        width: withSpring(150),
-        height: 150
-    }
-  });
 
   return (
     <View style={styles.overlay}>

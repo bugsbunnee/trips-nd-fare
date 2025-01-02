@@ -7,5 +7,6 @@ export { default as Text } from './Text';
 export { default as TextInput } from './TextInput';
 export { default as HelloWave } from './HelloWave';
 export { default as ImagePicker } from './ImagePicker';
+export { default as RiderLayout } from './RiderLayout';
 export { default as Notification } from './Notification';
 export { default as Skeleton } from './Skeleton';

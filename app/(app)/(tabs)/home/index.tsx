@@ -1,51 +1,43 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
+import Carousel from "react-native-reanimated-carousel";
+import _ from 'lodash';
 
-import { FlatList, Image, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
+import { FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { router } from "expo-router";
 
+import Conditional from "@/components/common/Conditional";
 import DashboardTrips from '@/components/lists/DashboardTrip';
 import Screen from "@/components/navigation/Screen";
 
-import { Notification, Text } from "@/components/ui";
+import { Notification, Skeleton, Text } from "@/components/ui";
 import { colors, styles as defaultStyles } from "@/constants";
 import { formatAmount } from "@/utils/lib";
-
-
-const CTAs = [
-    { 
-        backgroundColor: '#FFDCD4',
-        title: 'Book a ride', 
-        description: 'Order a ride from your home', 
-        image: require('@/assets/images/book-ride.png') 
-    },
-    { 
-        backgroundColor: '#D3E8D9',
-        title: 'Buy Bus Ticket', 
-        description: 'Book your bus ticket from the comfort of your home', 
-        image: require('@/assets/images/bus.png') 
-    },
-    { 
-        backgroundColor: '#E8E8D3',
-        title: 'Local Trips', 
-        description: 'Call a local rider from around your area', 
-        image: require('@/assets/images/keke.png') 
-    },
-    { 
-        backgroundColor: '#E8DED3',
-        title: 'Train', 
-        description: 'Book your train services', 
-        image: require('@/assets/images/train.png') 
-    },
-    { 
-        backgroundColor: '#71C3FF',
-        title: 'Ferry', 
-        description: 'Buy your ferry ticket', 
-        image: require('@/assets/images/ferry.png') 
-    },
-];
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getServices } from "@/store/data/actions";
+import { setSelectedService } from "@/store/ride/slice";
+import { useSharedValue } from "react-native-reanimated";
 
 const HomeIndexPage: React.FC = () => {
-    const { height } = useWindowDimensions();
+    const { height, width } = useWindowDimensions();
+
+    const ref = React.useRef(null);
+    const progress = useSharedValue(0);
+    
+    const dispatch = useAppDispatch();
+    const data = useAppSelector((state) => state.data);
+
+    const handleFetchServices = useCallback(() => {
+        dispatch(getServices());
+    }, [dispatch]);
+
+    const handleSelectService = useCallback((serviceId: string) => {
+        dispatch(setSelectedService(serviceId));
+        router.push('/home/book');
+    }, [dispatch]);
+
+    useEffect(() => {
+        handleFetchServices();
+    }, [handleFetchServices]);
    
     return ( 
       <Screen style={styles.container}>
@@ -64,46 +56,86 @@ const HomeIndexPage: React.FC = () => {
           </View>
 
           <View style={styles.body}>
-            <View style={styles.card}>
-                <View style={styles.cardDetails}>
-                    <Text type='default' style={styles.cardTitle}>Are you ready for a <Text type='default-semibold' style={styles.cardTitleBold}>smooth ride?</Text></Text>
-                    <Text type='default' style={styles.cardDescription}>Sit back, relax and enjoy rides from your comfort.</Text>
-                    <TouchableOpacity style={styles.cardButton} onPress={() => router.push('/home/book')}>
-                        <Text type='default-semibold' style={styles.cardButtonText}>Ride with ClickRide</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.cardImageContainer}>
-                    <Image 
-                        source={require('@/assets/images/home-cta.png')}
-                        style={styles.cardImage}
-                    />
-                </View>
+            <View>
+                <Carousel
+                    ref={ref}
+                    width={width * 0.9}
+                    height={1000}
+                    data={news}
+                    style={{ flex: 1,height: '100%', marginTop: -90, backgroundColor: 'red' }}
+                    onProgressChange={value => progress.set(value)}
+                    renderItem={({ index, item }) => (
+                        <View style={styles.card}>
+                            <View style={styles.cardDetails}>
+                                <Text type='default' style={styles.cardTitle}>{item.title} <Text type='default-semibold' style={styles.cardTitleBold}>{item.cta}</Text></Text>
+                                <Text type='default' style={styles.cardDescription}>{item.description}</Text>
+                                <TouchableOpacity style={styles.cardButton} onPress={() => router.push('/home/book')}>
+                                    <Text type='default-semibold' style={styles.cardButtonText}>{item.button}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.cardImageContainer}>
+                                <Image 
+                                    source={require('@/assets/images/home-cta.png')}
+                                    style={styles.cardImage}
+                                />
+                            </View>
+                        </View>
+                    )}
+                />
+
+                {/* <Carousel
+                    progress={progress}
+                    data={data}
+                    dotStyle={styles.dotStyle}
+                    containerStyle={styles.dotContainer}
+                /> */}
             </View>
+            
+
             <View>
                 <Text type="subtitle" style={styles.subtitle}>Explore seamless ways to move around</Text>
 
-                <FlatList 
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={CTAs}
-                    snapToAlignment="start"
-                    pagingEnabled
-                    keyExtractor={(item) => item.title}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity 
-                            onPress={() => router.push('/home/book')}
-                            style={[styles.cta, { backgroundColor: item.backgroundColor }]}
-                        >
-                            <Text type='default-semibold' style={styles.ctaTitle}>{item.title}</Text>
-                            <Text type='default' style={styles.ctaDescription}>{item.description}</Text>
-                            
-                            <View style={styles.ctaImageContainer}>
-                                <Image source={item.image} style={styles.ctaImage} />
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
+                <Conditional visible={data.isLoading}>
+                    <ScrollView bounces={false} showsHorizontalScrollIndicator={false} horizontal>
+                        {_.range(1, 4).map((fill, index) => (
+                            <Skeleton key={fill} style={[styles.ctaSkeleton, (index + 1) % 2 === 0 ? styles.horizontalMargin : undefined]}>
+                                <Skeleton style={styles.ctaSkeletonTitle} />     
+                                <Skeleton style={styles.ctaSkeletonText} />   
+                
+                                <View style={styles.ctaImageContainer}> 
+                                    <Skeleton style={styles.ctaSkeletonImage} />     
+                                </View>  
+                            </Skeleton>
+                        ))}
+                    </ScrollView>
+                </Conditional>
+
+                <Conditional visible={!data.isLoading}>
+                    <FlatList 
+                        refreshing={data.isLoading}
+                        onRefresh={handleFetchServices}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={data.services}
+                        snapToAlignment="start"
+                        pagingEnabled
+                        keyExtractor={(item) => item.name}
+                        ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity 
+                                onPress={() => handleSelectService(item._id)}
+                                style={[styles.cta, { backgroundColor: item.color }]}
+                            >
+                                <Text type='default-semibold' style={styles.ctaTitle}>{item.name}</Text>
+                                <Text type='default' style={styles.ctaDescription}>{item.description}</Text>
+                                
+                                <View style={styles.ctaImageContainer}>
+                                    <Image src={item.image} style={styles.ctaImage} />
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </Conditional>
 
                 <Text type="subtitle" style={styles.subtitle}>Trips</Text>
 
@@ -113,6 +145,16 @@ const HomeIndexPage: React.FC = () => {
       </Screen>
     );
 };
+
+const news = [
+    {
+        title: 'Are you ready for a',
+        cta: 'smooth ride?',
+        description: 'Sit back, relax and enjoy rides from your comfort.',
+        button: 'Ride with ClickRide',
+        img: require('@/assets/images/home-cta.png'),
+    }
+];
 
 const styles = StyleSheet.create({
     balance: { backgroundColor: colors.light.white, paddingVertical: 5, paddingHorizontal: 7, borderRadius: 11 },
@@ -125,12 +167,14 @@ const styles = StyleSheet.create({
     body: { flex: 1, zIndex: 1, elevation: 0, backgroundColor: colors.light.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 16 },
     card: { 
         width: '100%', 
+        // minHeight: 100,
         padding: 16,
         gap: 4,
         backgroundColor: colors.light.input,
         borderRadius: 10,
         marginTop: -90,
         flexDirection: "row",
+        alignItems: "center"
     },
     cardButton: { padding: 10, backgroundColor: colors.light.primary, marginTop: 10, borderRadius: 8, alignSelf: 'flex-start' },
     cardButtonText: { 
@@ -193,6 +237,28 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
+    ctaSkeleton: {
+        borderRadius: 8,
+        width: 112,
+        padding: 11,
+        backgroundColor: colors.light.dew,
+    },
+    ctaSkeletonImage: { 
+        width: 76, 
+        height: 47,
+        borderRadius: 8, 
+    },
+    ctaSkeletonTitle: { 
+        width: '100%', 
+        height: 15, 
+        borderRadius: 4, 
+    },
+    ctaSkeletonText: { 
+        width: '100%', 
+        height: 8,
+        marginTop: 10, 
+        borderRadius: 8, 
+    },
     greeting: { 
         color: colors.light.white, 
         fontSize: 22, 
@@ -206,6 +272,7 @@ const styles = StyleSheet.create({
         elevation: 20 
     },
     headerRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    horizontalMargin: { marginHorizontal: 17 },
     rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     separator: { width: 17 },
     subtitle: { 

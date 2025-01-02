@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Platform } from 'react-native';
+
+import _ from 'lodash';
+
 import { getCoords } from '@/utils/lib';
+import { useAppDispatch } from '@/store/hooks';
+import { updateLocation } from '@/store/data/actions';
+import { CoordinatesDelta } from '@/utils/models';
 
 import * as Device from 'expo-device';
 import * as Location from 'expo-location';
 
-interface Coords extends Location.LocationObjectCoords {
-  latitudeDelta: number;
-  longitudeDelta: number;
-}
 
 function useLocation() {
-  const [coords, setCoords] = useState<Coords>();
+  const [coords, setCoords] = useState<CoordinatesDelta>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function requestPermission() {
@@ -21,11 +24,27 @@ function useLocation() {
         if (permission.status !== 'granted') return;
 
         const fetchedLocation = await Location.getCurrentPositionAsync();
-        setCoords(getCoords(fetchedLocation.coords));
+        const address = await Location.reverseGeocodeAsync(fetchedLocation.coords);
+
+        setCoords(getCoords({
+            ...fetchedLocation.coords,
+            address: `${address[0].name} ${address[0].street}, ${address[0].country}`
+        }));
     }
 
     requestPermission();
   }, []);
+
+  useEffect(() => {
+    async function uploadLocation() {
+        if (!coords) return;
+
+        const coordinates = _.pick(coords, ['latitude', 'longitude']);
+        await dispatch(updateLocation(coordinates));
+    }
+
+    uploadLocation();
+  }, [dispatch, coords]);
 
   return coords;
 }

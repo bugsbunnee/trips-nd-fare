@@ -1,113 +1,95 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React from 'react';
 
-import { View,  StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import { View,  StyleSheet } from 'react-native';
+import { Octicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { router } from 'expo-router';
 
 import { colors, icons, styles as defaultStyles } from '@/constants';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { Button, Text } from '@/components/ui';
+import { useAppSelector } from '@/store/hooks';
+import { Button, Image, RiderLayout, Text } from '@/components/ui';
 
-import car from '@/assets/images/car.png';
+import RouteMap from '@/components/maps/RouteMap';
 
-const RideInformationPage = () => {
-    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const snapPoints = useMemo(() => ['65%'], []);
-
+const RideTrackingPage = () => {
     const rideDetails = useAppSelector((state) => state.ride);
-
     const insets = useSafeAreaInsets();
-    const dispatch = useAppDispatch();
 
     const handleNavigateHome = () => {
        router.replace('/home')
     };
 
-    useEffect(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
-
-  return (
-    <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <View style={[styles.header, { paddingTop: insets.top }]}>
-            <TouchableOpacity style={styles.backButton} onPress={handleNavigateHome}>
-                <MaterialCommunityIcons name='arrow-left' size={icons.SIZES.NORMAL} color={colors.light.dark} />
-            </TouchableOpacity>
-
-            <Text type='title' style={styles.title}>Track Ride</Text>
-        </View>
-
-        <BottomSheetModal style={styles.curved} animateOnMount enablePanDownToClose={false} ref={bottomSheetModalRef} index={1} snapPoints={snapPoints}>
-            <BottomSheetView style={styles.contentHeader}>
-                <Text type='default-semibold' style={styles.contentTitle}>Arriving in <Text type='default-semibold' style={[styles.contentTitle, styles.contentTitlePrimary]}>10 mins</Text></Text>
-            </BottomSheetView>
-
-            <BottomSheetView style={styles.content}>
-                <View style={styles.metadata}>
-                    <View>
-                        <Image 
-                            source={{ uri: rideDetails.rider!.uri }} 
-                            alt={rideDetails.rider!.name} 
-                            style={styles.riderImage} 
-                        />
-
-                        <Text type='subtitle' style={{ fontSize: 15, lineHeight: 20, marginTop: 8 }}>{rideDetails.rider!.name}</Text>
-                    </View>
-
-                    <Image 
-                        source={car} 
-                        alt={rideDetails.rider!.type} 
-                        style={styles.vehicleImage} 
+    return (
+            <RiderLayout 
+                label='Track Ride'
+                Map={() => (
+                    <RouteMap
+                        origin={rideDetails.booking!.from}
+                        destination={rideDetails.booking!.to}
                     />
+                )}
+            >
+                <View style={[styles.contentHeader, styles.horizontalPadding]}>
+                    <Text type='default-semibold' style={styles.contentTitle}>
+                        Arriving in <Text type='default-semibold' style={[styles.contentTitle, styles.contentTitlePrimary]}>{rideDetails.booking!.driver.timeToLocation}</Text>
+                    </Text>
                 </View>
 
-                <View style={styles.location}>
-                    <View style={styles.locationItem}>
-                        <Octicons
-                            name='paper-airplane' 
-                            size={icons.SIZES.NORMAL} 
-                            color={colors.light.dark} 
-                        />
+                <View style={[styles.content, styles.horizontalPadding]}>
+                    <View style={styles.metadata}>
+                        <View>
+                            <Image 
+                                src={rideDetails.booking!.driver.profileDisplayImage} 
+                                alt={rideDetails.booking!.driver.firstName} 
+                                style={styles.riderImage} 
+                                contentFit='cover'
+                            />
 
-                        <Text type='default-semibold' style={styles.address}>Ogombo road</Text>
+                            <Text type='subtitle' style={styles.name}>{rideDetails.booking!.driver.firstName}</Text>
+                        </View>
+
+                        <Image
+                            src={rideDetails.booking!.driver.serviceDisplayImage}
+                            alt={rideDetails.booking!.driver.lastName} 
+                            style={styles.vehicleImage} 
+                            contentFit='contain'
+                        />
                     </View>
 
-                    <View style={styles.separator} />
+                    <View style={styles.location}>
+                        <View style={styles.locationItem}>
+                            <Octicons
+                                name='paper-airplane' 
+                                size={icons.SIZES.NORMAL} 
+                                color={colors.light.dark} 
+                            />
 
-                    <View style={styles.locationItem}>
-                        <Octicons
-                            name='location'
-                            size={icons.SIZES.NORMAL} 
-                            color={colors.light.dark} 
-                        />
+                            <Text type='default-semibold' style={styles.address}>{rideDetails.booking!.from.address}</Text>
+                        </View>
 
-                        <Text type='default-semibold' style={styles.address}>Lekki pennisula scheme 2, road 6b</Text>
+                        <View style={styles.separator} />
+
+                        <View style={styles.locationItem}>
+                            <Octicons
+                                name='location'
+                                size={icons.SIZES.NORMAL} 
+                                color={colors.light.dark} 
+                            />
+
+                            <Text type='default-semibold' style={styles.address}>{rideDetails.booking!.to.address}</Text>
+                        </View>
                     </View>
                 </View>
-            </BottomSheetView>
 
-            <View style={{ paddingBottom: insets.bottom + 10 }}>
-                <Button label='Back Home' onPress={handleNavigateHome} />
-            </View>
-        </BottomSheetModal>
-      </View>
-    </BottomSheetModalProvider>
-  );
+                <View style={[{ paddingBottom: insets.bottom + 10 }, styles.horizontalPadding]}>
+                    <Button label='Back Home' onPress={handleNavigateHome} />
+                </View>
+            </RiderLayout>
+    );
 };
 
 const styles = StyleSheet.create({
-    address: { color: colors.light.dark, fontSize: 15, lineHeight: 20 },
-    backButton: { 
-        backgroundColor: colors.light.white, 
-        width: 40, 
-        height: 40, 
-        borderRadius: 40, 
-        justifyContent: 'center', 
-        alignItems: 'center'
-    },
+    address: { color: colors.light.dark, fontSize: 15, lineHeight: 20, flex: 1 },
     container: {
         flex: 1,
         padding: 16,
@@ -123,33 +105,17 @@ const styles = StyleSheet.create({
     contentHeader: { flexDirection: 'row', alignItems: 'center' },
     contentTitle: { fontSize: 20, color: colors.light.dark, flex: 1 },
     contentTitlePrimary: { color: colors.light.primary },
-    curved: { 
-        borderTopRightRadius: 30,
-        borderTopLeftRadius: 30,
-        padding: 16,
-        backgroundColor: colors.light.white
-    },
-    gps: { right: 16, position: 'absolute', top: '30%' },
-    header: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+    horizontalPadding: { paddingHorizontal: 16 },
     location: { marginTop: 20 },
     locationItem: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 16 },
     metadata: { paddingVertical: 16, paddingHorizontal: 24, borderRadius: 16, backgroundColor: colors.light.primaryLight, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     metadataRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.light.white },
     metadataLabel: { color: colors.light.dark, fontSize: 17, lineHeight: 24, textTransform: 'capitalize' },
-    rating: { fontSize: 15, lineHeight: 20, color: colors.light.dark },
-    ratingContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2},
+    name: { fontSize: 15, lineHeight: 20, marginTop: 8, textAlign: 'center' },
     riderDetails: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 12 },
-    riderImage: { width: 100, height: 100, contentFit: 'cover', borderRadius: 100 },
+    riderImage: { width: 100, height: 100, borderRadius: 100 },
     separator: { height: 1, backgroundColor: colors.light.grayLight, width: '100%' },
-    vehicleImage: { width: 128, height: 72, contentFit: 'contain' },
-    title: {
-        fontSize: 24,
-        lineHeight: 28,
-        color: colors.light.dark,
-        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
-        fontWeight: defaultStyles.jakartaSemibold.fontWeight,
-    },
-
+    vehicleImage: { width: 128, height: 72 },
 });
 
-export default RideInformationPage;
+export default RideTrackingPage;

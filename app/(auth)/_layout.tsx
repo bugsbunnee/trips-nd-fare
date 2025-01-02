@@ -1,14 +1,17 @@
+import React from "react";
+
 import { Redirect, Stack } from "expo-router";
-import { setAuthenticating } from "@/store/auth/slice";
+import { setInitializing } from "@/store/auth/slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+
 import Splash from "@/components/ui/Splash";
 
-const AuthLayout = () => {
+const AuthLayout: React.FC = () => {
     const auth = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
 
-    if (auth.isAuthenticating) {
-        return <Splash onDone={() => dispatch(setAuthenticating(false))} />;
+    if (auth.isInitializing) {
+        return <Splash onDone={() => dispatch(setInitializing(false))} />;
     }
 
     if (auth.user) {

@@ -1,5 +1,25 @@
+import { NearbyRider } from "@/store/data/slice";
 import { ImageSource } from "expo-image";
 import { ImageURISource } from "react-native";
+
+export interface AuthUser {
+    email: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    sessionId: string;
+}
+
+export interface Booking {
+    _id: string;
+    driver: NearbyRider;
+    user: string;
+    price: number;
+    rideStatus: string;
+    paymentStatus: string;
+    createdAt: string;
+    from: Location;
+    to: Location;
+}
 
 export interface Coordinates {
     latitude: number;
@@ -13,6 +33,15 @@ export interface Destination {
     minimumCost: number;
 }
 
+export interface Location extends Coordinates {
+    address: string;
+}
+
+export interface CoordinatesDelta extends Location {
+  latitudeDelta: number;
+  longitudeDelta: number;
+}
+
 export interface OnboardingSlide {
     title: string;
     description: string;
@@ -21,9 +50,14 @@ export interface OnboardingSlide {
 }
 
 export interface User {
-    accountType: 'driver' | 'customer';
-    name: string;
+    _id: string;
+    city: string;
     email: string;
+    emailVerifiedAt: Date | null;
+    firstName: string;
+    isEmailVerified: boolean;
+    lastName: string;
+    phoneNumber: string;
 }
 
 export interface UserRide {
@@ -58,7 +92,7 @@ export interface PickerItemModel {
 export interface Ticket {
     location: string;
     destination: string;
-    departureDate: Date | string,
+    departureDate: Date | string;
     arrivalDate: Date | string,
     company: ImageSource;
     amount: number;
@@ -72,3 +106,4 @@ export interface Transaction {
     date: string | number | Date;
     transactionType: 'deposit' | 'withdrawal';
 }
+

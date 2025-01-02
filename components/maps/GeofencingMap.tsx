@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 import { Platform, StyleSheet, View } from 'react-native';
 
-import { Coordinates } from '@/utils/models';
+import { Coordinates, Location } from '@/utils/models';
 import { getCoords } from '@/utils/lib';
 import { Image, Skeleton } from '../ui';
 import { colors } from '@/constants';
@@ -15,11 +15,11 @@ import { colors } from '@/constants';
 import useLocation from '@/hooks/useLocation';
 
 interface Props {
-    origin: Coordinates | undefined;
-    destination: Coordinates | undefined;
+    origin: Location | null;
+    destination: Location | null;
     markers: MapMarkerProps[];
-    onDestinationChange: (coordinates: Coordinates) => void;
-    onOriginChange: (coordinates: Coordinates) => void;
+    onDestinationChange?: (location: Location) => void;
+    onOriginChange?: (coordinates: Location) => void;
 }
 
 const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOriginChange, onDestinationChange }) => {
@@ -48,6 +48,8 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
         }
     }, [origin, markers]);
 
+    console.log(destination)
+
     if (origin) {
         return ( 
             <View style={styles.container}>
@@ -57,6 +59,7 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
                     style={styles.map}
                     zoomEnabled
                     initialRegion={getCoords({
+                        address: origin.address,
                         latitude: origin.latitude,
                         longitude: origin.longitude,
                         accuracy: 10,
@@ -70,9 +73,8 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
                         <React.Fragment key={marker.identifier}>
                             <Marker
                                 key={marker.title}
-                                onPress={() => onDestinationChange(marker.coordinate)}
                                 identifier={marker.identifier}
-                                image={marker.image}
+                                image={require('@/assets/images/rider-map-pin.png')}
                                 coordinate={marker.coordinate}
                                 title={marker.title}
                                 description={marker.description}
@@ -104,10 +106,14 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
                                 image={require('@/assets/images/destination-map-pin.png')}
                                 coordinate={destination}
                                 title="Suggested dropoff"
-                                onDragEnd={(event) => {
+                                onDragEnd={onDestinationChange ? (event) => {
                                     impactAsync(ImpactFeedbackStyle.Medium);
-                                    onDestinationChange(event.nativeEvent.coordinate);
-                                }}
+                                    onDestinationChange({
+                                        latitude: event.nativeEvent.coordinate.latitude,
+                                        longitude: event.nativeEvent.coordinate.longitude,
+                                        address: '',
+                                    });
+                                } : undefined}
                             />
                         </>
                     )}
@@ -117,10 +123,14 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
                         coordinate={origin}
                         title="Suggested pickup"
                         image={require("@/assets/images/marker.png")}
-                        onDragEnd={(event) => {
+                        onDragEnd={onOriginChange ? (event) => {
                             impactAsync(ImpactFeedbackStyle.Medium);
-                            onOriginChange(event.nativeEvent.coordinate);
-                        }}
+                            onOriginChange({
+                                latitude: event.nativeEvent.coordinate.latitude,
+                                longitude: event.nativeEvent.coordinate.longitude,
+                                address: '',
+                            });
+                        } : undefined}
                     />        
                 </MapView>
             </View>
@@ -146,7 +156,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pin: { width: 30, height: 42, resizeMode: 'contain' },
-  skeleton: { justifyContent: 'center', alignItems: 'center' },
+  skeleton: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default GeofencingMap;

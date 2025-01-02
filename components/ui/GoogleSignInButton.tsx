@@ -1,22 +1,69 @@
 import React from 'react';
+import * as Linking from 'expo-linking';
 
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { useOAuth } from '@clerk/clerk-expo';
+
+import Image from './Image';
+
 import { APP_COLORS } from '@/constants/colors';
+import { AuthUser } from '@/utils/models';
+
+
 
 import Text from './Text';
 
 interface Props {
+    label: string;
 }
 
-const GoogleSignInButton: React.FC<Props> = ({  }) => {
+
+const GoogleSignInButton: React.FC<Props> = ({ label }) => {
+    const oauth = useOAuth({ strategy: 'oauth_google' });
+
+    const handleRegistration = (authUser: AuthUser) => {
+        console.log(authUser);
+    };
+    
+    const handleAuthentication = (authUser: AuthUser) => {
+        console.log(authUser);
+    };
+
+    const handleGoogleSignIn = async () => {
+        const redirectUrl = await Linking.createURL('/home');
+        const authFlow = await oauth.startOAuthFlow({ redirectUrl });
+        
+       if (authFlow.createdSessionId) {
+            if (authFlow.signUp && authFlow.signUp.createdUserId) {
+                const auth = {
+                    email: authFlow.signUp.emailAddress!,
+                    firstName: authFlow.signUp.firstName!,
+                    lastName: authFlow.signUp.lastName!,
+                    sessionId: authFlow.signUp.createdUserId,
+                };
+
+                return handleRegistration(auth);
+            };
+
+            console.log(authFlow.signIn);
+       }
+
+    };
+
     return ( 
-        <TouchableOpacity style={[styles.button]}>
-            <Image source={require('@/assets/images/google.png')} alt='Google' style={styles.image} />
+        <TouchableOpacity style={[styles.button]} onPress={handleGoogleSignIn}>
+            <Image 
+                contentFit='contain' 
+                src={require('@/assets/images/google.png')} 
+                alt='Google' 
+                style={styles.image} 
+            />
+
             <Text type='default-semibold' style={styles.text}>
-                Login with Google
+                {label}
             </Text>
         </TouchableOpacity>
-     );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -33,7 +80,6 @@ const styles = StyleSheet.create({
     image: { 
         width: 20,
         height: 20,
-        contentFit: 'contain',
         marginRight: 10
     },
     text: {

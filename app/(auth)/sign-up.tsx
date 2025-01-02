@@ -1,13 +1,16 @@
+import React from 'react';
+
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Link, router } from 'expo-router';
+import { FormikHelpers } from 'formik';
 
 import * as yup from 'yup';
 import YupPassword from 'yup-password'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { APP_COLORS } from '@/constants/colors';
-import { loginUser } from '@/store/auth/actions';
+import { loginUser, registerUser } from '@/store/auth/actions';
 import { User } from '@/utils/models';
 
 import ActivityIndicator from '@/components/ui/ActivityIndicator';
@@ -16,6 +19,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
 import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui';
+import { getFieldErrorsFromError } from '@/utils/lib';
 
 import storage from '@/utils/storage';
 
@@ -39,17 +43,24 @@ const signupSchema = yup.object<FormValues>().shape({
             .label('Password')
 });
 
-const SignUpPage = () => {
+const SignUpPage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const handleSubmit = async (auth: FormValues) => {
-    const result = await dispatch(loginUser(auth));
-    if (loginUser.fulfilled.match(result)) {
-      await storage.storeUser(result.payload as unknown as User);
+  console.log('auth', auth)
+
+  const handleSubmit = async (auth: FormValues, helpers: FormikHelpers<FormValues>) => {
+    try {
+      const result = await dispatch(registerUser(auth)).unwrap();
+      if (!result) return;
+
+      storage.storeUser(result);
+      router.push('/account-verified');
+    } catch (error) {
+      const fieldErrors = getFieldErrorsFromError(error);
+      if (fieldErrors) helpers.setErrors(fieldErrors);
     }
 
-    router.push('/account-verified');
   };
 
   return (
@@ -106,7 +117,7 @@ const SignUpPage = () => {
                 
                 <OrDivider />  
                 
-                <GoogleSignInButton />
+                <GoogleSignInButton label='Login with Google' />
 
                 <Link href='/sign-in' asChild>
                   <TouchableOpacity style={styles.signinContainer}>

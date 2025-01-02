@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_600SemiBold, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold } from '@expo-google-fonts/plus-jakarta-sans';
 import { Urbanist_400Regular, Urbanist_500Medium, Urbanist_600SemiBold, Urbanist_700Bold, Urbanist_800ExtraBold } from "@expo-google-fonts/urbanist";
 import { useAppDispatch } from "@/store/hooks";
-import { setUser } from "@/store/auth/slice";
+import { setSession } from "@/store/auth/slice";
 
 import * as Font from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
@@ -33,7 +33,7 @@ const useInitializeApp = () => {
                 });
 
                 const user = await storage.retrieveUser();
-                if (user) dispatch(setUser(user));
+                if (user) dispatch(setSession(user));
             } catch (error) {
                 console.log(error);
             } finally {

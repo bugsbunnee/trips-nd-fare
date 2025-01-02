@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { Formik, FormikHelpers, FormikValues } from 'formik';
+import { Formik, FormikHelpers, FormikProps, FormikValues } from 'formik';
 
 interface FormProps extends PropsWithChildren {
 	initialValues: FormikValues;
@@ -7,14 +7,12 @@ interface FormProps extends PropsWithChildren {
 	validationSchema: unknown;
 }
 
-const Form: React.FC<FormProps> = ({
-	initialValues,
-	onSubmit,
-	validationSchema,
-	children,
-}) => {
+const Form = React.forwardRef<FormikProps<any> | null, FormProps>((props, ref) => {
+	const { initialValues, onSubmit, validationSchema, children } = props;
+
 	return (
 		<Formik
+			innerRef={ref}
 			initialValues={initialValues}
 			onSubmit={onSubmit}
 			validationSchema={validationSchema}
@@ -23,6 +21,6 @@ const Form: React.FC<FormProps> = ({
 			{() => <>{children}</>}
 		</Formik>
 	);
-};
+});
 
 export default Form;

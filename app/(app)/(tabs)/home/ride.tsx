@@ -1,150 +1,112 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React from 'react';
 
-import { View,  StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View,  StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { MapMarkerProps } from 'react-native-maps';
+import { FormikHelpers } from 'formik';
 
 import * as yup from 'yup';
 
-import { colors, icons, styles as defaultStyles } from '@/constants';
-import { Text } from '@/components/ui';
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetTextInput, BottomSheetView } from '@gorhom/bottom-sheet';
-import { Form, FormField, SubmitButton } from '@/components/forms';
+import { colors, styles as defaultStyles } from '@/constants';
+import { Form, FormError, FormLocationField, SubmitButton } from '@/components/forms';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setDestination, setLocationDetails, setOrigin } from '@/store/ride/slice';
+import { setLocationDetails, setLocationFrom, setLocationTo } from '@/store/ride/slice';
+import { getRidersForTrip } from '@/store/data/actions';
+import { Location } from '@/utils/models';
+import { getFieldErrorsFromError } from '@/utils/lib';
 
+import ActivityIndicator from '@/components/ui/ActivityIndicator';
 import GeofencingMap from '@/components/maps/GeofencingMap';
-import useBottomSheet from '@/hooks/useBottomSheet';
+import RiderLayout from '@/components/ui/RiderLayout';
+
+import useNearbyRiders from '@/hooks/useNearbyRiders';
 import useLocation from '@/hooks/useLocation';
 
+
 interface FormValues {
-    from: string;
-    to: string;
+    from: Location;
+    to: Location;
 }
 
 const locationSchema = yup.object<FormValues>().shape({
-	from: yup.string().required().label('From location'),
-	to: yup.string().required().label('To location'),
+	from: yup.object().required().label('Pick-up location'),
+	to: yup.object().required().label('Drop-off location'),
 });
 
 const RidePage: React.FC = () => {
-    const bottomSheet = useBottomSheet();
-    const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
-
+    
+    const data = useAppSelector((state) => state.data);
     const rideDetails = useAppSelector((state) => state.ride);
+    
+    const location = useLocation();
+    const nearbyRiders = useNearbyRiders();
 
-    const coordinates = useLocation();
+    const handleSubmit = async (location: FormValues, helpers: FormikHelpers<FormValues>) => {
+        const payload = {
+            service: rideDetails.selectedService,
+            from: location.from,
+            to: location.to,
+        };
 
-    const handleSubmit = (location: FormValues) => {
-        dispatch(setLocationDetails(location));
-        router.push('/home/choose-rider');
+        try {
+            dispatch(setLocationDetails(location));
+            await dispatch(getRidersForTrip(payload)).unwrap();
+            
+            router.push('/home/choose-rider');
+        } catch (error) {
+            const fieldErrors = getFieldErrorsFromError(error);
+            if (fieldErrors) helpers.setErrors(fieldErrors);
+        }
+        
     };
 
-    const handleResetOrigin = useCallback(() => {
-        if (coordinates) {
-            dispatch(setOrigin(coordinates));
-        }
-    }, [dispatch, coordinates]);
-
-    useEffect(() => {
-        handleResetOrigin();
-    }, [handleResetOrigin]);
-
     return (
-        <BottomSheetModalProvider>
-            <View style={styles.container}>
-                <View style={styles.flex}>
-                    <View style={styles.map}>
-                        <GeofencingMap 
-                            destination={rideDetails.destination}
-                            origin={rideDetails.origin} 
-                            onDestinationChange={(destination) => dispatch(setDestination(destination))} 
-                            onOriginChange={(origin) => dispatch(setOrigin(origin))} 
-                            markers={nearbyRiders} 
-                        />
+        <RiderLayout
+            label='Ride' 
+            allowMapRecenter
+            Map={() => (
+                <GeofencingMap 
+                    destination={rideDetails.to}
+                    origin={rideDetails.from || location || null}
+                    onDestinationChange={(destination) => dispatch(setLocationTo(destination))} 
+                    onOriginChange={(origin) => dispatch(setLocationFrom(origin))} 
+                    markers={nearbyRiders} 
+                />
+            )}
+        >
+            <ActivityIndicator visible={data.isLoading} />
+            
+            <View style={styles.horizontalPadding}>
+                <Form initialValues={{ from: rideDetails.from, to: rideDetails.to }} onSubmit={handleSubmit} validationSchema={locationSchema}>
+                    <FormLocationField 
+                        placeholder='Pickup location'
+                        name='from'
+                        rightIcon='compass'
+                        leftIcon='location-pin' 
+                        label='From'
+                        containerStyle={styles.input}
+                    />
+                    
+                    <FormLocationField 
+                        placeholder='Dropoff location'
+                        name='to'
+                        label='To'
+                        rightIcon='map'
+                        leftIcon='location-pin' 
+                        containerStyle={styles.input}
+                    />
+
+                    <FormError error={data.error} />
+                    
+                    <View style={styles.submitButton}>
+                        <SubmitButton label="Find now" />
                     </View>
-
-                    <View style={[styles.header, styles.horizontalPadding, { top: insets.top, position: 'absolute' }]}>
-                        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                            <MaterialCommunityIcons name='arrow-left' size={icons.SIZES.NORMAL} color={colors.light.white} />
-                        </TouchableOpacity>
-
-                        <Text type='title' style={styles.title}>Ride</Text>
-                    </View>
-
-                    {coordinates && (
-                        <TouchableOpacity 
-                            onPress={handleResetOrigin} 
-                            style={[styles.backButton, styles.gps]}
-                        >
-                            <Ionicons name='locate' size={icons.SIZES.NORMAL} color={colors.light.white} />
-                        </TouchableOpacity>
-                    )}
-                </View>
-
-                <BottomSheetModal keyboardBehavior='interactive' keyboardBlurBehavior='restore' style={styles.modal} animateOnMount enablePanDownToClose={false} ref={bottomSheet.ref}>
-                    <BottomSheetView style={[styles.content, { paddingBottom: insets.bottom > 0 ? insets.bottom : 16 }]}>
-                        <Form initialValues={{ from: '', to: '' }} onSubmit={handleSubmit} validationSchema={locationSchema}>
-                            <FormField 
-                                autoCapitalize="none" 
-                                primaryIcon='location-pin' 
-                                label='From'
-                                name='from'
-                                width='100%' 
-                                InputComponent={BottomSheetTextInput}
-                                trailingButtonParams={{ icon: 'locate', onPress: () => {} }}
-                                placeholder='From location'
-                                containerStyle={styles.input} 
-                            />
-
-                            <FormField
-                                primaryIcon='location-pin' 
-                                label='To'
-                                name='to'
-                                width='100%' 
-                                InputComponent={BottomSheetTextInput}
-                                trailingButtonParams={{ icon: 'map-outline', onPress: () => {} }}
-                                placeholder='To location'
-                                containerStyle={styles.input} 
-                            />
-                            
-                            <View style={styles.submitButton}>
-                                <SubmitButton label="Find now" />
-                            </View>
-                        </Form>
-                    </BottomSheetView>
-                </BottomSheetModal>
+                </Form>
             </View>
-        </BottomSheetModalProvider>
+        </RiderLayout>
     );
 };
-
-const nearbyRiders: MapMarkerProps[] = [
-    {
-      identifier: 'joseph-ahmed',
-      title: 'Joseph Ahmed',
-      description: 'Currently at Ajah',
-      image: require('@/assets/images/rider-map-pin.png'),
-      coordinate: {
-        latitude: 6.4683108,
-        longitude: 3.5237379
-      },
-    },
-    {
-      identifier: 'michael-rako',
-      title: 'Michael Rako',
-      description: 'Currently at Abraham Adesanya',
-      image: require('@/assets/images/rider-map-pin.png'),
-      coordinate: {
-        latitude: 6.4657128,
-        longitude: 3.5489286
-      },
-    },
-];
 
 const styles = StyleSheet.create({
     backButton: { 

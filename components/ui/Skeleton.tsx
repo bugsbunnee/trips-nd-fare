@@ -46,7 +46,9 @@ const Skeleton: React.FC<Props> = ({ children, style }) => {
 const styles = StyleSheet.create({
     container: { 
         backgroundColor: colors.light.skeleton,
-        flex: 1,
+        position: 'relative',
+        overflow: 'hidden'
+        // flex: 1,
     }
 });
 
