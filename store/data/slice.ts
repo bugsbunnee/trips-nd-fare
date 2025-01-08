@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "./actions";
+import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getMyBookings, getNearbyRiders, getRidersForTrip, getServices, localRidersAvailableAction } from "./actions";
 import { getMessageFromError } from "@/utils/lib";
-import { Booking, Coordinates } from "@/utils/models";
+import { Booking, BusTicket, Coordinates, PickerItemModel } from "@/utils/models";
 
 export interface Service {
     _id: string;
@@ -11,6 +11,7 @@ export interface Service {
     color: string;
     image: string;
     driver: string;
+    route: string;
 }
 
 export interface NearbyRider {
@@ -22,12 +23,20 @@ export interface NearbyRider {
     serviceDisplayImage: string;
     timeToLocation: string;
     distanceToLocation: string;
-    coordinates: Coordinates;
+    coordinates: Coordinates & { distance: number; };
     rating: number;
     price: number;
 }
 
+export interface BusLocations {
+    origins: PickerItemModel[];
+    destinations: PickerItemModel[];
+}
+
 export interface DataState {
+    busTickets: BusTicket[];
+    busLocations: BusLocations;
+    localRiders: NearbyRider[];
     bookings: Booking[];
     services: Service[];
     nearbyRiders: NearbyRider[];
@@ -36,6 +45,9 @@ export interface DataState {
 }
 
 const initialState: DataState = {
+    busTickets: [],
+    busLocations: { origins: [], destinations: [] },
+    localRiders: [],
     bookings: [],
     services: [],
     nearbyRiders: [],
@@ -47,7 +59,7 @@ const dataSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {},
-     extraReducers: (builder) => {
+    extraReducers: (builder) => {
         builder.addCase(getServices.pending, (state) => {
             state.isLoading = true;
         })
@@ -85,6 +97,58 @@ const dataSlice = createSlice({
             state.error = '';
         })
         .addCase(getMyBookings.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getBusLocations.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getBusLocations.fulfilled, (state, action) => {
+            state.busLocations = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getBusLocations.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getBusTickets.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getBusTickets.fulfilled, (state, action) => {
+            state.busTickets = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getBusTickets.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getAvailableBusTickets.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getAvailableBusTickets.fulfilled, (state, action) => {
+            state.busTickets = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getAvailableBusTickets.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getAvailableLocalRiders.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getAvailableLocalRiders.fulfilled, (state, action) => {
+            state.localRiders = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getAvailableLocalRiders.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })

@@ -58,7 +58,7 @@ const WalletHomePage: React.FC = () => {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                 >
-                    <Image src={require('@/assets/images/polygons.png')} style={styles.image} />
+                    <Image contentFit="cover" src={require('@/assets/images/polygons.png')} style={styles.image} />
                     
                     <View style={styles.balanceContainerPaddingHorizontal}>
                         <Text type='default' style={styles.balanceLabel}>Click Ride Cash</Text>
@@ -255,7 +255,6 @@ const styles = StyleSheet.create({
     image: {
         width: 108,
         height: 120,
-        resizeMode: 'contain',
         position: 'absolute',
         right: -20,
         top: -40,

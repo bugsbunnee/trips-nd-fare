@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.webiq.tripsndfare",
-      "googleServicesFile": "./config/GoogleService-Info.plist",
+      "googleServicesFile": "./config/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,6 +28,7 @@
           "apiKey": "AIzaSyADwNi9utUXmZA6jCPGRf1HVjjvb5PL42E"
         }
       },
+      "package": "com.webiq.tripsndfare",
       "package_name": "com.webiq.tripsndfare",
       "googleServicesFile": "./config/google-services.json"
     },

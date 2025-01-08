@@ -9,7 +9,7 @@ const TicketsLayout: React.FC = () => {
             <Stack.Screen name="receipt" />
             <Stack.Screen name="confirmation" options={{ presentation: "modal" }} />
         </Stack>
-     );
+    );
 };
  
 export default TicketsLayout;

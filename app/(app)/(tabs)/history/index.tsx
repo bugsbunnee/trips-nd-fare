@@ -1,21 +1,32 @@
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import _ from "lodash";
+
 import { Text } from "@/components/ui";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 
 import BookingListItem from "@/components/lists/BookinglistItem";
-import Screen from "@/components/navigation/Screen";
+import EmptyItem from "@/components/lists/EmptyItem";
 import Picker from "@/components/lists/Picker";
+import RidePicker from "@/components/lists/RidePicker";
+import Screen from "@/components/navigation/Screen";
 
 import useBookings from "@/hooks/useRecentBookings";
 
 import { colors } from "@/constants";
-import { PickerItemModel, UserRide } from "@/utils/models";
+import { PickerItemModel } from "@/utils/models";
 import { SORT_ORDER } from "@/constants/app";
+import Conditional from "@/components/common/Conditional";
+import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
 
 const HistoryIndexPage : React.FC= () => {
     const [selectedOrder, setSelectedOrder] = useState<PickerItemModel | null>(null);
-    const data = useBookings();
+    const bookings = useBookings();
+
+    const sortedBookings = useMemo(() => {
+      const sortOrder = selectedOrder ? selectedOrder.value : 'asc' as any;
+      return _.orderBy(bookings.bookings, ['createdAt'], sortOrder)
+    }, [selectedOrder]);
 
     return ( 
       <Screen style={styles.container}>
@@ -25,9 +36,10 @@ const HistoryIndexPage : React.FC= () => {
 
             <View style={styles.pickerContainer}>
               <Picker
+                label=""
+                PickerTriggerComponent={RidePicker}
                 onSelectItem={(order) => setSelectedOrder(order)}
                 width="100%"
-                numberOfColumns={1}
                 selectedItem={selectedOrder} 
                 placeholder="Select order" 
                 items={SORT_ORDER} 
@@ -37,19 +49,36 @@ const HistoryIndexPage : React.FC= () => {
         </View>
           
         <View style={styles.flex}>
-          <FlatList
-            data={data.bookings}
-            refreshing={data.isLoading}
-            onRefresh={data.onRefresh}
-            keyExtractor={(ride) => ride._id}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={({ item }) => (
-              <BookingListItem 
-                booking={item}
-                backgroundColor={colors.light.input}
-              />
-            )}
-          />
+            <FlatList
+              data={sortedBookings}
+              refreshing={bookings.isLoading}
+              onRefresh={bookings.onRefresh}
+              keyExtractor={(ride) => ride._id}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              renderItem={({ item }) => (
+                <BookingListItem 
+                  booking={item}
+                  backgroundColor={colors.light.input}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <>
+                    <Conditional visible={!bookings.isLoading}>
+                      <EmptyItem
+                        label='No Rides Yet' 
+                        description="You haven't booked any rides yet!"
+                        onRefresh={bookings.onRefresh}
+                      />
+                    </Conditional>
+
+                    <Conditional visible={bookings.isLoading}>
+                        {_.range(1, 4).map((fill) => (
+                          <BookingListItemSkeleton key={fill} />
+                        ))}
+                    </Conditional>
+                </>
+              )}
+            />
         </View>
       </Screen>
     );

@@ -4,16 +4,15 @@ import _ from "lodash";
 
 import { Text } from "@/components/ui";
 import { router } from "expo-router";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import CurrentLocationMap from "@/components/maps/CurrentLocationMap";
 import GoogleTextInput from "@/components/ui/GoogleTextInput";
 import BookingListItem from "@/components/lists/BookinglistItem";
+import Logout from "@/components/common/Logout";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { logout } from "@/store/auth/slice";
 import { setLocationTo } from "@/store/ride/slice";
 import { colors, icons, styles as defaultStyles } from "@/constants";
 import { Location } from "@/utils/models";
@@ -22,10 +21,12 @@ import { getNearbyRiders } from "@/store/data/actions";
 import useNearbyRiders from "@/hooks/useNearbyRiders";
 import useLocation from "@/hooks/useLocation";
 import useBookings from "@/hooks/useRecentBookings";
+import EmptyItem from "@/components/lists/EmptyItem";
+import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
+import Conditional from "@/components/common/Conditional";
 
 const BookRidePage: React.FC = () => {
     const auth = useAppSelector((state) => state.auth);
-    const ride = useAppSelector((state) => state.ride);
     
     const dispatch = useAppDispatch();
     const insets = useSafeAreaInsets();
@@ -34,11 +35,6 @@ const BookRidePage: React.FC = () => {
     const nearbyRiders = useNearbyRiders();
     const bookings = useBookings();
 
-    const handleLogout = useCallback(() => {
-        dispatch(logout());
-        router.push('/');
-    }, [dispatch]);
-
     const handleSetDestination = useCallback((location: Location) => {
       dispatch(setLocationTo(location));
       router.push('/home/ride');
@@ -46,62 +42,75 @@ const BookRidePage: React.FC = () => {
 
     useEffect(() => {
       async function getRiders() {
-        if (!location || !ride.selectedService) return;
-  
-        const coordinates = _.pick(location, ['latitude', 'longitude']);
-        await dispatch(getNearbyRiders(coordinates));
+        if (location) {
+          dispatch(getNearbyRiders({
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }));
+        }
       }
   
       getRiders();
-    }, [dispatch, location, ride.selectedService]);
+    }, [dispatch, location]);
 
     return ( 
       <View style={[styles.container, { paddingTop: insets.top }]}>
-          <FlatList
-              refreshing={bookings.isLoading}
-              onRefresh={bookings.onRefresh}
-              data={bookings.bookings.slice(0, 3)}
-              keyboardShouldPersistTaps='always'
-              keyExtractor={(booking) => booking._id}
-              renderItem={({ item }) => <BookingListItem booking={item} />}
-              ItemSeparatorComponent={() => <View style={styles.separator} />}
-              ListHeaderComponent={() => (
-                <>
-                  <View style={styles.header}>
-                    <Text type='default-semibold' style={styles.greeting}>
-                      Welcome, {auth.user!.firstName}
-                    </Text>
+        <FlatList
+            refreshing={bookings.isLoading}
+            onRefresh={bookings.onRefresh}
+            data={bookings.bookings.slice(0, 3)}
+            keyboardShouldPersistTaps='always'
+            keyExtractor={(booking) => booking._id}
+            renderItem={({ item }) => <BookingListItem booking={item} />}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ListHeaderComponent={() => (
+              <>
+                <View style={styles.header}>
+                  <Text type='default-semibold' style={styles.greeting}>
+                    Welcome, {auth.user!.firstName}
+                  </Text>
 
-                    <TouchableOpacity style={[styles.logout]} onPress={handleLogout}>
-                      <MaterialCommunityIcons 
-                        name='logout' 
-                        size={icons.SIZES.NORMAL} 
-                        color={colors.light.primary} 
-                      />
-                    </TouchableOpacity>
+                  <Logout />
+                </View>
+
+                <GoogleTextInput
+                    leftIcon="magnifier"
+                    placeholder="Where do you want to go?"
+                    onPress={handleSetDestination}
+                    containerStyle={styles.input}
+                />
+
+                <View>
+                  <Text type='subtitle' style={styles.subtitle}>Your current location</Text>
+
+                  <View style={styles.map}>
+                    <CurrentLocationMap markers={nearbyRiders} />
                   </View>
+                </View>
 
-                  <GoogleTextInput
-                      leftIcon="magnifier"
-                      placeholder="Where do you want to go?"
-                      onPress={handleSetDestination}
-                      containerStyle={styles.input}
+                <View>
+                  <Text type='subtitle' style={styles.subtitle}>Recent Rides</Text>
+                </View>
+              </>
+            )}
+            ListEmptyComponent={() => (
+              <>
+                <Conditional visible={!bookings.isLoading}>
+                  <EmptyItem
+                    label='No Rides Yet' 
+                    description="You haven't booked any rides yet!"
+                    onRefresh={bookings.onRefresh}
                   />
-
-                  <View>
-                    <Text type='subtitle' style={styles.subtitle}>Your current location</Text>
-
-                    <View style={styles.map}>
-                      <CurrentLocationMap markers={nearbyRiders} />
-                    </View>
-                  </View>
-
-                  <View>
-                    <Text type='subtitle' style={styles.subtitle}>Recent Rides</Text>
-                  </View>
-                </>
-              )}
-          />
+                </Conditional>
+              
+                <Conditional visible={bookings.isLoading}>
+                  {_.range(1, 4).map((fill) => (
+                    <BookingListItemSkeleton key={fill} />
+                  ))}
+                </Conditional>
+              </>
+            )}
+        />
       </View>
     );
 };
@@ -119,7 +128,6 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16 },
   input: { backgroundColor: colors.light.white, borderColor: colors.light.grayLight, marginTop: 16, marginBottom: 0 },
   map: { borderRadius: 16, height: 380, width: '100%', overflow: 'hidden' },
-  logout: { width: 40, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.light.white, borderRadius: 40 },
   ridesSection: { marginBottom: 130},
   separator: { marginBottom: 10 }
 });

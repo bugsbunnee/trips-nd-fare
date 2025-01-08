@@ -5,7 +5,6 @@ import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { OnboardingSlide } from '@/utils/models';
 import { styles as defaultStyles } from '@/constants';
 import { APP_COLORS } from '@/constants/colors';
-import useThemeColor from '@/hooks/useThemeColor';
 
 interface Props {
     item: OnboardingSlide;
@@ -14,7 +13,6 @@ interface Props {
 }
 
 const OnboardingItem: React.FC<Props> = ({ item,index, x }) => {
-    const { text } = useThemeColor();
     const { width: SCREEN_WIDTH } = useWindowDimensions();
   
     const imageStyle = useAnimatedStyle(() => {

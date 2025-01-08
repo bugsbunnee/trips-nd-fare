@@ -5,25 +5,24 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { colors, styles as defaultStyles } from "@/constants";
 import { Image, Text } from "../ui";
-import { formatAmount, getCountDown, getLocationCode, getTimeFromDate } from "@/utils/lib";
-import { Ticket } from "@/utils/models";
+import { excludeStateKeyword, formatAmount, formatDate, getLocationCode, getTimeFromDate } from "@/utils/lib";
+import { BusTicket } from "@/utils/models";
 
 interface TicketProps {
-    ticket: Ticket;
+    ticket: BusTicket;
     onPress: () => void;
     includeCurvatures?: boolean;
 }
 
 const TicketItem: React.FC<TicketProps> = ({ ticket, includeCurvatures = true, onPress }) => {
-    const countdown = getCountDown(ticket.departureDate, ticket.arrivalDate);
-
     return ( 
         <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={[styles.row, styles.padding]}>
                 <View>
-                    <Text type='default' style={styles.location}>{ticket.location}</Text>
-                    <Text type='default' style={styles.code}>{getLocationCode(ticket.location)}</Text>
-                    <Text type='default' style={styles.time}>{getTimeFromDate(ticket.departureDate)}</Text>
+                    <Text type='default' style={styles.location}>{excludeStateKeyword(ticket.origin)}</Text>
+                    <Text type='default' style={styles.code}>{getLocationCode(ticket.origin)}</Text>
+                    <Text type='default' style={styles.time}>{ticket.details.departureDate}</Text>
+                    <Text type='default' style={styles.time}>{ticket.details.departureTime}</Text>
                 </View>
 
                 <View style={styles.flex}>
@@ -53,13 +52,14 @@ const TicketItem: React.FC<TicketProps> = ({ ticket, includeCurvatures = true, o
                         <View style={styles.dot} />
                     </View>
 
-                    <Text type='default' style={styles.duration}>{countdown.days > 0 ? countdown.days + 'D' : null} {countdown.hours}H {countdown.minutes}M</Text>
+                    <Text type='default' style={styles.duration}>{ticket.details.location.timeToLocationText}</Text>
                 </View>
 
                 <View>
-                    <Text type='default' style={styles.location}>{ticket.destination}</Text>
+                    <Text type='default' style={styles.location}>{excludeStateKeyword(ticket.destination)}</Text>
                     <Text type='default' style={styles.code}>{getLocationCode(ticket.destination)}</Text>
-                    <Text type='default' style={styles.time}>{getTimeFromDate(ticket.arrivalDate)}</Text>
+                    <Text type='default' style={styles.time}>{formatDate(ticket.details.arrivalTime, 'YYYY-MM-DD')}</Text>
+                    <Text type='default' style={styles.time}>{getTimeFromDate(ticket.details.arrivalTime)}</Text>
                 </View>
             </View>
 
@@ -79,17 +79,18 @@ const TicketItem: React.FC<TicketProps> = ({ ticket, includeCurvatures = true, o
             
             <View style={[styles.bottom, styles.padding]}>
                <Image
-                    src={ticket.company}
+                    contentFit="cover"
+                    src={ticket.details.logo}
                     style={styles.company}
                 />
 
                 <Text type="default-semibold" style={styles.amount}>
-                    <Text type="default-semibold">{formatAmount(ticket.amount)}</Text>
+                    <Text type="default-semibold">{formatAmount(ticket.details.price)}</Text>
                     <Text type="default-semibold" style={styles.amountLabel}>/Trip</Text>
                 </Text>
             </View>
         </TouchableOpacity>
-     );
+    );
 };
 
 const styles  = StyleSheet.create({
@@ -127,8 +128,7 @@ const styles  = StyleSheet.create({
     },
     company: { 
         width: 35,
-        height: 15,
-        resizeMode: "contain"
+        height: 15.5,
     },
     container: {
         width: "100%",
@@ -137,6 +137,9 @@ const styles  = StyleSheet.create({
         overflow: "hidden",
         marginBottom: 23,
         maxHeight: 180,
+        minHeight: 152,
+        justifyContent: "center",
+        // alignItems: "center"
     },
     dash: { width: 66 },
     dot: { 
@@ -180,13 +183,14 @@ const styles  = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        marginTop: 8
     },
     time: {
         color: colors.light.graySemi,
         fontSize: 10,
-        lineHeight: 26,
+        lineHeight: 12,
         fontFamily: defaultStyles.urbanistBold.fontFamily,
-        textTransform: "uppercase"
+        textTransform: "uppercase",
     },
     padding: {
         paddingVertical: 8,

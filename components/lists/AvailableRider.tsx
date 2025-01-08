@@ -3,7 +3,6 @@ import React from "react";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ImageSource } from "expo-image";
 
 import { Image, Text } from "@/components/ui";
 import { colors, styles as defaultStyles } from "@/constants";
@@ -13,7 +12,7 @@ interface Props {
     lastName: string;
     distanceInKm: number;
     location: string;
-    image: ImageSource;
+    image: string;
     onPress: () => void;
 }
 
@@ -21,6 +20,7 @@ const AvailableRider: React.FC<Props> = ({ firstName, lastName, image, distanceI
     return ( 
         <TouchableOpacity onPress={onPress} style={styles.container}>
             <Image 
+                contentFit="cover"
                 src={image}
                 style={styles.image}
             />
@@ -33,7 +33,7 @@ const AvailableRider: React.FC<Props> = ({ firstName, lastName, image, distanceI
 
                     <View style={[styles.row, { gap: 2 }]}>
                         <MaterialCommunityIcons name="map-marker" size={10} color={colors.light.dark} />
-                        <Text type="default-semibold" style={styles.distance}>{distanceInKm}km</Text>
+                        <Text type="default-semibold" style={styles.distance}>{distanceInKm.toFixed(2)}km</Text>
                     </View>
                 </View>
             </View>
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         color: colors.light.dark
     },
-    image: { height: 138, resizeMode: "cover", width: "100%", borderRadius: 8 },
+    image: { height: 138, width: "100%", borderRadius: 8 },
     name: {
         fontSize: 15,
         lineHeight: 18,

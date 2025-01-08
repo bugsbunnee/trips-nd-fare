@@ -44,7 +44,6 @@ const RidePage: React.FC = () => {
 
     const handleSubmit = async (location: FormValues, helpers: FormikHelpers<FormValues>) => {
         const payload = {
-            service: rideDetails.selectedService,
             from: location.from,
             to: location.to,
         };

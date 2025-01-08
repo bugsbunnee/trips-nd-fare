@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 
 import { colors, icons, styles as defaultStyles } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { bookRide } from '@/store/ride/actions';
+import { bookCarRide } from '@/store/ride/actions';
 import { formatAmount, getFieldErrorsFromError } from '@/utils/lib';
 import { Button, Image, RiderLayout, Text } from '@/components/ui';
 import { FormError } from '@/components/forms';
@@ -40,7 +40,7 @@ const RideInformationPage: React.FC = () => {
         };
 
         try {
-            await dispatch(bookRide(payload)).unwrap();
+            await dispatch(bookCarRide(payload)).unwrap();
             router.dismissTo('/home/track');
         } catch (error) {
             const fieldErrors = getFieldErrorsFromError(error) as ApiErrorResponse | undefined;

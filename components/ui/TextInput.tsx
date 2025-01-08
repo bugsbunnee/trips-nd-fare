@@ -113,15 +113,15 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 				)}
 				
 				{editable 
-					? null 
-					: (
-						<TouchableOpacity style={styles.iconContainer} onPress={() => handleSetEditable()}>
-							<FontAwesome
-								name='pencil-square-o'
-								size={icons.SIZES.NORMAL} 
-								color={colors.light.primary} />
-						</TouchableOpacity>
-					)}
+					? 	null 
+					: 	(
+							<TouchableOpacity style={styles.iconContainer} onPress={() => handleSetEditable()}>
+								<FontAwesome
+									name='pencil-square-o'
+									size={icons.SIZES.NORMAL} 
+									color={colors.light.primary} />
+							</TouchableOpacity>
+						)}
 				
 			</View>
 

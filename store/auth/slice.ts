@@ -1,9 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthResponse, loginUser, registerUser } from "./actions";
+
+import { AuthResponse, loginUser, registerUser, updateUser } from "./actions";
 import { User } from "@/utils/models";
-import { AppDispatch } from "..";
-import storage from "@/utils/storage";
 import { getMessageFromError } from "@/utils/lib";
+import { AppDispatch } from "..";
+import { updateDeviceToken } from "../data/actions";
+
+import storage from "@/utils/storage";
 
 interface AuthState {
     error: string;
@@ -59,8 +62,27 @@ const authSlice = createSlice({
         .addCase(registerUser.rejected, (state, action) => {
             state.isAuthenticating = false;
             state.error = getMessageFromError(action.payload);
-        });
-    }
+        })
+        .addCase(updateUser.pending, (state) => {
+            state.isAuthenticating = true;
+        })
+        .addCase(updateUser.fulfilled, (state, action) => {
+            state.token = action.payload!.token;
+            state.user = action.payload!.account;
+            state.isAuthenticating = false;
+            state.error = '';
+        })
+        .addCase(updateUser.rejected, (state, action) => {
+            state.isAuthenticating = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(updateDeviceToken.fulfilled, (state, action) => {
+            state.token = action.payload!.token;
+            state.user = action.payload!.account;
+            state.isAuthenticating = false;
+            state.error = '';
+        })
+    },
 });
 
 export const logout = () => async (dispatch: AppDispatch) => {

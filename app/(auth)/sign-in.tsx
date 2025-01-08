@@ -4,12 +4,12 @@ import { FormikHelpers, FormikProps } from 'formik';
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Link } from 'expo-router';
-import { useOAuth, useSignIn, useSignUp } from '@clerk/clerk-expo';
-import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup';
 
+import ActivityIndicator from '@/components/ui/ActivityIndicator';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import storage from '@/utils/storage';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
@@ -18,9 +18,7 @@ import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui'
 import { colors } from '@/constants';
 import { loginUser } from '@/store/auth/actions';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import { getFieldErrorsFromError, getMessageFromError } from '@/utils/lib';
-import storage from '@/utils/storage';
+import { getFieldErrorsFromError } from '@/utils/lib';
 
 
 interface FormValues {
@@ -34,35 +32,9 @@ const authSchema = yup.object<FormValues>().shape({
 });
 
 const SignInPage: React.FC = () => {
-  // const authFlow = useSignIn();
-  const oauth = useOAuth({ strategy: 'oauth_google' });
-  
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
   const formikRef = useRef<FormikProps<FormValues>>(null);
-
-  const handleGoogleSignUp = async () => {
-    // if (!authFlow.isLoaded || !authFlow.signIn) return;
- 
-    // try {
-    //   const auth = formikRef.current!.values;
-      
-    //   const attempt = await authFlow.signIn.create({
-    //     identifier: auth.email,
-    //     password: auth.password,
-    //   });
-
-    //   if (attempt.status === 'complete') {
-    //     console.log(attempt.createdSessionId)
-    //     // attempt.createdSessionId
-    //     // auth.email
-
-    //     // send email and session id to the backend for persistence
-    //   }
-    // } catch (err: any) {
-     
-    // }
-  };
 
   const handleSubmit = async (auth: FormValues, helpers: FormikHelpers<FormValues>) => {
     try {
@@ -118,9 +90,7 @@ const SignInPage: React.FC = () => {
                     
                     <OrDivider />  
                     
-                    <GoogleSignInButton 
-                      label='Login with Google' 
-                    />
+                    <GoogleSignInButton label='Login with Google' />
 
                     <Link href='/sign-up' asChild>
                         <TouchableOpacity style={styles.signinContainer}>

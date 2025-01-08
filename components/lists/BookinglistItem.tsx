@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     icon: { width: 24 },
     location: { flexDirection: 'row', alignItems: 'center', gap: 16 },
     locationItem: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
-    image: { width: 79, height: 90 },
+    image: { width: 79, height: 90, borderRadius: 10 },
     metadata: { padding: 16, marginTop: 16, borderRadius: 16 },
     metadataRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.light.white },
     metadataLabel: { 

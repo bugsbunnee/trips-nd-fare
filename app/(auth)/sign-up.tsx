@@ -10,8 +10,7 @@ import YupPassword from 'yup-password'
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { APP_COLORS } from '@/constants/colors';
-import { loginUser, registerUser } from '@/store/auth/actions';
-import { User } from '@/utils/models';
+import { registerUser } from '@/store/auth/actions';
 
 import ActivityIndicator from '@/components/ui/ActivityIndicator';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -47,14 +46,11 @@ const SignUpPage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  console.log('auth', auth)
-
   const handleSubmit = async (auth: FormValues, helpers: FormikHelpers<FormValues>) => {
     try {
       const result = await dispatch(registerUser(auth)).unwrap();
-      if (!result) return;
-
-      storage.storeUser(result);
+      if (result) storage.storeUser(result);
+      
       router.push('/account-verified');
     } catch (error) {
       const fieldErrors = getFieldErrorsFromError(error);

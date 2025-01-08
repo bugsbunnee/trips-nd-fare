@@ -18,6 +18,7 @@ const Destination: React.FC<Props> = ({ destination, onPress, style }) => {
     return (  
         <TouchableOpacity style={[styles.container, defaultStyles.shadow, styles.shadow, style]} onPress={onPress}>
             <Image
+                contentFit="cover"
                 src={destination.image}
                 style={styles.image}
             />
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: 129
     },
-    image: { width: "100%", height: 91, borderRadius: 5, resizeMode: 'cover' },
+    image: { width: "100%", height: 91, borderRadius: 5 },
     label: {
         fontSize: 12,
         lineHeight: 14,

@@ -1,5 +1,3 @@
-import { UserRide } from "@/utils/models";
-
 export const DATE_TIME_FORMAT = 'DD-MM-YYYY HH:mm:ss';
 
 export const SORT_ORDER = [
@@ -7,39 +5,14 @@ export const SORT_ORDER = [
     { label: 'Descending', value: 'desc' },
 ];
 
-export const RIDES: UserRide[] = [
-    {
-      id: "1",
-      driverName: "Albert Akang",
-      carSeats: 4,
-      date: "2023-10-20 04:55",
-      status: 'paid',
-      fromAddress: "Ogombo road, Ajah",
-      toAddress: "Lekki scheme 2. Lagos",
-      price: 3000,
-      type: 'jetty'
-    },
-    {
-      id: "2",
-      driverName: "Albert Akang",
-      carSeats: 4,
-      date: "2023-10-20 04:55",
-      status: 'paid',
-      fromAddress: "Ogombo road, Ajah",
-      toAddress: "Lekki scheme 2. Lagos",
-      price: 3000,
-      type: 'bus'
-    }
-];
-
 export const BOOKING_TYPES = [
   {
     label: "One Way",
-    value: 1,
+    value: 0,
   }, 
   {
     label: "Round Trip",
-    value: 2,
+    value: 1,
   }
 ];
 

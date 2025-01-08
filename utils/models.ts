@@ -1,4 +1,4 @@
-import { NearbyRider } from "@/store/data/slice";
+import { NearbyRider, Service } from "@/store/data/slice";
 import { ImageSource } from "expo-image";
 import { ImageURISource } from "react-native";
 
@@ -16,9 +16,37 @@ export interface Booking {
     price: number;
     rideStatus: string;
     paymentStatus: string;
+    seatNumbers: [];
     createdAt: string;
+    departureDate: Date;
     from: Location;
     to: Location;
+}
+
+export interface BusTicket {
+    details: {
+        ticketId: string;
+        logo: string;
+        price: number;
+        departureDate: string;
+        departureTime: string;
+        returnDate: string;
+        returnTime: string;
+        arrivalTime: string;
+        seatCount: number;
+        barcode: string;
+        bookedSeats: number[];
+        location: {
+            timeToLocationText: string;
+            distanceToLocation: string;
+            timeToLocationInSeconds: number;
+        },
+        coordinates: Location[];
+    },
+    origin: string;
+    originCity: string;
+    destination: string;
+    destinationCity: string;
 }
 
 export interface Coordinates {
@@ -42,6 +70,12 @@ export interface CoordinatesDelta extends Location {
   longitudeDelta: number;
 }
 
+export interface Geolocation {
+    timeToLocationText: string;
+    distanceToLocation: string;
+    timeToLocationInSeconds: number;
+}
+
 export interface OnboardingSlide {
     title: string;
     description: string;
@@ -58,35 +92,25 @@ export interface User {
     isEmailVerified: boolean;
     lastName: string;
     phoneNumber: string;
-}
-
-export interface UserRide {
-    id: string;
-    carSeats: number;
-    date: string;
-    driverName: string;
-    status: 'paid' | 'pending';
-    toAddress: string;
-    fromAddress: string;
-    price: number;
-    type: 'jetty' | 'bus' | 'bike' | 'train' | 'ferry' | 'car'
-}
-
-export interface Rider {
-    id: string | number;
-    uri: string;
-    name: string;
-    rating: number;
-    price: number;
-    timeToLocation: string;
-    numberOfSeats: number;
-    type: UserRide['type'];
-    coordinates: Coordinates;
+    profilePhoto?: string;
 }
 
 export interface PickerItemModel {
     label: string; 
     value: string;
+}
+
+export interface RideDetails  extends Geolocation {
+    _id: string;
+    from: Location;
+    to: Location;
+    service: Service;
+    driver: {
+        firstName: string;
+        lastName: string;
+        profilePhoto: string;
+        coordinates: Location;
+    }
 }
 
 export interface Ticket {

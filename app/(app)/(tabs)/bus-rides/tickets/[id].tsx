@@ -1,45 +1,72 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import _ from "lodash";
 
 import { router, useLocalSearchParams } from "expo-router";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSelectedSeat } from "@/store/booking/slice";
+import { setSelectedTicket } from "@/store/booking/slice";
 
 import { colors, icons, styles as defaultStyles } from "@/constants";
 import { Button, Text } from "@/components/ui";
-import { TICKETS } from "@/utils/data";
-import { formatDate } from "@/utils/lib";
+import { formatDate, getMessageFromError, parseTime } from "@/utils/lib";
+import { bookBusRide } from "@/store/ride/actions";
 
+import ActivityIndicator from "@/components/ui/ActivityIndicator";
 import RouteMap from "@/components/maps/RouteMap";
 import TicketItem from "@/components/lists/Ticket";
 
-
 const TicketDetailsPage: React.FC = () => {
+    const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
     const dispatch = useAppDispatch();
 
-    const { selectedSeat } = useAppSelector((state) => state.booking);
+    const { isBooking } = useAppSelector((state) => state.booking);
     const { top: paddingTop, bottom: paddingBottom } = useSafeAreaInsets();
     const { id } = useLocalSearchParams();
+    const { busTickets } = useAppSelector((state) => state.data);
 
-    let ticket = TICKETS.find((ticket) => ticket.id.toString() === id.toString());
-    let seatCount = 16;
-    let bookedSeats = [7, 8, 14, 15, 16]; 
+    const ticket = busTickets.find((ticket) => ticket.details.ticketId === id);
 
     const getSeatColor = useCallback((seat: number) => {
-        if (bookedSeats.includes(seat)) {
+        if (ticket!.details.bookedSeats.includes(seat)) {
             return STATUS.UNAVAILABLE.value;
         }
 
-        if (seat === selectedSeat) {
+        if (selectedSeats.includes(seat)) {
             return STATUS.SELECTED.value;
         }
 
         return STATUS.AVAILABLE.value;
-    }, [selectedSeat]);
+    }, [ticket, selectedSeats]);
 
+    const handleNavigateToPayment = useCallback(async () => {
+        const payload = {
+            ticketId: ticket!.details.ticketId,
+            seatNumbers: selectedSeats,
+            departureDate: ticket!.details.departureDate,
+            departureTime: formatDate(`${ticket!.details.departureDate} ${ticket!.details.departureTime}`, 'HH:mm:ss'),
+        };
+
+        try {
+            await dispatch(bookBusRide(payload)).unwrap();
+            dispatch(setSelectedTicket(ticket!));
+
+            router.dismissTo('/bus-rides/tickets/receipt');
+        } catch (error) {
+            const errorMessage = getMessageFromError(error);
+            Alert.alert('Error', errorMessage);
+        }
+    }, [dispatch, ticket, selectedSeats]);
+
+    const handleSelectSeat = (newSeat: number) => {
+        if (selectedSeats.includes(newSeat)) {
+            setSelectedSeats(selectedSeats.filter((seat) => seat !== newSeat));
+        } else {
+            setSelectedSeats([...selectedSeats, newSeat]);
+        }
+    };
+    
     return ( 
         <View style={[styles.container, { paddingTop, paddingBottom }]}>
             <View style={styles.flex}>
@@ -67,21 +94,18 @@ const TicketDetailsPage: React.FC = () => {
                     </TouchableOpacity>
                 </View>
 
-                <RouteMap
-                    origin={{
-                        latitude: 6.473992801063133, 
-                        longitude: 3.579008049806905
-                    }}
-                    destination={{
-                        latitude: 6.4643061,
-                        longitude: 3.5339421
-                    }}
-                />
+                {ticket!.details.coordinates && (
+                    <RouteMap
+                        origin={ticket!.details.coordinates[0]}
+                        destination={ticket!.details.coordinates[1]}
+                    />
+                )}
             </View>
-
-         
+  
             <View style={styles.details}>
-                <ScrollView style={{ padding: 16 }}>
+                <ActivityIndicator visible={isBooking} />
+
+                <ScrollView style={styles.scrollview}>
                     <TicketItem 
                         ticket={ticket!} 
                         onPress={() => {}} 
@@ -105,8 +129,8 @@ const TicketDetailsPage: React.FC = () => {
                         </View>
 
                         <View style={styles.seats}>
-                            {_.range(1, seatCount + 1).map((seat) => (
-                                <TouchableOpacity key={seat} disabled={bookedSeats.includes(seat)} onPress={() => dispatch(setSelectedSeat(seat))}>
+                            {_.range(1, ticket!.details.seatCount + 1).map((seat) => (
+                                <TouchableOpacity key={seat} disabled={ticket!.details.bookedSeats.includes(seat)} onPress={() => handleSelectSeat(seat)}>
                                     <MaterialIcons name='person' size={icons.SIZES.LARGE} color={getSeatColor(seat)} style={styles.row}>
                                         <Text type="default-semibold" style={styles.seatLabel}>S{seat}</Text>
                                     </MaterialIcons>
@@ -116,10 +140,10 @@ const TicketDetailsPage: React.FC = () => {
 
                         <View style={styles.date}>
                             <Text type="default" style={styles.dateLabel}>Departure Date</Text>
-                            <Text type="default-semibold" style={styles.dateValue}>{formatDate(ticket!.departureDate, 'MMM. DD, YYYY')}</Text>
+                            <Text type="default-semibold" style={styles.dateValue}>{formatDate(ticket!.details.departureDate, 'MMM. DD, YYYY')}</Text>
                         </View>
 
-                        <Button label="Buy ticket" disabled={!selectedSeat} onPress={() => router.push('/booking/tickets/receipt')} />
+                        <Button label="Buy ticket" disabled={selectedSeats.length === 0} onPress={handleNavigateToPayment} />
                     </View>
                 </ScrollView>
             </View>
@@ -230,6 +254,7 @@ const styles = StyleSheet.create({
         fontFamily: defaultStyles.urbanistBold.fontFamily,
         textAlign: "center",
     },
+    scrollview: { padding: 16 },
     select: {
         fontSize: 15,
         lineHeight: 18,

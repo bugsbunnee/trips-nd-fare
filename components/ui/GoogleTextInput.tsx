@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import { colors, icons, styles as defaultStyles } from "@/constants";
@@ -15,10 +15,11 @@ export interface GoogleTextInputProps {
     label?: string;
     placeholder: string;
     containerStyle?: StyleProp<ViewStyle>;
+    placeholderStyle?: StyleProp<TextStyle>;
     onPress: (location: Location) => void;
 }
 
-const GoogleTextInput: React.FC<GoogleTextInputProps> = ({ containerStyle, initialLocation, label, leftIcon, rightIcon, placeholder, onPress }) => {
+const GoogleTextInput: React.FC<GoogleTextInputProps> = ({ containerStyle, initialLocation, label, placeholderStyle, leftIcon, rightIcon, placeholder, onPress }) => {
   return (
     <View>
        {label && <Text type='default-semibold' style={[styles.label]}>{label}</Text>}
@@ -39,8 +40,8 @@ const GoogleTextInput: React.FC<GoogleTextInputProps> = ({ containerStyle, initi
                 longitude: details?.geometry.location.lng!,
             })}
             query={{
-            key: process.env.EXPO_PUBLIC_GOOGLE_API_KEY,
-            language: "en",
+                key: process.env.EXPO_PUBLIC_GOOGLE_API_KEY,
+                language: "en",
             }}
             renderLeftButton={leftIcon ? () => (
                 <View>
@@ -62,6 +63,7 @@ const GoogleTextInput: React.FC<GoogleTextInputProps> = ({ containerStyle, initi
             ) : undefined}
             textInputProps={{ 
                 placeholder: initialLocation ?? placeholder, 
+                style: [styles.placeholder, placeholderStyle],
                 placeholderTextColor: initialLocation ? colors.light.dark : colors.light.placeholder
             }}
         />
@@ -85,11 +87,13 @@ const styles = StyleSheet.create({
 	},
     listView: {
         marginVertical: 16,
+        minHeight: 150,
         borderRadius: 8,
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: colors.light.dew
     },
+    placeholder: { flex: 1, marginLeft: 12 },
     textInput: {
         backgroundColor: 'transparent',
         marginBottom: 0,

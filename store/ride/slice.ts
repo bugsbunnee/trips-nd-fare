@@ -1,35 +1,32 @@
-import { Booking, Location } from "@/utils/models";
+import { Booking, Location, RideDetails } from "@/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { bookRide } from "./actions";
+import { bookCarRide, trackRide } from "./actions";
 import { getMessageFromError } from "@/utils/lib";
 
 interface RideState {
     error: string;
     isLoading: boolean;
-    selectedService: string;
     from: Location | null;
     to: Location | null;
     rider: string;
     booking: Booking | null;
+    rideDetails: RideDetails | null;
 }
 
 const initialState: RideState = {
     isLoading: false,
     error: '',
-    selectedService: '',
     from: null,
     to: null,
     rider: '',
     booking: null,
+    rideDetails: null,
 };
 
 const riderSlice = createSlice({
     name: 'ride',
     initialState,
     reducers: {
-        setSelectedService: (state, action: PayloadAction<string>) => {
-            state.selectedService = action.payload;
-        },
         setLocationFrom: (state, action: PayloadAction<Location>) => {
             state.from = action.payload;
         },
@@ -45,19 +42,30 @@ const riderSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(bookRide.pending, (state) => {
+        builder.addCase(bookCarRide.pending, (state) => {
             state.isLoading = true;
         })
-        .addCase(bookRide.fulfilled, (state, action) => {
+        .addCase(bookCarRide.fulfilled, (state, action) => {
             state.booking = action.payload!;
             state.isLoading = false;
         })
-        .addCase(bookRide.rejected, (state, action) => {
+        .addCase(bookCarRide.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        builder.addCase(trackRide.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(trackRide.fulfilled, (state, action) => {
+            state.rideDetails = action.payload!;
+            state.isLoading = false;
+        })
+        .addCase(trackRide.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })
     },
 });
 
-export const { setLocationDetails, setLocationFrom, setLocationTo, setRider, setSelectedService } = riderSlice.actions;
+export const { setLocationDetails, setLocationFrom, setLocationTo, setRider } = riderSlice.actions;
 export default riderSlice.reducer;

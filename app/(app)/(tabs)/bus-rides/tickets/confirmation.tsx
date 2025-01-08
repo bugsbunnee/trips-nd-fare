@@ -19,25 +19,13 @@ const BookingConfirmationPage = () => {
     };
 
     return (
-        <Animated.View entering={ZoomIn} style={[styles.overlay, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                    <MaterialCommunityIcons name='arrow-left' size={icons.SIZES.NORMAL} color={colors.light.dark} />
-                </TouchableOpacity>
-
-                <Text type='title' style={styles.title}>Confirm Bookings</Text>
-
-                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-                    <MaterialCommunityIcons name='bell-outline' size={icons.SIZES.NORMAL} color={colors.light.dark} />
-                </TouchableOpacity>
-            </View>
-
+        <View style={[styles.overlay, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
             <Link href='/' asChild>
                 <Pressable style={StyleSheet.absoluteFill} />
             </Link>
 
             <View style={styles.center}>
-                <Animated.View entering={SlideInDown} style={styles.content}>
+                <View style={styles.content}>
                     <MaterialCommunityIcons name='check-circle' color={colors.light.success} size={icons.SIZES.XX_LARGE} />
                     
                     <View style={styles.contentInner}>
@@ -47,12 +35,12 @@ const BookingConfirmationPage = () => {
                     
                     <Button label='Go track' onPress={() => trackRide()} />
                     
-                    <TouchableOpacity style={styles.homeButton}>
-                    <Text type='subtitle' style={styles.homeButtonText}>Back home</Text>
+                    <TouchableOpacity onPress={() => router.push('/')} style={styles.homeButton}>
+                        <Text type='subtitle' style={styles.homeButtonText}>Back home</Text>
                     </TouchableOpacity>
-                </Animated.View>
+                </View>
             </View>
-        </Animated.View>
+        </View>
     );
 };
 
@@ -70,7 +58,6 @@ const styles = StyleSheet.create({
     },
     center: {
         flex: 1,
-        paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -81,9 +68,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: colors.light.white,
     },
-    header: { flexDirection: 'row', alignItems: 'center', gap: 16, paddingHorizontal: 16 },
     homeButton: { padding: 16, marginTop: 16, backgroundColor: colors.light.input, width: "100%", borderRadius: 50  },
     homeButtonText: { textAlign: 'center', color: colors.light.dark, lineHeight: 24, fontSize: 20 },
     modalTitle: { textAlign: 'center', fontSize: 28, lineHeight: 34 },

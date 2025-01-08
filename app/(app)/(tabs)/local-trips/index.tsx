@@ -1,21 +1,33 @@
 
-import React from "react";
+import React, { useEffect } from "react";
+import _ from "lodash";
 
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Text, TextInput } from "@/components/ui";
+import { Text } from "@/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/constants";
+import { getAvailableLocalRiders } from "@/store/data/actions";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Destination as DestinationModel } from "@/utils/models";
 
 import AvailableRider from "@/components/lists/AvailableRider";
 import Destination from "@/components/lists/Destination";
+import GoogleTextInput from "@/components/ui/GoogleTextInput";
 import Screen from "@/components/navigation/Screen";
+
+import useLocation from "@/hooks/useLocation";
+import AvailableRiderSkeleton from "@/components/lists/AvailableRiderSkeleton";
+import Conditional from "@/components/common/Conditional";
 
 const LocalTripsIndexPage : React.FC= () => {
     const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
+    const data = useAppSelector((state) => state.data);
+
+    const location = useLocation();
 
     const RIDE_TYPES = ['Keke', 'Danfo', 'Bike', 'Boat', 'Uber'];
 
@@ -33,21 +45,23 @@ const LocalTripsIndexPage : React.FC= () => {
             minimumCost: 700,
         },
     ];
-   
-    const AVAILABLE_RIDERS = [
-        {
-            id: 1,
-            image: require("@/assets/images/rider.png"),
-            firstName: 'Aminu',
-            lastName: 'Gabriel',
-            location: 'Ogombo road',
-            distanceInKm: 7,
-        },
-    ];
+
+    useEffect(() => {
+        function getRiders() {
+            if (location) {
+                dispatch(getAvailableLocalRiders({
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                }))
+            }
+        }
+
+        getRiders();
+    }, [dispatch, location]);
 
     return ( 
-      <Screen style={[styles.container, { paddingTop: insets.top }]}>
-            <View style={styles.horizontalPadding}>
+        <Screen style={styles.container}>
+            <View style={[styles.horizontalPadding, { flexDirection: 'column', justifyContent: 'flex-start' }]}>
                 <View style={styles.row}>
                     <TouchableOpacity style={styles.button} onPress={() => router.back()}>
                         <MaterialCommunityIcons 
@@ -67,14 +81,17 @@ const LocalTripsIndexPage : React.FC= () => {
                 </View>
             
                 <View style={styles.inputContainer}>
-                    <TextInput 
-                        primaryIcon="magnifier" 
-                        placeholder="Search location" 
-                        primaryIconColor={colors.light.primary}
-                        onSubmitEditing={() => router.push({
-                            pathname: '/local-trips/location/[id]',
-                            params: { id: 1 }
-                        })} 
+                    <GoogleTextInput
+                        placeholderStyle={styles.placeholder}
+                        containerStyle={styles.input}
+                        leftIcon="magnifier"
+                        placeholder="Search location"
+                        onPress={() => {
+                            router.push({
+                                pathname: '/local-trips/location/[id]',
+                                params: { id: 1 }
+                            });
+                        }}
                     />
                 </View>
 
@@ -117,21 +134,29 @@ const LocalTripsIndexPage : React.FC= () => {
                     </View>
 
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {AVAILABLE_RIDERS.map((rider) => (
-                            <AvailableRider 
-                                key={rider.id}
-                                onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider.id }})}
-                                firstName={rider.firstName}
-                                lastName={rider.lastName}
-                                location={rider.location}
-                                distanceInKm={rider.distanceInKm}
-                                image={rider.image}
-                            />
-                        ))}
+                        <Conditional visible={data.isLoading}>
+                            {_.range(1, 4).map((fill) => (
+                                <AvailableRiderSkeleton key={fill} />
+                            ))}
+                        </Conditional>
+
+                        <Conditional visible={!data.isLoading}>
+                            {data.localRiders.map((rider) => (
+                                <AvailableRider 
+                                    key={rider._id}
+                                    onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider._id }})}
+                                    firstName={rider.firstName}
+                                    lastName={rider.lastName}
+                                    location={rider.lastName}
+                                    distanceInKm={rider.coordinates.distance}
+                                    image={rider.profileDisplayImage}
+                                />
+                            ))}
+                        </Conditional>
                     </ScrollView>
                 </ScrollView>
             </View>   
-      </Screen>
+        </Screen>
     );
 };
 
@@ -143,7 +168,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20, 
         borderTopLeftRadius: 20, 
         marginTop: -20,
-        paddingBottom: 98
+        paddingBottom: 70
     },
     button: {
         width: 40,
@@ -164,9 +189,11 @@ const styles = StyleSheet.create({
         color: colors.light.primary
     },
     horizontalPadding: { paddingHorizontal: 20 },
+    input: { backgroundColor: colors.light.white, borderWidth: 0, width: '100%', },
     inputContainer: { marginTop: 33 },
+    placeholder: { flex: 1, color: colors.light.black, fontFamily: defaultStyles.urbanistBold.fontFamily, marginLeft: 4, fontSize: 16 },
     row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-    rides: { borderRadius: 20, paddingHorizontal: 11, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100000 },
+    rides: { borderRadius: 20, marginTop: 80, paddingHorizontal: 11, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100000 },
     rideType: { 
         alignSelf: 'flex-start', 
         paddingHorizontal: 18, 

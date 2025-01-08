@@ -1,5 +1,4 @@
 import React from 'react';
-import Animated, { SlideInDown, ZoomIn } from 'react-native-reanimated';
 
 import { View,  StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
 import { MaterialCommunityIcons  } from '@expo/vector-icons';
@@ -14,19 +13,23 @@ const RideConfirmationPage = () => {
     const rideDetails = useAppSelector((state) => state.ride);
     const insets = useSafeAreaInsets();
 
-    console.log(rideDetails.booking)
     const trackRide = () => {
-        router.push('/home/track/1234')
+        router.push({
+            pathname: '/home/track/[id]',
+            params: {
+                id: rideDetails.booking!._id,
+            }
+        })
     };
 
     return (
-        <Animated.View entering={ZoomIn} style={styles.overlay}>
+        <View style={styles.overlay}>
             <Link href='/' asChild>
                 <Pressable style={StyleSheet.absoluteFill} />
             </Link>
 
             <View style={styles.center}>
-                <Animated.View entering={SlideInDown} style={styles.content}>
+                <View style={styles.content}>
                     <MaterialCommunityIcons name='check-circle' color={colors.light.success} size={icons.SIZES.XX_LARGE} />
                     <View style={styles.contentInner}>
                         <Text type='subtitle' style={styles.modalTitle}>Booking placed successfully!</Text>
@@ -36,9 +39,9 @@ const RideConfirmationPage = () => {
                     <TouchableOpacity style={styles.homeButton}>
                         <Text type='subtitle' style={styles.homeButtonText}>Back home</Text>
                     </TouchableOpacity>
-                </Animated.View>
+                </View>
             </View>
-        </Animated.View>
+        </View>
     );
 };
 

@@ -1,53 +1,38 @@
 import React from 'react';
+
 import * as Linking from 'expo-linking';
+import * as Google from 'expo-auth-session/providers/google';
 
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { useOAuth } from '@clerk/clerk-expo';
 
-import Image from './Image';
-
+import { Image, Text } from '.';
 import { APP_COLORS } from '@/constants/colors';
 import { AuthUser } from '@/utils/models';
-
-
-
-import Text from './Text';
+import { useAppDispatch } from '@/store/hooks';
+import { loginWithGoogle } from '@/store/auth/actions';
 
 interface Props {
     label: string;
 }
 
-
 const GoogleSignInButton: React.FC<Props> = ({ label }) => {
-    const oauth = useOAuth({ strategy: 'oauth_google' });
-
-    const handleRegistration = (authUser: AuthUser) => {
-        console.log(authUser);
-    };
-    
-    const handleAuthentication = (authUser: AuthUser) => {
-        console.log(authUser);
-    };
+    const dispatch = useAppDispatch();
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        androidClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_KEY,
+        iosClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_IOS_KEY,
+    })
 
     const handleGoogleSignIn = async () => {
-        const redirectUrl = await Linking.createURL('/home');
-        const authFlow = await oauth.startOAuthFlow({ redirectUrl });
-        
-       if (authFlow.createdSessionId) {
-            if (authFlow.signUp && authFlow.signUp.createdUserId) {
-                const auth = {
-                    email: authFlow.signUp.emailAddress!,
-                    firstName: authFlow.signUp.firstName!,
-                    lastName: authFlow.signUp.lastName!,
-                    sessionId: authFlow.signUp.createdUserId,
-                };
-
-                return handleRegistration(auth);
-            };
-
-            console.log(authFlow.signIn);
-       }
-
+        try {
+            const result = await promptAsync();
+            if (result.type === 'success') {
+                const token = result.authentication!.accessToken;
+                const action = await dispatch(loginWithGoogle(token)).unwrap();
+                console.log(action);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return ( 

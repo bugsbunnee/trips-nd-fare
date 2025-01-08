@@ -1,10 +1,9 @@
 import React, { useCallback, useRef } from 'react';
-import MapViewDirections from 'react-native-maps-directions';
-
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { MapViewDirections, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import _ from 'lodash';
+import Conditional from '../common/Conditional';
 
 import { colors } from '@/constants';
 import { Location } from '@/utils/models';
@@ -45,28 +44,30 @@ const RouteMap: React.FC<Props> = ({ origin, destination }) => {
                     heading: null
                 })}
             >
-                <Marker
-                    identifier="origin"
-                    coordinate={origin}
-                    title="origin"
-                    description="Take-off point"
-                />
+                <Conditional visible={Platform.OS !== 'web'}>
+                    <Marker
+                        identifier="origin"
+                        coordinate={origin}
+                        title="Take-off point"
+                        description={origin.address ? origin.address : 'Origin'}
+                    />
 
-                <Marker
-                    identifier="destination"
-                    coordinate={destination}
-                    title="destination"
-                    description="Drop-off point"
-                />
+                    <Marker
+                        identifier="destination"
+                        coordinate={destination}
+                        title="Drop-off point"
+                        description={destination.address ? destination.address : 'Destination'}
+                    />
 
-                <MapViewDirections
-                    origin={origin}
-                    destination={destination}
-                    apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY as string}
-                    strokeWidth={5}
-                    strokeColor={colors.light.route}
-                    onReady={() => handleFocusMap()}
-                />
+                    <MapViewDirections
+                        origin={origin}
+                        destination={destination}
+                        apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY as string}
+                        strokeWidth={5}
+                        strokeColor={colors.light.route}
+                        onReady={() => handleFocusMap()}
+                    />
+                </Conditional>
             </MapView>
         </View>
     );

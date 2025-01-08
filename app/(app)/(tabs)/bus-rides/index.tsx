@@ -8,24 +8,28 @@ import { Link, router } from "expo-router";
 import { Text } from "@/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/constants";
 
-import Trip from "@/components/booking/Trip";
+import Conditional from "@/components/common/Conditional";
+import EmptyItem from "@/components/lists/EmptyItem";
+import OneWayTrip from "@/components/booking/OneWayTrip";
+import TicketItemSkeleton from "@/components/lists/TicketSkeleton";
 import TicketItem from "@/components/lists/Ticket";
 
 import { BOOKING_TYPES } from "@/constants/app";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setBookingType } from "@/store/booking/slice";
-import { TICKETS } from "@/utils/data";
+import { getBusTickets } from "@/store/data/actions";
 
 const BookingIndexPage : React.FC= () => {
+    const data = useAppSelector((state) => state.data);
     const booking = useAppSelector((state) => state.booking);
-    const insets = useSafeAreaInsets();
     const dispatch = useAppDispatch();
+    const insets = useSafeAreaInsets();
 
     return ( 
       <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.horizontalPadding}>
                 <View style={styles.row}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => router.back()}>
                         <MaterialCommunityIcons 
                             name='arrow-left'
                             size={icons.SIZES.NORMAL}
@@ -43,7 +47,7 @@ const BookingIndexPage : React.FC= () => {
                 </View>
             </View>
 
-            <ScrollView bounces={false}>
+            <ScrollView style={styles.flex} bounces={false}>
                 <View style={styles.horizontalPadding}>
                     <View style={styles.question}>
                         <Text type="default-semibold" style={styles.title}>Where do you want to go?</Text>
@@ -56,7 +60,7 @@ const BookingIndexPage : React.FC= () => {
                                 <TouchableOpacity 
                                     key={bookingType.value} 
                                     onPress={() => dispatch(setBookingType(bookingType.value))}
-                                    style={[styles.tab, bookingType.value === booking.booking.bookingType ? styles.tabActive : undefined]}
+                                    style={[styles.tab, bookingType.value === booking.bookingType ? styles.tabActive : undefined]}
                                 >
                                     <Text type="default" style={styles.tabText}>{bookingType.label}</Text>
                                 </TouchableOpacity>
@@ -64,16 +68,16 @@ const BookingIndexPage : React.FC= () => {
                         </View>
 
                         <View style={styles.form}>
-                            <Trip />
+                            <OneWayTrip />
                         </View>
                     </View>
                 </View>
 
                 <View style={styles.bottom}>
                     <View style={styles.row}>
-                        <Text type="default-semibold" style={styles.schedulesLabel}>Today's Schedule</Text>
+                        <Text type="default-semibold" style={styles.schedulesLabel}>Available Schedule</Text>
 
-                        <Link href="/(app)/(tabs)/booking/tickets" asChild>
+                        <Link href="/bus-rides/tickets" asChild>
                             <TouchableOpacity>
                                 <Text type="default-semibold" style={styles.viewAll}>View all</Text>
                             </TouchableOpacity>
@@ -81,16 +85,32 @@ const BookingIndexPage : React.FC= () => {
                     </View>
 
                     <View style={styles.tickets}>
-                        {TICKETS.map((ticket) => (
-                            <TicketItem 
-                                key={ticket.id}
-                                ticket={ticket}
-                                onPress={() => router.push({
-                                    pathname: '/booking/tickets/[id]',
-                                    params: { id: ticket.id }
-                                })}
-                            />
-                        ))}
+                        <Conditional visible={data.isLoading}>
+                            <TicketItemSkeleton />
+                        </Conditional>
+                        
+                        <Conditional visible={!data.isLoading}>
+                            <Conditional visible={data.busTickets.length > 0}>
+                                {data.busTickets.slice(0, 4).map((ticket) => (
+                                    <TicketItem 
+                                        key={ticket.details.ticketId}
+                                        ticket={ticket}
+                                        onPress={() => router.push({
+                                            pathname: '/bus-rides/tickets/[id]',
+                                            params: { id: ticket.details.ticketId }
+                                        })}
+                                    />
+                                ))}
+                            </Conditional>
+
+                            <Conditional visible={data.busTickets.length === 0}>
+                                <EmptyItem
+                                    label='No Tickets Available Yet' 
+                                    description="Tickets will show here when available!"
+                                    onRefresh={() => dispatch(getBusTickets())}
+                                />
+                            </Conditional>
+                        </Conditional>
                     </View>
                 </View>
             </ScrollView>
@@ -113,6 +133,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         marginTop: -150,
         paddingTop: 172,
+        height: '100%',
     },
     button: {
         width: 40,
@@ -126,7 +147,8 @@ const styles = StyleSheet.create({
         flex: 1, 
         backgroundColor: colors.light.primary, 
     },
-    form: { padding: 9 },
+    flex: { flex: 1 },
+    form: { marginTop: 9 },
     horizontalPadding: { paddingHorizontal: 16 },
     title: {
         fontSize: 18,

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import MapView, { CameraZoomRange, MapMarkerProps, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { CameraZoomRange, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
 
+import Conditional from '../common/Conditional';
 import _ from 'lodash';
 
 import { Platform, StyleSheet, View } from 'react-native';
@@ -45,24 +46,26 @@ const CurrentLocationMap: React.FC<Props> = ({ markers = [] }) => {
                     initialRegion={coordinates}
                     cameraZoomRange={cameraRangeOptions}
                 >
-                    {markers.length > 0 && markers.map((marker) => (
-                        <Marker
-                            key={marker.title}
-                            identifier={marker.identifier}
-                            image={require('@/assets/images/rider-map-pin.png')}
-                            coordinate={marker.coordinate}
-                            title={marker.title}
-                            description={marker.description}
-                        />
-                    ))}
+                    <Conditional visible={Platform.OS !== 'web'}>
+                        {markers.length > 0 && markers.map((marker) => (
+                            <Marker
+                                key={marker.title}
+                                identifier={marker.identifier}
+                                image={require('@/assets/images/rider-map-pin.png')}
+                                coordinate={marker.coordinate}
+                                title={marker.title}
+                                description={marker.description}
+                            />
+                        ))}
 
-                    <Marker
-                        coordinate={coordinates}
-                        identifier={CURRENT_USER_IDENTIFIER}
-                        title="You"
-                        description="Your current location"
-                        image={require("@/assets/images/marker.png")}
-                    />
+                        <Marker
+                            coordinate={coordinates}
+                            identifier={CURRENT_USER_IDENTIFIER}
+                            title="You"
+                            description="Your current location"
+                            image={require("@/assets/images/marker.png")}
+                        />
+                    </Conditional>
                 </MapView>
             </View>
         );
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  pin: { width: 30, height: 42, resizeMode: 'contain' },
+  pin: { position: 'absolute', width: 30, height: 42, resizeMode: 'contain' },
   skeleton: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 

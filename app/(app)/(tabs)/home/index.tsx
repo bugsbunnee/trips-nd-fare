@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect } from "react";
-import Carousel from "react-native-reanimated-carousel";
+import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 import _ from 'lodash';
 
 import { FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 import { router } from "expo-router";
+import { useSharedValue } from "react-native-reanimated";
+import { ExpandingDot } from "react-native-animated-pagination-dots";
 
 import Conditional from "@/components/common/Conditional";
 import DashboardTrips from '@/components/lists/DashboardTrip';
@@ -14,25 +16,20 @@ import { colors, styles as defaultStyles } from "@/constants";
 import { formatAmount } from "@/utils/lib";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getServices } from "@/store/data/actions";
-import { setSelectedService } from "@/store/ride/slice";
-import { useSharedValue } from "react-native-reanimated";
+
 
 const HomeIndexPage: React.FC = () => {
     const { height, width } = useWindowDimensions();
 
-    const ref = React.useRef(null);
     const progress = useSharedValue(0);
+    const ref = React.useRef<ICarouselInstance>(null);
     
     const dispatch = useAppDispatch();
+    const auth = useAppSelector((state) => state.auth);
     const data = useAppSelector((state) => state.data);
 
     const handleFetchServices = useCallback(() => {
         dispatch(getServices());
-    }, [dispatch]);
-
-    const handleSelectService = useCallback((serviceId: string) => {
-        dispatch(setSelectedService(serviceId));
-        router.push('/home/book');
     }, [dispatch]);
 
     useEffect(() => {
@@ -43,7 +40,7 @@ const HomeIndexPage: React.FC = () => {
       <Screen style={styles.container}>
           <View style={[styles.header, { height: height * 0.18 }]}>
             <View style={styles.rowBetween}>
-                <Text type='subtitle' style={styles.greeting}>Welcome, Joseph</Text>
+                <Text type='subtitle' style={styles.greeting}>Welcome, {auth.user!.firstName}</Text>
 
                 <View style={styles.headerRight}>
                     <View style={styles.balance}>
@@ -56,15 +53,19 @@ const HomeIndexPage: React.FC = () => {
           </View>
 
           <View style={styles.body}>
-            <View>
+            <View style={styles.news}>
                 <Carousel
                     ref={ref}
-                    width={width * 0.9}
-                    height={1000}
+                    style={styles.carousel}
+                    loop
+                    snapEnabled
+                    pagingEnabled
+                    autoPlay
+                    autoPlayInterval={5000}
+                    width={width * 0.925}
                     data={news}
-                    style={{ flex: 1,height: '100%', marginTop: -90, backgroundColor: 'red' }}
                     onProgressChange={value => progress.set(value)}
-                    renderItem={({ index, item }) => (
+                    renderItem={({item }) => (
                         <View style={styles.card}>
                             <View style={styles.cardDetails}>
                                 <Text type='default' style={styles.cardTitle}>{item.title} <Text type='default-semibold' style={styles.cardTitleBold}>{item.cta}</Text></Text>
@@ -82,15 +83,7 @@ const HomeIndexPage: React.FC = () => {
                         </View>
                     )}
                 />
-
-                {/* <Carousel
-                    progress={progress}
-                    data={data}
-                    dotStyle={styles.dotStyle}
-                    containerStyle={styles.dotContainer}
-                /> */}
             </View>
-            
 
             <View>
                 <Text type="subtitle" style={styles.subtitle}>Explore seamless ways to move around</Text>
@@ -98,14 +91,13 @@ const HomeIndexPage: React.FC = () => {
                 <Conditional visible={data.isLoading}>
                     <ScrollView bounces={false} showsHorizontalScrollIndicator={false} horizontal>
                         {_.range(1, 4).map((fill, index) => (
-                            <Skeleton key={fill} style={[styles.ctaSkeleton, (index + 1) % 2 === 0 ? styles.horizontalMargin : undefined]}>
+                            <View key={fill} style={[styles.ctaSkeleton, (index + 1) % 2 === 0 ? styles.horizontalMargin : undefined]}>
                                 <Skeleton style={styles.ctaSkeletonTitle} />     
                                 <Skeleton style={styles.ctaSkeletonText} />   
-                
                                 <View style={styles.ctaImageContainer}> 
                                     <Skeleton style={styles.ctaSkeletonImage} />     
                                 </View>  
-                            </Skeleton>
+                            </View>
                         ))}
                     </ScrollView>
                 </Conditional>
@@ -123,7 +115,7 @@ const HomeIndexPage: React.FC = () => {
                         ItemSeparatorComponent={() => <View style={styles.separator} />}
                         renderItem={({ item }) => (
                             <TouchableOpacity 
-                                onPress={() => handleSelectService(item._id)}
+                                onPress={() => router.push(item.route as any)}
                                 style={[styles.cta, { backgroundColor: item.color }]}
                             >
                                 <Text type='default-semibold' style={styles.ctaTitle}>{item.name}</Text>
@@ -153,7 +145,14 @@ const news = [
         description: 'Sit back, relax and enjoy rides from your comfort.',
         button: 'Ride with ClickRide',
         img: require('@/assets/images/home-cta.png'),
-    }
+    },
+    {
+        title: 'Get the most',
+        cta: 'affordable rates',
+        description: 'Sit back, relax and enjoy rides from your comfort.',
+        button: 'Ride with ClickRide',
+        img: require('@/assets/images/home-cta.png'),
+    },
 ];
 
 const styles = StyleSheet.create({
@@ -165,16 +164,21 @@ const styles = StyleSheet.create({
         fontFamily: defaultStyles.urbanistBold.fontFamily,
     },
     body: { flex: 1, zIndex: 1, elevation: 0, backgroundColor: colors.light.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 16 },
+    bottomContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 4
+    },
     card: { 
         width: '100%', 
-        // minHeight: 100,
+        height: '100%',
         padding: 16,
         gap: 4,
         backgroundColor: colors.light.input,
         borderRadius: 10,
-        marginTop: -90,
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
     },
     cardButton: { padding: 10, backgroundColor: colors.light.primary, marginTop: 10, borderRadius: 8, alignSelf: 'flex-start' },
     cardButtonText: { 
@@ -196,6 +200,7 @@ const styles = StyleSheet.create({
     cardDetails: { flex: 1 },
     cardImageContainer: { justifyContent: 'center', alignItems: 'center' },
     cardImage: { width: 137, height: 121, resizeMode: 'contain' },
+    carousel: { width: '100%', height: '100%', minHeight: 160, marginTop: -90 }, 
     cardTitle: {
         fontSize: 18, 
         lineHeight: 21, 
@@ -273,6 +278,7 @@ const styles = StyleSheet.create({
     },
     headerRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     horizontalMargin: { marginHorizontal: 17 },
+    news: { position: 'relative', marginBottom: 70 },
     rowBetween: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     separator: { width: 17 },
     subtitle: { 

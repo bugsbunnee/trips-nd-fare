@@ -19,14 +19,14 @@ interface ListItem {
 
 const SLIDES: OnboardingSlide[] = [
     {
-    coloredText: 'TripsnFare',
+    coloredText: 'ClickRide',
       title: 'The best car in your hands with ',
       description: 'Discover the convenience of finding your perfect ride with our App',
-      image: require('@/assets/images/onboarding.png'),
+      image: require('@/assets/images/danfo.png'),
     },
     {
       title: 'The perfect ride is just a tap away!',
-      description: 'Your journey begins with Trips n fare. Find your ideal ride effortlessly.',
+      description: 'Your journey begins with ClickRide. Find your ideal ride effortlessly.',
       image: require('@/assets/images/onboarding_two.png'),
     },
     {

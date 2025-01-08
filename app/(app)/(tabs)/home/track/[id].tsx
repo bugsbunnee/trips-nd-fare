@@ -1,60 +1,85 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { View,  StyleSheet } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { colors, icons, styles as defaultStyles } from '@/constants';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Button, Image, RiderLayout, Text } from '@/components/ui';
+import { trackRide } from '@/store/ride/actions';
 
+import ActivityIndicator from '@/components/ui/ActivityIndicator';
 import RouteMap from '@/components/maps/RouteMap';
 
 const RideTrackingPage = () => {
-    const rideDetails = useAppSelector((state) => state.ride);
+    const ride = useAppSelector((state) => state.ride);
     const insets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
+    const { id } = useLocalSearchParams();
 
     const handleNavigateHome = () => {
        router.replace('/home')
     };
+
+    const handleFetchRide = async () => {
+        await dispatch(trackRide(id.toString()));
+    };
+
+    useEffect(() => {
+        const interval = setInterval(handleFetchRide, 10_000);
+        return () => clearInterval(interval);
+    }, [id]);
+
+    useEffect(() => {
+        handleFetchRide();
+    }, [id]);
+
+    if (!ride.rideDetails) {
+        return <ActivityIndicator visible />;
+    }
 
     return (
             <RiderLayout 
                 label='Track Ride'
                 Map={() => (
                     <RouteMap
-                        origin={rideDetails.booking!.from}
-                        destination={rideDetails.booking!.to}
+                        origin={ride.rideDetails!.from!}
+                        destination={ride.rideDetails!.to!}
                     />
                 )}
             >
+                <ActivityIndicator visible={ride.isLoading} />
+
                 <View style={[styles.contentHeader, styles.horizontalPadding]}>
                     <Text type='default-semibold' style={styles.contentTitle}>
-                        Arriving in <Text type='default-semibold' style={[styles.contentTitle, styles.contentTitlePrimary]}>{rideDetails.booking!.driver.timeToLocation}</Text>
+                        Arriving in <Text type='default-semibold' style={[styles.contentTitle, styles.contentTitlePrimary]}>{ride.rideDetails!.timeToLocationText}</Text>
                     </Text>
                 </View>
 
                 <View style={[styles.content, styles.horizontalPadding]}>
-                    <View style={styles.metadata}>
-                        <View>
-                            <Image 
-                                src={rideDetails.booking!.driver.profileDisplayImage} 
-                                alt={rideDetails.booking!.driver.firstName} 
-                                style={styles.riderImage} 
-                                contentFit='cover'
+                   {ride.rideDetails && (
+                        <View style={styles.metadata}>
+                            <View>
+                                <Image 
+                                    src={ride.rideDetails.driver.profilePhoto} 
+                                    alt={ride.rideDetails.driver.firstName} 
+                                    style={styles.riderImage} 
+                                    contentFit='cover'
+                                />
+
+                                <Text type='subtitle' style={styles.name}>{ride.rideDetails.driver.firstName}</Text>
+                            </View>
+
+                            <Image
+                                src={ride.rideDetails.service.image}
+                                alt={ride.rideDetails.service.name} 
+                                style={styles.vehicleImage} 
+                                contentFit='contain'
                             />
-
-                            <Text type='subtitle' style={styles.name}>{rideDetails.booking!.driver.firstName}</Text>
                         </View>
-
-                        <Image
-                            src={rideDetails.booking!.driver.serviceDisplayImage}
-                            alt={rideDetails.booking!.driver.lastName} 
-                            style={styles.vehicleImage} 
-                            contentFit='contain'
-                        />
-                    </View>
+                   )}
 
                     <View style={styles.location}>
                         <View style={styles.locationItem}>
@@ -64,7 +89,7 @@ const RideTrackingPage = () => {
                                 color={colors.light.dark} 
                             />
 
-                            <Text type='default-semibold' style={styles.address}>{rideDetails.booking!.from.address}</Text>
+                            <Text type='default-semibold' style={styles.address}>{ride.rideDetails.from.address}</Text>
                         </View>
 
                         <View style={styles.separator} />
@@ -76,7 +101,7 @@ const RideTrackingPage = () => {
                                 color={colors.light.dark} 
                             />
 
-                            <Text type='default-semibold' style={styles.address}>{rideDetails.booking!.to.address}</Text>
+                            <Text type='default-semibold' style={styles.address}>{ride.rideDetails.to.address}</Text>
                         </View>
                     </View>
                 </View>

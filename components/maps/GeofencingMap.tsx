@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import MapView, { CameraZoomRange, Heatmap, MapMarkerProps, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Heatmap, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
 import MapViewDirections from 'react-native-maps-directions';
 
 import _ from 'lodash';
@@ -7,12 +7,13 @@ import _ from 'lodash';
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 import { Platform, StyleSheet, View } from 'react-native';
 
-import { Coordinates, Location } from '@/utils/models';
+import { Location } from '@/utils/models';
 import { getCoords } from '@/utils/lib';
 import { Image, Skeleton } from '../ui';
 import { colors } from '@/constants';
 
 import useLocation from '@/hooks/useLocation';
+import Conditional from '../common/Conditional';
 
 interface Props {
     origin: Location | null;
@@ -69,69 +70,71 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
                         heading: null
                     })}
                 >
-                    {markers.length > 0 && markers.map((marker) => (
-                        <React.Fragment key={marker.identifier}>
-                            <Marker
-                                key={marker.title}
-                                identifier={marker.identifier}
-                                image={require('@/assets/images/rider-map-pin.png')}
-                                coordinate={marker.coordinate}
-                                title={marker.title}
-                                description={marker.description}
-                            />
-                    
-                            {coords && isAndroid && (
-                                <Heatmap
-                                    opacity={0.5}
-                                    radius={30}
-                                    points={[coords]}
+                    <Conditional visible={Platform.OS !== 'web'}>
+                        {markers.length > 0 && markers.map((marker) => (
+                            <React.Fragment key={marker.identifier}>
+                                <Marker
+                                    key={marker.title}
+                                    identifier={marker.identifier}
+                                    image={require('@/assets/images/rider-map-pin.png')}
+                                    coordinate={marker.coordinate}
+                                    title={marker.title}
+                                    description={marker.description}
                                 />
-                            )}
-                        </React.Fragment>
-                    ))}
-
-                    {destination && (
-                        <>
-                            <MapViewDirections
-                                origin={origin}
-                                destination={destination}
-                                apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY as string}
-                                strokeWidth={5}
-                                strokeColor={colors.light.primary}
-                                onReady={() => handleFitToRoute()}
-                            />
                         
-                            <Marker
-                                draggable
-                                image={require('@/assets/images/destination-map-pin.png')}
-                                coordinate={destination}
-                                title="Suggested dropoff"
-                                onDragEnd={onDestinationChange ? (event) => {
-                                    impactAsync(ImpactFeedbackStyle.Medium);
-                                    onDestinationChange({
-                                        latitude: event.nativeEvent.coordinate.latitude,
-                                        longitude: event.nativeEvent.coordinate.longitude,
-                                        address: '',
-                                    });
-                                } : undefined}
-                            />
-                        </>
-                    )}
-    
-                    <Marker
-                        draggable
-                        coordinate={origin}
-                        title="Suggested pickup"
-                        image={require("@/assets/images/marker.png")}
-                        onDragEnd={onOriginChange ? (event) => {
-                            impactAsync(ImpactFeedbackStyle.Medium);
-                            onOriginChange({
-                                latitude: event.nativeEvent.coordinate.latitude,
-                                longitude: event.nativeEvent.coordinate.longitude,
-                                address: '',
-                            });
-                        } : undefined}
-                    />        
+                                {coords && isAndroid && (
+                                    <Heatmap
+                                        opacity={0.5}
+                                        radius={30}
+                                        points={[coords]}
+                                    />
+                                )}
+                            </React.Fragment>
+                        ))}
+
+                        {destination && (
+                            <>
+                                <MapViewDirections
+                                    origin={origin}
+                                    destination={destination}
+                                    apikey={process.env.EXPO_PUBLIC_GOOGLE_API_KEY as string}
+                                    strokeWidth={5}
+                                    strokeColor={colors.light.primary}
+                                    onReady={() => handleFitToRoute()}
+                                />
+                            
+                                <Marker
+                                    draggable
+                                    image={require('@/assets/images/destination-map-pin.png')}
+                                    coordinate={destination}
+                                    title="Suggested dropoff"
+                                    onDragEnd={onDestinationChange ? (event) => {
+                                        impactAsync(ImpactFeedbackStyle.Medium);
+                                        onDestinationChange({
+                                            latitude: event.nativeEvent.coordinate.latitude,
+                                            longitude: event.nativeEvent.coordinate.longitude,
+                                            address: '',
+                                        });
+                                    } : undefined}
+                                />
+                            </>
+                        )}
+        
+                        <Marker
+                            draggable
+                            coordinate={origin}
+                            title="Suggested pickup"
+                            image={require("@/assets/images/marker.png")}
+                            onDragEnd={onOriginChange ? (event) => {
+                                impactAsync(ImpactFeedbackStyle.Medium);
+                                onOriginChange({
+                                    latitude: event.nativeEvent.coordinate.latitude,
+                                    longitude: event.nativeEvent.coordinate.longitude,
+                                    address: '',
+                                });
+                            } : undefined}
+                        />  
+                    </Conditional>
                 </MapView>
             </View>
         );

@@ -14,11 +14,17 @@ import { Location, Transaction } from "./models";
 
 dayjs.extend(duration);
 
+export const excludeStateKeyword = (text: string) => {
+    return text.toLowerCase().replace('state', '').trim();
+};
+
 export const formatDate = (date: string | number |  Date, format: string = 'DD MMMM YYYY, HH:mm a') => {
     return dayjs(date).format(format);
 };
 
 export const formatAmount = (amount: number) => {
+    if (isNaN(amount)) return 'N/A';
+    
     const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: CURRENCY.NGN.CODE, unitDisplay: 'narrow' }).format(amount);
     return formattedAmount.replace(CURRENCY.NGN.CODE, CURRENCY.NGN.SYMBOL);
 };
@@ -78,7 +84,7 @@ export const getMessageFromError = (error: any) => {
 };
 
 export const getTimeFromDate = (date: string | Date | number) => {
-    return dayjs(date).format('hh:mmA');
+    return dayjs(date).format('hh:mm');
 }
 
 export const getLocationCode = (location: string) => {
@@ -118,6 +124,10 @@ export const getTransactionStatusColors = (status: Transaction['status']) => {
                 text: colors.light.successDark
             };
     }
+};
+
+export const parseTime = (time: string, format: dayjs.OptionType) => {
+    return dayjs(time, format).toString();
 };
 
 export const sendLocalNotification = (content: NotificationContentInput) => {

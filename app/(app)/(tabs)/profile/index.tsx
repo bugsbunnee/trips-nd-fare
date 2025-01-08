@@ -21,12 +21,12 @@ const ROUTES = [
   {
     label: 'Messages',
     icon: 'chat-processing' as const,
-    route: '/booking/local-trips',
+    route: '/messages',
   },
   {
     label: 'Buy Bus Ticket',
     icon: 'ticket' as const,
-    route: '/booking/local-trips',
+    route: '/bus-rides',
   },
   {
     label: 'Local Trips',
@@ -36,12 +36,12 @@ const ROUTES = [
   {
     label: 'Ferry Tickets',
     icon: 'ferry' as const,
-    route: '/booking/local-trips',
+    route: '/local-trips',
   },
   {
     label: 'Settings',
     icon: 'cog' as const,
-    route: '/booking/local-trips',
+    route: '/bus-rides',
   },
 ];
 
@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
         <View style={styles.intro}>
           <View style={{ flex: 1 }}>
             <Text type='default-semibold' style={styles.fullName}>
-              {auth.user!.name}
+              {auth.user!.firstName} {auth.user!.lastName}
             </Text>
             
             <View style={styles.overview}>
@@ -73,7 +73,7 @@ const ProfilePage: React.FC = () => {
 
           <View style={defaultStyles.shadow}>
             <Image
-                src={require('../../../../assets/images/map.png')}
+                src={auth.user!.profilePhoto ?? require('../../../../assets/images/map.png')}
                 style={styles.image}
             />
           </View>
@@ -94,17 +94,19 @@ const ProfilePage: React.FC = () => {
             </TouchableOpacity>
          </Link>
           
-          <TouchableOpacity style={styles.card}>
-            <Ionicons 
-              name='receipt'
-              size={icons.SIZES.NORMAL}
-              color={colors.light.black}
-            />
+          <Link href='/history' asChild>
+            <TouchableOpacity style={styles.card}>
+              <Ionicons 
+                name='receipt'
+                size={icons.SIZES.NORMAL}
+                color={colors.light.black}
+              />
 
-            <Text type='default-semibold' style={styles.cardText}>
-              Trips
-            </Text>
-          </TouchableOpacity>
+              <Text type='default-semibold' style={styles.cardText}>
+                Trips
+              </Text>
+            </TouchableOpacity>
+          </Link>
         </View>
 
       </View>
@@ -112,24 +114,25 @@ const ProfilePage: React.FC = () => {
       <View style={styles.screenSeparator} />
 
       <View style={styles.bottom}>
-        <FlatList
-              data={ROUTES}
-              keyExtractor={(route) => route.label}
-              ItemSeparatorComponent={() => <View style={styles.separator} />}
-              renderItem={({ item }) => (
-                <Link href={item.route as any} asChild>
-                  <TouchableOpacity style={styles.route}>
-                    <MaterialCommunityIcons 
-                      name={item.icon}
-                      size={icons.SIZES.NORMAL}
-                      color={colors.light.black}
-                    />
+          <FlatList
+            bounces={false}
+            data={ROUTES}
+            keyExtractor={(route) => route.label}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderItem={({ item }) => (
+              <Link href={item.route as any} asChild>
+                <TouchableOpacity style={styles.route}>
+                  <MaterialCommunityIcons 
+                    name={item.icon}
+                    size={icons.SIZES.NORMAL}
+                    color={colors.light.black}
+                  />
 
-                    <Text type='default' style={styles.routeLabel}>{item.label}</Text>
-                  </TouchableOpacity>
-                </Link>
-              )}
-            />
+                  <Text type='default' style={styles.routeLabel}>{item.label}</Text>
+                </TouchableOpacity>
+              </Link>
+            )}
+          />
       </View>
     </Screen>
   );

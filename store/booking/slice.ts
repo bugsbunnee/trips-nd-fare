@@ -1,50 +1,45 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export interface Booking {
-    location: string;
-    destination: string;
-    departureDate: string;
-    numberOfSeats: number;
-    bookingType: number;
-}
+import { bookBusRide } from "../ride/actions";
+import { Booking, BusTicket } from "@/utils/models";
 
 interface BookingState {
-    selectedSeat: number;
-    booking: Booking;
+    isBooking: boolean;
+    bookingType: number;
+    selectedTicket: BusTicket | null;
+    receipt: Booking | null;
 }
 
 const initialState: BookingState = {
-    selectedSeat: 0,
-    booking: {
-        location: '',
-        destination: '',
-        departureDate: '',
-        numberOfSeats: 0,
-        bookingType: 1
-    }
-}
+    isBooking: false,
+    bookingType: 0,
+    selectedTicket: null,
+    receipt: null,
+};
 
 const bookingSlice = createSlice({
     name: 'booking',
     initialState,
     reducers: {
-        setSelectedSeat: (state, action: PayloadAction<number>) => {
-            state.selectedSeat = action.payload;
+        setBookingType: (state, action: PayloadAction<number>) => {
+            state.bookingType = action.payload;
         },
-        setBookingType: (state, action: PayloadAction<Booking['bookingType']>) => {
-            state.booking.bookingType = action.payload;
-        },
-        setBooking: (state, action: PayloadAction<Omit<Booking, 'bookingType'>>) => {
-            state.booking = { 
-                bookingType: state.booking.bookingType,
-                location: action.payload.location,
-                destination: action.payload.destination,
-                departureDate: action.payload.departureDate,
-                numberOfSeats: action.payload.numberOfSeats,
-            }
+        setSelectedTicket: (state, action: PayloadAction<BusTicket | null>) => {
+            state.selectedTicket = action.payload;
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(bookBusRide.pending, (state) => {
+            state.isBooking = true;
+        })
+        .addCase(bookBusRide.fulfilled, (state, action) => {
+            state.isBooking = false;
+            state.receipt = action.payload!;
+        })
+        .addCase(bookBusRide.rejected, (state) => {
+            state.isBooking = false;
+        })
+    }
 });
 
-export const { setBooking, setBookingType, setSelectedSeat } = bookingSlice.actions;
+export const { setBookingType, setSelectedTicket } = bookingSlice.actions;
 export default bookingSlice.reducer;

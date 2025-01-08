@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import Animated from "react-native-reanimated";
 import DashedLine from "react-native-dashed-line";
-import AppProgress from "@/components/ui/Progress";
 
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -10,26 +9,28 @@ import { router } from "expo-router";
 import { FormError } from "@/components/forms";
 import { colors, styles as defaultStyles } from "@/constants";
 import { Image, Text } from "@/components/ui";
-import { TICKETS } from "@/utils/data";
-import { formatAmount, formatDate, generateScreenshot, getCountDown, getLocationCode, getTimeFromDate, sendLocalNotification } from "@/utils/lib";
+import { excludeStateKeyword, formatAmount, formatDate, generateScreenshot, getCountDown, getLocationCode, getTimeFromDate, sendLocalNotification } from "@/utils/lib";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
+import ActivityIndicator from "@/components/ui/ActivityIndicator";
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
-import useDownload from "@/hooks/useDownload";
 import useMediaPermission from "@/hooks/useMediaPermission";
-
+import { setSelectedTicket } from "@/store/booking/slice";
+import { getBusTickets } from "@/store/data/actions";
 
 const TicketDownloadPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
+    const [isDownloading, setDownloading] = useState(false);
 
     const insets = useSafeAreaInsets();
-    const ticket = TICKETS[0];
-    
-    const countdown = getCountDown(ticket.departureDate, ticket.arrivalDate);
+    const auth = useAppSelector((state) => state.auth);
+    const booking = useAppSelector((state) => state.booking);
+
     const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
     const ref = useRef<View>(null);
-    const download = useDownload();
     const media = useMediaPermission();
+    const dispatch = useAppDispatch();
 
     const style = useFluidButtonStyle({ 
         triggerAnimation: true, 
@@ -38,33 +39,28 @@ const TicketDownloadPage: React.FC = () => {
 
     const handleDownload = useCallback(async () => {
         try {
+            setDownloading(true);
+
             let uri = await generateScreenshot(ref);
             if (uri) await media.saveFileToLibrary(uri);
 
-            download.simulateDownload();
+            sendLocalNotification({
+                title: 'Success!',
+                body: 'Receipt downloaded successfully'
+            });
+
+            await dispatch(getBusTickets());
+            router.push('/bus-rides/tickets/confirmation');
         } catch (error) {
             setErrorMessage((error as Error).message)
+        } finally {
+            setDownloading(false);
         }
-    }, []);
-
-    const handleDownloadCompleted = useCallback(() => {
-        sendLocalNotification({
-            title: "Receipt downloaded successfully!",
-            body: "Your receipt has been downloaded successfully!"
-        });
-
-        download.resetProgress();
-
-        router.push('/booking/tickets/confirmation');
     }, []);
 
     return ( 
         <View style={[styles.container, { paddingTop: insets.top }]}>
-            <AppProgress 
-                visible={download.downloadProgress > 0} 
-                progress={download.downloadProgress} 
-                onDone={handleDownloadCompleted}
-            />
+           <ActivityIndicator visible={isDownloading} />
 
            <View style={styles.header} />
 
@@ -72,7 +68,8 @@ const TicketDownloadPage: React.FC = () => {
                 <View ref={ref} collapsable={false} style={styles.receipt}>
                     <View style={styles.companyContainer}>
                         <Image 
-                            src={require("@/assets/images/abc.png")}
+                            contentFit="contain"
+                            src={booking.selectedTicket!.details.logo}
                             style={styles.company}
                         />
                     </View>
@@ -80,9 +77,9 @@ const TicketDownloadPage: React.FC = () => {
                     <View>
                         <View style={[styles.row, styles.padding]}>
                             <View>
-                                <Text type='default' style={styles.location}>{ticket.location}</Text>
-                                <Text type='default' style={styles.code}>{getLocationCode(ticket.location)}</Text>
-                                <Text type='default' style={styles.time}>{getTimeFromDate(ticket.departureDate)}</Text>
+                                <Text type='default' style={styles.location}>{excludeStateKeyword(booking.selectedTicket!.origin)}</Text>
+                                <Text type='default' style={styles.code}>{getLocationCode(booking.receipt!.from.address)}</Text>
+                                <Text type='default' style={styles.time}>{getTimeFromDate(booking.receipt!.departureDate)}</Text>
                             </View>
 
                             <View style={styles.flex}>
@@ -112,13 +109,13 @@ const TicketDownloadPage: React.FC = () => {
                                     <View style={styles.dot} />
                                 </View>
 
-                                <Text type='default' style={styles.duration}>{countdown.days > 0 ? countdown.days + 'D' : null} {countdown.hours}H {countdown.minutes}M</Text>
+                                <Text type='default' style={styles.duration}>{booking.selectedTicket!.details.location.timeToLocationText}</Text>
                             </View>
 
                             <View>
-                                <Text type='default' style={styles.location}>{ticket.destination}</Text>
-                                <Text type='default' style={styles.code}>{getLocationCode(ticket.destination)}</Text>
-                                <Text type='default' style={styles.time}>{getTimeFromDate(ticket.arrivalDate)}</Text>
+                                <Text type='default' style={styles.location}>{excludeStateKeyword(booking.selectedTicket!.destination)}</Text>
+                                <Text type='default' style={styles.code}>{getLocationCode(booking.receipt!.to.address)}</Text>
+                                <Text type='default' style={styles.time}>{getTimeFromDate(booking.selectedTicket!.details.arrivalTime)}</Text>
                             </View>
                         </View>
 
@@ -138,7 +135,7 @@ const TicketDownloadPage: React.FC = () => {
 
                         <View style={styles.amountContainer}>
                             <Text type="default-semibold" style={styles.amount}>
-                                <Text type="default-semibold">{formatAmount(ticket.amount)}</Text>
+                                <Text type="default-semibold">{formatAmount(booking.receipt!.price)}</Text>
                                 <Text type="default-semibold" style={styles.amountLabel}>/Trip</Text>
                             </Text>
                         </View>
@@ -147,24 +144,24 @@ const TicketDownloadPage: React.FC = () => {
                             <View style={[styles.detail, { marginBottom: 27 }]}>
                                 <View style={styles.detailItem}>
                                     <Text type="default-semibold" style={styles.label}>Passenger Name</Text>
-                                    <Text type="default-semibold" style={styles.value}>Joseph Ogbaji</Text>
+                                    <Text type="default-semibold" style={styles.value}>{auth.user!.firstName} {auth.user!.lastName}</Text>
                                 </View>
                             
                                 <View style={styles.detailItem}>
                                     <Text type="default-semibold" style={styles.label}>Departure Date</Text>
-                                    <Text type="default-semibold" style={styles.value}>{formatDate(ticket.departureDate, 'MMM. DD, YYYY')}</Text>
+                                    <Text type="default-semibold" style={styles.value}>{formatDate(booking.receipt!.departureDate, 'MMM. DD, YYYY')}</Text>
                                 </View>
                             </View>
                             
                             <View style={styles.detail}>
                                 <View style={styles.detailItem}>
                                     <Text type="default-semibold" style={styles.label}>Terminal</Text>
-                                    <Text type="default-semibold" style={styles.value}>Ajah</Text>
+                                    <Text type="default-semibold" style={styles.value}>{booking.selectedTicket!.originCity}</Text>
                                 </View>
                             
                                 <View style={styles.detailItem}>
-                                    <Text type="default-semibold" style={styles.label}>Seat Number</Text>
-                                    <Text type="default-semibold" style={styles.value}>S4</Text>
+                                    <Text type="default-semibold" style={styles.label}>Seats</Text>
+                                    <Text type="default-semibold" style={styles.value}>{booking.receipt!.seatNumbers.map((seat) => `S${seat}`).join(', ')}</Text>
                                 </View>
                             </View>
                         
@@ -175,7 +172,6 @@ const TicketDownloadPage: React.FC = () => {
                                 style={{ width: "100%", marginTop: 29 }}
                                 dashColor={colors.light.grayDeep} 
                             />
-                        
                         </View>
                         
                         <View style={styles.buttonContainer}>
@@ -189,7 +185,7 @@ const TicketDownloadPage: React.FC = () => {
                <FormError error={errorMessage} />
            </View>
         </View>
-     );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -215,6 +211,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         backgroundColor: colors.light.input,
     },
+    barcode: {
+        width: 254,
+        height: 89,
+    },
     body: {
         flex: 1,
         backgroundColor: colors.light.dewMid,
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.light.primary,
         borderRadius: 100,
+        width: '100%',
         backgroundColor: colors.light.primaryLight
     },
     buttonContainer: { paddingHorizontal: 29, paddingVertical: 19 },
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light.dew,
         flex: 1,
     },
-    company: { width: 63, height: 44, resizeMode: "contain" },
+    company: { width: 63, height: 44 },
     companyContainer: {
         justifyContent: "center",
         alignItems: "center",
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
         fontFamily: defaultStyles.urbanistSemibold.fontFamily,
         textTransform: "capitalize"
     },
-    logo: { width: 18, height: 18, resizeMode: "contain" },
+    logo: { width: 18, height: 18 },
     receipt: {
         padding: 11,
         borderRadius: 20,

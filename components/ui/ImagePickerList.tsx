@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 
 import ImagePicker from '@/components/ui/ImagePicker';

@@ -17,9 +17,10 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen name="home" options={{ title: 'Home' }} />
-      <Tabs.Screen name="booking" options={{ title: 'Booking' }} />
       <Tabs.Screen name="history" options={{ title: 'History' }} />
+      <Tabs.Screen name="messages" options={{ title: 'Messages' }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+      <Tabs.Screen name="bus-rides" options={{ title: 'Bus Rides', href: null }} />
       <Tabs.Screen name="wallet" options={{ title: 'Wallet', href: null }} />
       <Tabs.Screen name="local-trips" options={{ title: 'Local Trips', href: null }} />
     </Tabs>
