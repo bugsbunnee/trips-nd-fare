@@ -5,11 +5,14 @@ import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-n
 
 import { Button, GoogleSignInButton, Image, OrDivider, Text } from "@/components/ui";
 import { APP_COLORS } from "@/constants/colors";
+import { useAppSelector } from "@/store/hooks";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ActivityIndicator from "@/components/ui/ActivityIndicator";
 
 const GetStartedPage: React.FC = () => {
     const { height } = useWindowDimensions();
+    const { isAuthenticating } = useAppSelector((state) => state.auth);
 
     return ( 
         <ParallaxScrollView
@@ -23,6 +26,8 @@ const GetStartedPage: React.FC = () => {
                 />
             }
         >
+            <ActivityIndicator visible={isAuthenticating} />
+            
             <View>
                 <Text type='subtitle' style={styles.title}>Let's get started</Text>
                 <Text type='default' style={styles.description}>Sign up or log in to find out the best car for you</Text>

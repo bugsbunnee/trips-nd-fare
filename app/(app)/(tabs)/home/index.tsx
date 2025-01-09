@@ -85,7 +85,7 @@ const HomeIndexPage: React.FC = () => {
                 />
             </View>
 
-            <View>
+            <View style={styles.flex}>
                 <Text type="subtitle" style={styles.subtitle}>Explore seamless ways to move around</Text>
 
                 <Conditional visible={data.isLoading}>
@@ -264,6 +264,7 @@ const styles = StyleSheet.create({
         marginTop: 10, 
         borderRadius: 8, 
     },
+    flex: {  },
     greeting: { 
         color: colors.light.white, 
         fontSize: 22, 

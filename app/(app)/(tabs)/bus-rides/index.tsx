@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: 19,
         paddingHorizontal: 17,
-        zIndex: 1000000,
+        zIndex: 10000000000,
+        elevation: 4
     },
     bottom: { 
         backgroundColor: colors.light.dewMid, 

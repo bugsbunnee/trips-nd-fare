@@ -1,15 +1,15 @@
 import React from 'react';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { useAuthRequest } from 'expo-auth-session/providers/google';
 
-import * as Linking from 'expo-linking';
-import * as Google from 'expo-auth-session/providers/google';
+import Image from '@/components/ui/Image';
+import Text from '@/components/ui/Text';
+import storage from '@/utils/storage';
 
-import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import { Image, Text } from '.';
 import { APP_COLORS } from '@/constants/colors';
-import { AuthUser } from '@/utils/models';
 import { useAppDispatch } from '@/store/hooks';
 import { loginWithGoogle } from '@/store/auth/actions';
+import { getMessageFromError } from '@/utils/lib';
 
 interface Props {
     label: string;
@@ -17,7 +17,8 @@ interface Props {
 
 const GoogleSignInButton: React.FC<Props> = ({ label }) => {
     const dispatch = useAppDispatch();
-    const [request, response, promptAsync] = Google.useAuthRequest({
+    const [request, response, promptAsync] = useAuthRequest({
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_WEB_KEY,
         androidClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_KEY,
         iosClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_IOS_KEY,
     })
@@ -25,13 +26,15 @@ const GoogleSignInButton: React.FC<Props> = ({ label }) => {
     const handleGoogleSignIn = async () => {
         try {
             const result = await promptAsync();
-            if (result.type === 'success') {
-                const token = result.authentication!.accessToken;
-                const action = await dispatch(loginWithGoogle(token)).unwrap();
-                console.log(action);
-            }
+            if (result.type !== 'success') return;
+
+            const token = result.authentication!.accessToken;
+            const action = await dispatch(loginWithGoogle(token)).unwrap();
+            if (!action) return;
+            
+            storage.storeUser(action);
         } catch (error) {
-            console.log(error);
+            Alert.alert('Error', getMessageFromError(error));
         }
     };
 

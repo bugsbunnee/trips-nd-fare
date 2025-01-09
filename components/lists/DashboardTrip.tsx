@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import _ from 'lodash';
 
 import Conditional from "../common/Conditional";
+import EmptyItem from "./EmptyItem";
 
 import { Skeleton, Text } from "@/components/ui";
 import { colors, styles as defaultStyles } from "@/constants";
@@ -14,7 +15,6 @@ import { formatAmount } from "@/utils/lib";
 
 import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
 import useBookings from "@/hooks/useRecentBookings";
-import EmptyItem from "./EmptyItem";
 
 interface TableCellProps {
     isActive: boolean;
@@ -44,70 +44,73 @@ const DashboardTrips: React.FC = () => {
     const bookings = useBookings();
 
     return ( 
-        <FlatList
-            data={bookings.bookings.slice(0, 4)}
-            refreshing={bookings.isLoading}
-            onRefresh={bookings.onRefresh}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item, index }) => (
-                <View style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? colors.light.borderLight : colors.light.background }]}>
-                    <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('DD MMM.')}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{item.driver.serviceCode}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('HH:mm A')}</Text>
-                    <Text type='default-semibold' style={styles.tableRowText}>{formatAmount(item.price)}</Text>
-                </View>
-            )}
-            ListHeaderComponent={() => (
-                <View style={styles.tableHeader}>
-                    <TableHeaderCell 
-                        isActive={orderBy === 'date'} 
-                        label="Date" 
-                        onPress={() => setOrderBy('date')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'type'} 
-                        label="Location" 
-                        onPress={() => setOrderBy('type')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'time'} 
-                        label="Time" 
-                        onPress={() => setOrderBy('time')}
-                    />
-                    <TableHeaderCell 
-                        isActive={orderBy === 'price'} 
-                        label="Price" 
-                        onPress={() => setOrderBy('price')}
-                    />
-                </View>
-            )}
-            ListEmptyComponent={() => (
-                <>
-                    <Conditional visible={!bookings.isLoading}>
-                        <EmptyItem
-                            label='No Trips Yet' 
-                            description="You haven't booked any trips yet!"
-                            onRefresh={bookings.onRefresh}
+        <View style={styles.container}>
+            <FlatList
+                data={bookings.bookings.slice(0, 4)}
+                refreshing={bookings.isLoading}
+                onRefresh={bookings.onRefresh}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item, index }) => (
+                    <View style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? colors.light.borderLight : colors.light.background }]}>
+                        <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('DD MMM.')}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{item.driver.serviceCode}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('HH:mm A')}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{formatAmount(item.price)}</Text>
+                    </View>
+                )}
+                ListHeaderComponent={() => (
+                    <View style={styles.tableHeader}>
+                        <TableHeaderCell 
+                            isActive={orderBy === 'date'} 
+                            label="Date" 
+                            onPress={() => setOrderBy('date')}
                         />
-                    </Conditional>
+                        <TableHeaderCell 
+                            isActive={orderBy === 'type'} 
+                            label="Location" 
+                            onPress={() => setOrderBy('type')}
+                        />
+                        <TableHeaderCell 
+                            isActive={orderBy === 'time'} 
+                            label="Time" 
+                            onPress={() => setOrderBy('time')}
+                        />
+                        <TableHeaderCell 
+                            isActive={orderBy === 'price'} 
+                            label="Price" 
+                            onPress={() => setOrderBy('price')}
+                        />
+                    </View>
+                )}
+                ListEmptyComponent={() => (
+                    <>
+                        <Conditional visible={!bookings.isLoading}>
+                            <EmptyItem
+                                label='No Trips Yet' 
+                                description="You haven't booked any trips yet!"
+                                onRefresh={bookings.onRefresh}
+                            />
+                        </Conditional>
 
-                    <Conditional visible={bookings.isLoading}>
-                        {_.range(1, 5).map((fill) => (
-                            <View key={fill} style={[styles.tableRow, styles.skeletonContainer]}>
-                                <Skeleton style={styles.skeleton} />
-                                <Skeleton style={styles.skeleton} />
-                                <Skeleton style={styles.skeleton} />
-                                <Skeleton style={styles.skeleton} />
-                            </View>
-                        ))}
-                    </Conditional>
-                </>
-            )}
-        />
+                        <Conditional visible={bookings.isLoading}>
+                            {_.range(1, 5).map((fill) => (
+                                <View key={fill} style={[styles.tableRow, styles.skeletonContainer]}>
+                                    <Skeleton style={styles.skeleton} />
+                                    <Skeleton style={styles.skeleton} />
+                                    <Skeleton style={styles.skeleton} />
+                                    <Skeleton style={styles.skeleton} />
+                                </View>
+                            ))}
+                        </Conditional>
+                    </>
+                )}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {  },
     skeleton: { height: 10, flex: 1, borderRadius: 2 },
     skeletonContainer: { backgroundColor: colors.light.background, gap: 10 },
     tableRow: { flexDirection: 'row', paddingHorizontal: 15, paddingVertical: 10, borderRadius: 4, alignItems: 'center' },

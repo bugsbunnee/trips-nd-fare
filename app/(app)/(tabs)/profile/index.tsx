@@ -71,12 +71,10 @@ const ProfilePage: React.FC = () => {
             </View>
           </View>
 
-          <View style={defaultStyles.shadow}>
-            <Image
-                src={auth.user!.profilePhoto ?? require('../../../../assets/images/map.png')}
-                style={styles.image}
-            />
-          </View>
+          <Image
+              src={auth.user!.profilePhoto ?? require('../../../../assets/images/map.png')}
+              style={[styles.image, defaultStyles.shadow]}
+          />
         </View>
 
         <View style={styles.cardContainer}>

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import MapView, { MapViewDirections, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
+import MapView, { MapViewDirections, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import _ from 'lodash';

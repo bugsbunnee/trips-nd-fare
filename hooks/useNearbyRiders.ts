@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/store/hooks";
 import { useMemo } from "react";
-import { MapMarkerProps } from "react-native-maps";
+import { MapMarkerProps } from "@/components/maps/Map";
 
 const useNearbyRiders = () => {
     const data = useAppSelector((state) => state.data);

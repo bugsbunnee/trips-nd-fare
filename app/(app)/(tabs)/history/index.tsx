@@ -3,9 +3,11 @@ import React, { useMemo, useState } from "react";
 import _ from "lodash";
 
 import { Text } from "@/components/ui";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 import BookingListItem from "@/components/lists/BookinglistItem";
+import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
+import Conditional from "@/components/common/Conditional";
 import EmptyItem from "@/components/lists/EmptyItem";
 import Picker from "@/components/lists/Picker";
 import RidePicker from "@/components/lists/RidePicker";
@@ -16,8 +18,6 @@ import useBookings from "@/hooks/useRecentBookings";
 import { colors } from "@/constants";
 import { PickerItemModel } from "@/utils/models";
 import { SORT_ORDER } from "@/constants/app";
-import Conditional from "@/components/common/Conditional";
-import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
 
 const HistoryIndexPage : React.FC= () => {
     const [selectedOrder, setSelectedOrder] = useState<PickerItemModel | null>(null);

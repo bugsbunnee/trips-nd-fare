@@ -14,8 +14,6 @@ const FormField: React.FC<Props> = ({ name, ...otherProps }) => {
 	const { setFieldTouched, setFieldValue, errors, values, touched } = useFormikContext();
 	const value = _.get(values, name);
 
-	console.log('value', value)
-
 	return (
 		<>
 			<GoogleTextInput

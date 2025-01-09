@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import MapView, { Heatmap, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
-import MapViewDirections from 'react-native-maps-directions';
+import MapView, { MapViewDirections, Heatmap, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map';
 
 import _ from 'lodash';
 
@@ -48,8 +47,6 @@ const GeofencingMap: React.FC<Props> = ({ destination, markers, origin, onOrigin
             });
         }
     }, [origin, markers]);
-
-    console.log(destination)
 
     if (origin) {
         return ( 

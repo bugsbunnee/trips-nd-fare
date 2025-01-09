@@ -21,6 +21,13 @@ export const loginUser = createAsyncThunk(loginAction.type, async (authData: { e
     return thunkAPI.rejectWithValue(response.originalError);
 });
 
+export const loginWithGoogle = createAsyncThunk(loginGoogleAction.type, async (token: string, thunkAPI) => {
+    const response = await http.post<AuthResponse>('/auth/google', { token });
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
 export const registerUser = createAsyncThunk(registerAction.type, async (authData: { name: string, email: string, password: string }, thunkAPI) => {
     const response = await http.post<AuthResponse>('/users', authData);
     if (response.ok) return response.data;
@@ -37,19 +44,6 @@ export const updateUser = createAsyncThunk(updateLocationAction.type, async (aut
     };
 
     const response = await http.put<AuthResponse>('/users/me/profile', authData, config);
-    if (response.ok) return response.data;
-
-    return thunkAPI.rejectWithValue(response.originalError);
-});
-
-export const loginWithGoogle = createAsyncThunk(loginGoogleAction.type, async (token: string, thunkAPI) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
-    const response = await http.get(process.env.EXPO_PUBLIC_GOOGLE_API_URL!, {}, config);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);

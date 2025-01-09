@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { AuthResponse, loginUser, registerUser, updateUser } from "./actions";
+import { AuthResponse, loginUser, loginWithGoogle, registerUser, updateUser } from "./actions";
 import { User } from "@/utils/models";
 import { getMessageFromError } from "@/utils/lib";
 import { AppDispatch } from "..";
@@ -47,6 +47,19 @@ const authSlice = createSlice({
             state.error = '';
         })
         .addCase(loginUser.rejected, (state, action) => {
+            state.isAuthenticating = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(loginWithGoogle.pending, (state) => {
+            state.isAuthenticating = true;
+        })
+        .addCase(loginWithGoogle.fulfilled, (state, action) => {
+            state.token = action.payload!.token;
+            state.user = action.payload!.account;
+            state.isAuthenticating = false;
+            state.error = '';
+        })
+        .addCase(loginWithGoogle.rejected, (state, action) => {
             state.isAuthenticating = false;
             state.error = getMessageFromError(action.payload);
         })

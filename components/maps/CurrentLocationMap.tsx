@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import MapView, { CameraZoomRange, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map.native';
+import MapView, { CameraZoomRange, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/components/maps/Map';
 
 import Conditional from '../common/Conditional';
 import _ from 'lodash';
