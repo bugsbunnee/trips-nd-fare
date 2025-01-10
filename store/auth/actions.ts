@@ -8,10 +8,16 @@ export const loginAction = createAction<number | undefined>('auth/login')
 export const loginGoogleAction = createAction<number | undefined>('auth/loginGoogle')
 export const registerAction = createAction<number | undefined>('auth/register');
 export const updateLocationAction = createAction<number | undefined>('auth/updateLocation');
+export const verifyEmailAction = createAction<number>('auth/verifyEmail');
 
 export interface AuthResponse {
     token: string;
     account: User | null;
+}
+
+interface VerifyEmailPayload {
+    email: string;
+    token: string;
 }
 
 export const loginUser = createAsyncThunk(loginAction.type, async (authData: { email: string, password: string }, thunkAPI) => {
@@ -44,6 +50,13 @@ export const updateUser = createAsyncThunk(updateLocationAction.type, async (aut
     };
 
     const response = await http.put<AuthResponse>('/users/me/profile', authData, config);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const verifyEmail = createAsyncThunk(verifyEmailAction.type, async (payload: VerifyEmailPayload, thunkAPI) => {
+    const response = await http.post('/auth/verify', payload);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);

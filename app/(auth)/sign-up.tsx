@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { FormikHelpers } from 'formik';
 
 import * as yup from 'yup';
@@ -13,14 +13,13 @@ import { APP_COLORS } from '@/constants/colors';
 import { registerUser } from '@/store/auth/actions';
 
 import ActivityIndicator from '@/components/ui/ActivityIndicator';
+import EmailVerification from '@/components/forms/EmailVerification';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 
 import { ThemedView } from '@/components/ThemedView';
 import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
 import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui';
 import { getFieldErrorsFromError } from '@/utils/lib';
-
-import storage from '@/utils/storage';
 
 YupPassword(yup);
 
@@ -48,15 +47,11 @@ const SignUpPage: React.FC = () => {
 
   const handleSubmit = async (auth: FormValues, helpers: FormikHelpers<FormValues>) => {
     try {
-      const result = await dispatch(registerUser(auth)).unwrap();
-      if (result) storage.storeUser(result);
-      
-      router.push('/account-verified');
+      await dispatch(registerUser(auth)).unwrap();
     } catch (error) {
       const fieldErrors = getFieldErrorsFromError(error);
       if (fieldErrors) helpers.setErrors(fieldErrors);
     }
-
   };
 
   return (
@@ -125,6 +120,8 @@ const SignUpPage: React.FC = () => {
             </View>
         </Form>
       </KeyboardAwareScrollView>
+
+      <EmailVerification />
     </ParallaxScrollView>
   );
 };

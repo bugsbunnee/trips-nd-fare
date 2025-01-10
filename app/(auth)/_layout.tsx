@@ -24,7 +24,6 @@ const AuthLayout: React.FC = () => {
             <Stack.Screen name="get-started" />
             <Stack.Screen name="sign-in" />
             <Stack.Screen name="sign-up" />
-            <Stack.Screen name="account-verified" options={{ presentation: 'modal' }} />
         </Stack>
      );
 };

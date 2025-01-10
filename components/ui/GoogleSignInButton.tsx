@@ -23,7 +23,7 @@ const GoogleSignInButton: React.FC<Props> = ({ label }) => {
         webClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_WEB_KEY,
         androidClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_KEY,
         iosClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_IOS_KEY,
-        redirectUri: makeRedirectUri()
+        redirectUri: makeRedirectUri({ scheme: '' })
     })
 
     const handleGoogleSignIn = async () => {

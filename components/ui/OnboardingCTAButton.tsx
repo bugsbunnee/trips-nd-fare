@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import Animated, {  useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { router } from 'expo-router';
 
 import { styles as defaultStyles } from '@/constants';
@@ -17,10 +17,11 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const OnboardingCTAButton: React.FC<Props> = ({ currentIndex, flatListRef, length }) => {
     const colors = useThemeColor();
+    const dimensions = useWindowDimensions();
 
     const buttonStyle = useAnimatedStyle(() => {
         return {
-            width: currentIndex === length - 1 ? withSpring(343) : withSpring(240),
+            width: currentIndex === length - 1 ? withSpring(dimensions.width * 0.9) : withSpring(dimensions.width * 0.8),
             height: 60,
         };
     }, [currentIndex, length]);
