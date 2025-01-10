@@ -31,7 +31,7 @@ const GoogleTextInput: React.FC<GoogleTextInputProps> = ({ containerStyle, initi
             styles={{
                 textInputContainer: [styles.textInputContainer, containerStyle],
                 textInput: styles.textInput,
-                listView: [styles.listView, defaultStyles.shadow],
+                listView: [styles.listView],
                 description: styles.description,
             }}
             onPress={(data, details = null) => onPress({

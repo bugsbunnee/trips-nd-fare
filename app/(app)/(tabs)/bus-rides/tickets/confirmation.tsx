@@ -1,5 +1,4 @@
 import React from 'react';
-import Animated, { SlideInDown, ZoomIn } from 'react-native-reanimated';
 
 import { View,  StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { MaterialCommunityIcons  } from '@expo/vector-icons';
@@ -15,7 +14,7 @@ const BookingConfirmationPage = () => {
     const insets = useSafeAreaInsets();
 
     const trackRide = () => {
-        router.push('/home/track/1234')
+        router.push('/home');
     };
 
     return (

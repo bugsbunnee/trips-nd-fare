@@ -131,9 +131,8 @@ const TicketDetailsPage: React.FC = () => {
                         <View style={styles.seats}>
                             {_.range(1, ticket!.details.seatCount + 1).map((seat) => (
                                 <TouchableOpacity key={seat} disabled={ticket!.details.bookedSeats.includes(seat)} onPress={() => handleSelectSeat(seat)}>
-                                    <MaterialIcons name='person' size={icons.SIZES.LARGE} color={getSeatColor(seat)} style={styles.row}>
-                                        <Text type="default-semibold" style={styles.seatLabel}>S{seat}</Text>
-                                    </MaterialIcons>
+                                    <MaterialIcons name='person' size={icons.SIZES.LARGE} color={getSeatColor(seat)} style={styles.row} />
+                                    <Text type="default-semibold" style={styles.seatLabel}>S{seat}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -143,7 +142,11 @@ const TicketDetailsPage: React.FC = () => {
                             <Text type="default-semibold" style={styles.dateValue}>{formatDate(ticket!.details.departureDate, 'MMM. DD, YYYY')}</Text>
                         </View>
 
-                        <Button label="Buy ticket" disabled={selectedSeats.length === 0} onPress={handleNavigateToPayment} />
+                        <Button 
+                            label="Buy ticket" 
+                            disabled={selectedSeats.length === 0} 
+                            onPress={handleNavigateToPayment} 
+                        />
                     </View>
                 </ScrollView>
             </View>

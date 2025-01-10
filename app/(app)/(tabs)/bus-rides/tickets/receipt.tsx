@@ -50,7 +50,7 @@ const TicketDownloadPage: React.FC = () => {
             });
 
             await dispatch(getBusTickets());
-            router.push('/bus-rides/tickets/confirmation');
+            router.dismissTo('/bus-rides/tickets/confirmation');
         } catch (error) {
             setErrorMessage((error as Error).message)
         } finally {

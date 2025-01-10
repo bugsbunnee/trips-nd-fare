@@ -1,6 +1,6 @@
 import { Booking, Location, RideDetails } from "@/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { bookCarRide, trackRide } from "./actions";
+import { bookBusRide, bookCarRide, trackRide } from "./actions";
 import { getMessageFromError } from "@/utils/lib";
 
 interface RideState {
@@ -52,6 +52,9 @@ const riderSlice = createSlice({
         .addCase(bookCarRide.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
+        })
+        .addCase(bookBusRide.fulfilled, (state, action) => {
+            state.booking = action.payload!;
         })
         builder.addCase(trackRide.pending, (state) => {
             state.isLoading = true;

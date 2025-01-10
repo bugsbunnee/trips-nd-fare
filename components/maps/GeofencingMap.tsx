@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  pin: { width: 30, height: 42, resizeMode: 'contain' },
+  pin: { position: 'absolute', width: 30, height: 42, resizeMode: 'contain' },
   skeleton: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
