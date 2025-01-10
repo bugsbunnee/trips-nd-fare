@@ -32,7 +32,7 @@ const AvailableTicketsPage: React.FC = () => {
                 onRefresh={handleRefresh}
                 data={data.busTickets}
                 refreshing={data.isLoading}
-                keyExtractor={(ticket) => ticket.details.ticketId}
+                keyExtractor={(ticket, index) => ticket.details.ticketId + index}
                 renderItem={({ item }) => (
                     <TicketItem
                         ticket={item}

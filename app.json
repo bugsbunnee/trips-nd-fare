@@ -16,7 +16,14 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.webiq.tripsndfare",
-      "googleServicesFile": "./config/GoogleService-Info.plist"
+      "googleServicesFile": "./config/GoogleService-Info.plist",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+            {
+              "CFBundleURLSchemes": ["com.googleusercontent.apps.562192654841-fvfpnk2usg9h53170quig4jh2r5luegr"]
+            }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

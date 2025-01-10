@@ -91,9 +91,9 @@ const BookingIndexPage : React.FC= () => {
                         
                         <Conditional visible={!data.isLoading}>
                             <Conditional visible={data.busTickets.length > 0}>
-                                {data.busTickets.slice(0, 4).map((ticket) => (
+                                {data.busTickets.slice(0, 4).map((ticket, index) => (
                                     <TicketItem 
-                                        key={ticket.details.ticketId}
+                                        key={index}
                                         ticket={ticket}
                                         onPress={() => router.push({
                                             pathname: '/bus-rides/tickets/[id]',

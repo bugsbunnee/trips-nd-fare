@@ -84,7 +84,7 @@ export const getMessageFromError = (error: any) => {
 };
 
 export const getTimeFromDate = (date: string | Date | number) => {
-    return dayjs(date).format('hh:mm');
+    return dayjs(date).format('HH:mm');
 }
 
 export const getLocationCode = (location: string) => {

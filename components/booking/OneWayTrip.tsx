@@ -103,7 +103,7 @@ const OneWayTrip: React.FC= () => {
                             name='departureDate'
                             width='100%' 
                             format='MMM. DD YYYY'
-                            mode="datetime"
+                            mode="date"
                             minimumDate={today}
                             placeholder='Select a departure date'
                         />
