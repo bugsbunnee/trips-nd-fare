@@ -1,6 +1,6 @@
 import React from 'react';
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 
@@ -12,6 +12,7 @@ import { APP_COLORS } from '@/constants/colors';
 import { useAppDispatch } from '@/store/hooks';
 import { loginWithGoogle } from '@/store/auth/actions';
 import { getMessageFromError } from '@/utils/lib';
+import { APP_SCHEME } from '@/utils/data';
 
 interface Props {
     label: string;
@@ -23,7 +24,7 @@ const GoogleSignInButton: React.FC<Props> = ({ label }) => {
         webClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_WEB_KEY,
         androidClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_KEY,
         iosClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_IOS_KEY,
-        redirectUri: makeRedirectUri({ scheme: '' })
+        redirectUri: makeRedirectUri({ scheme: APP_SCHEME, path: 'get-started' })
     })
 
     const handleGoogleSignIn = async () => {

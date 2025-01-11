@@ -18,3 +18,5 @@ export const TICKETS = [
         amount: 19000
     },
 ];
+
+export const APP_SCHEME = 'clikride';
