@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import { makeRedirectUri } from 'expo-auth-session';
 import { useAuthRequest } from 'expo-auth-session/providers/google';
 
 import Image from '@/components/ui/Image';
@@ -12,7 +11,6 @@ import { APP_COLORS } from '@/constants/colors';
 import { useAppDispatch } from '@/store/hooks';
 import { loginWithGoogle } from '@/store/auth/actions';
 import { getMessageFromError } from '@/utils/lib';
-import { APP_SCHEME } from '@/utils/data';
 
 interface Props {
     label: string;
@@ -24,26 +22,28 @@ const GoogleSignInButton: React.FC<Props> = ({ label }) => {
         webClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_WEB_KEY,
         androidClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_ANDROID_KEY,
         iosClientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_IOS_KEY,
-        redirectUri: makeRedirectUri({ scheme: APP_SCHEME, path: 'get-started' })
-    })
+    });
 
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await promptAsync();
-            if (result.type !== 'success') return;
+    useEffect(() => {
+        async function handleSignIn() {
+            if (!response || response.type !== 'success') return;
 
-            const token = result.authentication!.accessToken;
-            const action = await dispatch(loginWithGoogle(token)).unwrap();
-            if (!action) return;
-            
-            storage.storeUser(action);
-        } catch (error) {
-            Alert.alert('Error', getMessageFromError(error));
+            try {
+                const token = response.authentication!.accessToken;
+                const action = await dispatch(loginWithGoogle(token)).unwrap();
+                if (!action) return;
+                
+                storage.storeUser(action);
+            } catch (error) {
+                Alert.alert('Error', getMessageFromError(error));
+            }
         }
-    };
+
+        handleSignIn();
+    }, [response]);
 
     return ( 
-        <TouchableOpacity style={[styles.button]} onPress={handleGoogleSignIn}>
+        <TouchableOpacity style={[styles.button]} onPress={() => promptAsync()}>
             <Image 
                 contentFit='contain' 
                 src={require('@/assets/images/google.png')} 

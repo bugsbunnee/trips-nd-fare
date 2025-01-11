@@ -7,8 +7,9 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Splash from "@/components/ui/Splash";
 
 const AuthLayout: React.FC = () => {
-    const auth = useAppSelector((state) => state.auth)
+    const auth = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
+
 
     if (auth.isInitializing) {
         return <Splash onDone={() => dispatch(setInitializing(false))} />;
