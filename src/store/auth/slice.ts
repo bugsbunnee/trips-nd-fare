@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { AuthResponse, loginUser, loginWithGoogle, registerUser, updateUser, verifyEmail } from "./actions";
+import { AuthResponse, loginUser, loginWithGoogle, registerUser, updateUser, verifyEmail } from "@/src/store/auth/actions";
 import { User } from "@/src/utils/models";
 import { getMessageFromError } from "@/src/utils/lib";
 import { AppDispatch } from "..";
-import { updateDeviceToken } from "../data/actions";
+import { updateDeviceToken } from "@/src/store/data/actions";
 
 import storage from "@/src/utils/storage";
 

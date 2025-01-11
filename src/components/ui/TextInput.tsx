@@ -4,7 +4,7 @@ import { TextInput, StyleSheet, View, TextInputProps, NativeSyntheticEvent, Text
 import { FontAwesome, Ionicons, Octicons, SimpleLineIcons } from '@expo/vector-icons';
  
 import ErrorMessage from '@/src/components/forms/ErrorMessage';
-import Text from './Text';
+import Text from '@/src/components/ui/Text';
 
 import { colors, icons, styles as defaultStyles } from '@/src/constants';
 

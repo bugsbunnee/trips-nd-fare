@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import MapView, { CameraZoomRange, MapMarkerProps, Marker, PROVIDER_GOOGLE } from '@/src/components/maps/Map';
 
-import Conditional from '../common/Conditional';
 import _ from 'lodash';
+import Conditional from '@/src/components/common/Conditional';
 
 import { Platform, StyleSheet, View } from 'react-native';
-import { Image, Skeleton } from '../ui';
+import { Image, Skeleton } from '@/src/components/ui';
 
 import useLocation from '@/src/hooks/useLocation';
 

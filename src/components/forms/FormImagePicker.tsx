@@ -1,8 +1,8 @@
 import React from "react";
 import { useFormikContext } from "formik";
 
-import ErrorMessage from "./ErrorMessage";
-import ImagePickerList from '../ui/ImagePickerList';
+import ErrorMessage from "@/src/components/forms/ErrorMessage";
+import ImagePickerList from '@/src/components/ui/ImagePickerList';
 
 interface Props {
   name: string;

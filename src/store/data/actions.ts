@@ -1,8 +1,8 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { BusLocations, NearbyRider, Service } from './slice';
+import { BusLocations, NearbyRider, Service } from '@/src/store/data/slice';
 import { Booking, BusTicket, Coordinates, Location } from '@/src/utils/models';
-import { RootState } from '..';
-import { AuthResponse } from '../auth/actions';
+import { RootState } from '@/src/store';
+import { AuthResponse } from '@/src/store/auth/actions';
 
 import http from '@/src/api/http';
 

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { APP_COLORS } from "./colors";
+import { APP_COLORS } from "@/src/constants/colors";
 
 const jakartaFonts = StyleSheet.create({
     jakartaRegular: {

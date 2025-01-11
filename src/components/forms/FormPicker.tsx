@@ -4,7 +4,7 @@ import _ from "lodash";
 import { useFormikContext } from "formik";
 import { PickerItemModel } from "@/src/utils/models";
 
-import Picker, { PickerProps } from "../lists/Picker";
+import Picker, { PickerProps } from "@/src/components/lists/Picker";
 import ErrorMessage from '@/src/components/forms/ErrorMessage';
 
 interface Props extends Omit<PickerProps, 'onSelectItem' | 'selectedItem'> {

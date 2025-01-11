@@ -3,8 +3,7 @@ import React from 'react';
 import { TextInput, StyleSheet, View, TextInputProps, DimensionValue } from 'react-native';
 import { colors, styles as defaultStyles } from '@/src/constants';
 
-import ErrorMessage from '@/src/components/forms/ErrorMessage';
-import Text from '../ui/Text';
+import Text from '@/src/components/ui/Text';
 
 export interface Props extends TextInputProps {
 	width?: DimensionValue;

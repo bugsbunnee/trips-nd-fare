@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getMyBookings, getNearbyRiders, getRidersForTrip, getServices, localRidersAvailableAction } from "./actions";
+import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
 import { getMessageFromError } from "@/src/utils/lib";
 import { Booking, BusTicket, Coordinates, PickerItemModel } from "@/src/utils/models";
 

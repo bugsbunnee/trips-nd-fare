@@ -1,5 +1,5 @@
 import React from 'react';
-import TabBarButton from './TabBarButton';
+import TabBarButton from '@/src/components/navigation/TabBarButton';
 
 import { View, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';

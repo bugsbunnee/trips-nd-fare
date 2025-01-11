@@ -3,8 +3,8 @@ import _ from 'lodash';
 
 import { useFormikContext } from 'formik';
 
-import GoogleTextInput, { GoogleTextInputProps } from '../ui/GoogleTextInput';
-import ErrorMessage from './ErrorMessage';
+import GoogleTextInput, { GoogleTextInputProps } from '@/src/components/ui/GoogleTextInput';
+import ErrorMessage from '@/src/components/forms/ErrorMessage';
 
 interface Props extends Omit<GoogleTextInputProps, 'onPress' | 'initialLocation'> {
 	name: string;

@@ -4,7 +4,7 @@ import DashedLine from "react-native-dashed-line";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { colors, styles as defaultStyles } from "@/src/constants";
-import { Image, Text } from "../ui";
+import { Image, Text } from "@/src/components/ui";
 import { excludeStateKeyword, formatAmount, formatDate, getLocationCode, getTimeFromDate } from "@/src/utils/lib";
 import { BusTicket } from "@/src/utils/models";
 

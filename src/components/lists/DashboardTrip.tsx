@@ -6,8 +6,8 @@ import Animated from "react-native-reanimated";
 import dayjs from "dayjs";
 import _ from 'lodash';
 
-import Conditional from "../common/Conditional";
-import EmptyItem from "./EmptyItem";
+import Conditional from "@/src/components/common/Conditional";
+import EmptyItem from "@/src/components/lists/EmptyItem";
 
 import { Skeleton, Text } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from "@/src/constants";

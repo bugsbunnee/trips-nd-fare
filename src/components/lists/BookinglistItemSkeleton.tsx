@@ -4,7 +4,7 @@ import { Octicons } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
 
 import { colors, icons } from '@/src/constants';
-import { Skeleton } from '../ui';
+import { Skeleton } from '@/src/components/ui';
 
 const BookingListItemSkeleton: React.FC = () => {
     return ( 

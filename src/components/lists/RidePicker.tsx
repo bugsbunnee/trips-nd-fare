@@ -3,7 +3,7 @@ import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { Text } from "../ui";
+import { Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
 
 interface Props {

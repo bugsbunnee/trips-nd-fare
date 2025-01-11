@@ -2,7 +2,7 @@ import React from 'react';
 import { useImage, Image, ImageStyle, ImageSource, ImageProps } from 'expo-image';
 import { StyleProp, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { colors, icons } from '../../constants';
+import { colors, icons } from '@/src/constants';
 
 interface Props extends ImageProps {
     src: ImageSource | string;

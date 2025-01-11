@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { colors, icons } from '@/src/constants';
 
-import Image from './Image';
+import Image from '@/src/components/ui/Image';
 
 
 interface Props {

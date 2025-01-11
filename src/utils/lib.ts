@@ -10,7 +10,7 @@ import duration from "dayjs/plugin/duration";
 
 import { CURRENCY } from "@/src/constants/app";
 import { colors } from "@/src/constants";
-import { Location, Transaction } from "./models";
+import { Location, Transaction } from "@/src/utils/models";
 
 dayjs.extend(duration);
 

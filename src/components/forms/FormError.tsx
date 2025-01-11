@@ -5,7 +5,7 @@ import { colors, icons } from '@/src/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { StyleSheet } from 'react-native';
-import { Text } from '../ui';
+import { Text } from '@/src/components/ui';
 
 interface Props {
     error: string;

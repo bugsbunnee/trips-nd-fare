@@ -4,7 +4,7 @@ import { Octicons } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
 
 import { colors, icons, styles as defaultStyles } from '@/src/constants';
-import { Image, Text } from '../ui';
+import { Image, Text } from '@/src/components/ui';
 import { formatDate } from '@/src/utils/lib';
 import { Booking } from '@/src/utils/models';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormikContext, FormikValues } from 'formik';
 
-import { DatePicker } from '../ui';
-import { DatePickerProps } from '../ui/DatePicker';
+import { DatePicker } from '@/src/components/ui';
+import { DatePickerProps } from '@/src/components/ui/DatePicker';
 
 interface Props extends Omit<DatePickerProps, 'value' | 'onPress' | 'onDateChange'> {
 	name: string;

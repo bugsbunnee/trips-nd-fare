@@ -1,6 +1,6 @@
 import { Booking, Location, RideDetails } from "@/src/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { bookBusRide, bookCarRide, trackRide } from "./actions";
+import { bookBusRide, bookCarRide, trackRide } from "@/src/store/ride/actions";
 import { getMessageFromError } from "@/src/utils/lib";
 
 interface RideState {

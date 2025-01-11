@@ -3,7 +3,7 @@ import MapView, { MapViewDirections, Marker, PROVIDER_GOOGLE } from '@/src/compo
 import { Platform, StyleSheet, View } from 'react-native';
 
 import _ from 'lodash';
-import Conditional from '../common/Conditional';
+import Conditional from '@/src/components/common/Conditional';
 
 import { colors } from '@/src/constants';
 import { Location } from '@/src/utils/models';

@@ -6,15 +6,15 @@ import { router } from "expo-router";
 import dayjs from "dayjs";
 import * as yup from "yup";
 
-import { Form, FormDatePicker, FormError, FormField, FormPicker, SubmitButton } from "../forms";
+import { Form, FormDatePicker, FormError, FormField, FormPicker, SubmitButton } from "@/src/components/forms";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { PickerItemModel } from "@/src/utils/models";
 import { getAvailableBusTickets, getBusLocations } from "@/src/store/data/actions";
 import { formatDate, getFieldErrorsFromError } from "@/src/utils/lib";
 
-import ActivityIndicator from "../ui/ActivityIndicator";
-import BookingField from "./Field";
-import Conditional from "../common/Conditional";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
+import BookingField from "@/src/components/booking/Field";
+import Conditional from "@/src/components/common/Conditional";
 
 interface FormValues {
     location: PickerItemModel | null;

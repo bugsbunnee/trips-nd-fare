@@ -4,7 +4,7 @@ import DashedLine from "react-native-dashed-line";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { colors, styles as defaultStyles } from "@/src/constants";
-import { Image, Skeleton, Text } from "../ui";
+import { Image, Skeleton, Text } from "@/src/components/ui";
 import { BusTicket } from "@/src/utils/models";
 
 

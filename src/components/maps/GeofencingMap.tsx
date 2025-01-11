@@ -8,11 +8,11 @@ import { Platform, StyleSheet, View } from 'react-native';
 
 import { Location } from '@/src/utils/models';
 import { getCoords } from '@/src/utils/lib';
-import { Image, Skeleton } from '../ui';
+import { Image, Skeleton } from '@/src/components/ui';
 import { colors } from '@/src/constants';
 
 import useLocation from '@/src/hooks/useLocation';
-import Conditional from '../common/Conditional';
+import Conditional from '@/src/components/common/Conditional';
 
 interface Props {
     origin: Location | null;

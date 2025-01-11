@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { bookBusRide } from "../ride/actions";
+import { bookBusRide } from "@/src/store/ride/actions";
 import { Booking, BusTicket } from "@/src/utils/models";
 
 interface BookingState {

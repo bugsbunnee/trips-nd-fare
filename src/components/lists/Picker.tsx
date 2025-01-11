@@ -8,7 +8,7 @@ import { colors, styles as defaultStyles } from '@/src/constants';
 import { PickerItemModel } from "@/src/utils/models";
 
 import PickerItem from "@/src/components/lists/PickerItem";
-import PickerTrigger from "./PickerTrigger";
+import PickerTrigger from "@/src/components/lists/PickerTrigger";
 export interface PickerProps {
     label: string;
     items: PickerItemModel[];

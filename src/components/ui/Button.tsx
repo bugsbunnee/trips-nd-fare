@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { styles as defaultStyles } from '@/src/constants';
 import colors, { APP_COLORS } from '@/src/constants/colors';
 
-import Text from './Text';
+import Text from '@/src/components/ui/Text';
 
 interface Props {
     disabled?: boolean;

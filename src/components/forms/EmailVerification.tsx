@@ -3,21 +3,21 @@ import Modal from "react-native-modal";
 
 import * as yup from 'yup';
 
-import ActivityIndicator from "../ui/ActivityIndicator";
-import AccountVerified from "./AccountVerified";
-import Form from "./Form";
-import FormError from "./FormError";
-import FormField from "./FormField";
-import SubmitButton from "./SubmitButton";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
+import AccountVerified from "@/src/components/forms/AccountVerified";
+import Form from "@/src/components/forms/Form";
+import FormError from "@/src/components/forms/FormError";
+import FormField from "@/src/components/forms/FormField";
+import SubmitButton from "@/src/components/forms/SubmitButton";
 
 import { FormikHelpers } from "formik";
 import { StyleSheet, View } from "react-native";
 
-import { Text } from "../ui";
+import { Text } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from "@/src/constants";
 import { getFieldErrorsFromError } from "@/src/utils/lib";
-import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { verifyEmail } from "@/src/store/auth/actions";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 
 
 interface FormValues {

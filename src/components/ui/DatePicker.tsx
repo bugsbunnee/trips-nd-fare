@@ -5,8 +5,7 @@ import { StyleSheet, View, DimensionValue, TouchableOpacity } from 'react-native
 import { colors, styles as defaultStyles } from '@/src/constants';
 import { formatDate } from '@/src/utils/lib';
 
-import ErrorMessage from '@/src/components/forms/ErrorMessage';
-import Text from './Text';
+import Text from '@/src/components/ui/Text';
 
 export interface DatePickerProps {
 	width?: DimensionValue;
