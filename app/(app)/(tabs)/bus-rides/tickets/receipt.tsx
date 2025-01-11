@@ -6,17 +6,17 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
-import { FormError } from "@/components/forms";
-import { colors, styles as defaultStyles } from "@/constants";
-import { Image, Text } from "@/components/ui";
-import { excludeStateKeyword, formatAmount, formatDate, generateScreenshot, getCountDown, getLocationCode, getTimeFromDate, sendLocalNotification } from "@/utils/lib";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { FormError } from "@/src/components/forms";
+import { colors, styles as defaultStyles } from "@/src/constants";
+import { Image, Text } from "@/src/components/ui";
+import { excludeStateKeyword, formatAmount, formatDate, generateScreenshot, getCountDown, getLocationCode, getTimeFromDate, sendLocalNotification } from "@/src/utils/lib";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 
-import ActivityIndicator from "@/components/ui/ActivityIndicator";
-import useFluidButtonStyle from "@/hooks/useFluidButtonStyle";
-import useMediaPermission from "@/hooks/useMediaPermission";
-import { setSelectedTicket } from "@/store/booking/slice";
-import { getBusTickets } from "@/store/data/actions";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
+import useFluidButtonStyle from "@/src/hooks/useFluidButtonStyle";
+import useMediaPermission from "@/src/hooks/useMediaPermission";
+import { setSelectedTicket } from "@/src/store/booking/slice";
+import { getBusTickets } from "@/src/store/data/actions";
 
 const TicketDownloadPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -95,7 +95,7 @@ const TicketDownloadPage: React.FC = () => {
                                     />
                                     
                                     <View style={styles.imageContainer}>
-                                        <Image src={require("@/assets/images/journey.png")} style={styles.logo} />
+                                        <Image src={require("@/src/assets/images/journey.png")} style={styles.logo} />
                                     </View>
                                     
                                     <DashedLine 

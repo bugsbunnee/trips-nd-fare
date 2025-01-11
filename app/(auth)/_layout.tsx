@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Redirect, Stack } from "expo-router";
-import { setInitializing } from "@/store/auth/slice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setInitializing } from "@/src/store/auth/slice";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 
-import Splash from "@/components/ui/Splash";
+import Splash from "@/src/components/ui/Splash";
 
 const AuthLayout: React.FC = () => {
     const auth = useAppSelector((state) => state.auth);

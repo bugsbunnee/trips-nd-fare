@@ -4,16 +4,16 @@ import { View,  StyleSheet } from 'react-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { router } from 'expo-router';
 
-import Rider from '@/components/lists/Rider';
-import GeofencingMap from '@/components/maps/GeofencingMap';
-import RiderLayout from '@/components/ui/RiderLayout';
-import useNearbyRiders from '@/hooks/useNearbyRiders';
+import Rider from '@/src/components/lists/Rider';
+import GeofencingMap from '@/src/components/maps/GeofencingMap';
+import RiderLayout from '@/src/components/ui/RiderLayout';
+import useNearbyRiders from '@/src/hooks/useNearbyRiders';
 
-import { colors, styles as defaultStyles } from '@/constants';
-import { Button } from '@/components/ui';
+import { colors, styles as defaultStyles } from '@/src/constants';
+import { Button } from '@/src/components/ui';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setRider } from '@/store/ride/slice';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { setRider } from '@/src/store/ride/slice';
 
 const ChooseRiderPage = () => {
     const [selectedRider, setSelectedRider] = useState<string>('');

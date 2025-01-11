@@ -6,15 +6,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Text } from "@/components/ui";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getBusTickets } from "@/store/data/actions";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Text } from "@/src/components/ui";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getBusTickets } from "@/src/store/data/actions";
 
-import Conditional from "@/components/common/Conditional";
-import TicketItem from "@/components/lists/Ticket";
-import TicketItemSkeleton from "@/components/lists/TicketSkeleton";
-import EmptyItem from "@/components/lists/EmptyItem";
+import Conditional from "@/src/components/common/Conditional";
+import TicketItem from "@/src/components/lists/Ticket";
+import TicketItemSkeleton from "@/src/components/lists/TicketSkeleton";
+import EmptyItem from "@/src/components/lists/EmptyItem";
 
 const AvailableTicketsPage: React.FC = () => {
     const insets = useSafeAreaInsets();

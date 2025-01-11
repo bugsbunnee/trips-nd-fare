@@ -7,18 +7,18 @@ import { Link } from 'expo-router';
 
 import * as yup from 'yup';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import storage from '@/utils/storage';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import ParallaxScrollView from '@/src/components/ParallaxScrollView';
+import storage from '@/src/utils/storage';
 
-import { ThemedView } from '@/components/ThemedView';
-import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
-import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui';
+import { ThemedView } from '@/src/components/ThemedView';
+import { Form, FormError, FormField, SubmitButton } from '@/src/components/forms';
+import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/src/components/ui';
 
-import { colors } from '@/constants';
-import { loginUser } from '@/store/auth/actions';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { getFieldErrorsFromError } from '@/utils/lib';
+import { colors } from '@/src/constants';
+import { loginUser } from '@/src/store/auth/actions';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { getFieldErrorsFromError } from '@/src/utils/lib';
 
 
 interface FormValues {
@@ -52,7 +52,7 @@ const SignInPage: React.FC = () => {
         headerImage={
             <View style={styles.headerContainer}>
                 <Image
-                source={require('@/assets/images/welcome.png')}
+                source={require('@/src/assets/images/welcome.png')}
                 style={styles.image}
                 />
 

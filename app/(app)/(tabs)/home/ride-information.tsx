@@ -5,15 +5,15 @@ import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
-import { colors, icons, styles as defaultStyles } from '@/constants';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { bookCarRide } from '@/store/ride/actions';
-import { formatAmount, getFieldErrorsFromError } from '@/utils/lib';
-import { Button, Image, RiderLayout, Text } from '@/components/ui';
-import { FormError } from '@/components/forms';
+import { colors, icons, styles as defaultStyles } from '@/src/constants';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { bookCarRide } from '@/src/store/ride/actions';
+import { formatAmount, getFieldErrorsFromError } from '@/src/utils/lib';
+import { Button, Image, RiderLayout, Text } from '@/src/components/ui';
+import { FormError } from '@/src/components/forms';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import RouteMap from '@/components/maps/RouteMap';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import RouteMap from '@/src/components/maps/RouteMap';
 
 interface ApiErrorResponse {
     driver?: [string];

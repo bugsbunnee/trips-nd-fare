@@ -4,19 +4,19 @@
     "slug": "trips-nd-fare",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "scheme": "clikride",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./src/assets/images/splash.png",
       "contentFit": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.webiq.tripsndfare",
-      "googleServicesFile": "./config/GoogleService-Info.plist",
+      "googleServicesFile": "./src/config/GoogleService-Info.plist",
       "infoPlist": {
         "CFBundleURLTypes": [
             {
@@ -27,7 +27,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "config": {
@@ -37,12 +37,12 @@
       },
       "package": "com.webiq.tripsndfare",
       "package_name": "com.webiq.tripsndfare",
-      "googleServicesFile": "./config/google-services.json"
+      "googleServicesFile": "./src/config/google-services.json"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./src/assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",

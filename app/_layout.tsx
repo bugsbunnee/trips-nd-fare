@@ -9,8 +9,8 @@ import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-rean
 import * as WebBrowser from 'expo-web-browser';
 
 
-import AppProvider from '@/components/authentication/Provider';
-import useInitializeApp from '@/hooks/useInitializeApp';
+import AppProvider from '@/src/components/authentication/Provider';
+import useInitializeApp from '@/src/hooks/useInitializeApp';
 
 import 'react-native-reanimated';
 import 'react-native-get-random-values';

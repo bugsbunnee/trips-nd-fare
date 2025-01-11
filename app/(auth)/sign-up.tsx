@@ -8,18 +8,18 @@ import { FormikHelpers } from 'formik';
 import * as yup from 'yup';
 import YupPassword from 'yup-password'
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { APP_COLORS } from '@/constants/colors';
-import { registerUser } from '@/store/auth/actions';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { APP_COLORS } from '@/src/constants/colors';
+import { registerUser } from '@/src/store/auth/actions';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import EmailVerification from '@/components/forms/EmailVerification';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import EmailVerification from '@/src/components/forms/EmailVerification';
+import ParallaxScrollView from '@/src/components/ParallaxScrollView';
 
-import { ThemedView } from '@/components/ThemedView';
-import { Form, FormError, FormField, SubmitButton } from '@/components/forms';
-import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/components/ui';
-import { getFieldErrorsFromError } from '@/utils/lib';
+import { ThemedView } from '@/src/components/ThemedView';
+import { Form, FormError, FormField, SubmitButton } from '@/src/components/forms';
+import { GoogleSignInButton, HelloWave, OrDivider, Text } from '@/src/components/ui';
+import { getFieldErrorsFromError } from '@/src/utils/lib';
 
 YupPassword(yup);
 
@@ -60,7 +60,7 @@ const SignUpPage: React.FC = () => {
         headerImage={
           <View style={styles.headerContainer}>
               <Image
-                source={require('@/assets/images/welcome.png')}
+                source={require('@/src/assets/images/welcome.png')}
                 style={styles.image}
               />
 

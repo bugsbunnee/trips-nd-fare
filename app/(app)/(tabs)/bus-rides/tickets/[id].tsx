@@ -5,17 +5,17 @@ import { router, useLocalSearchParams } from "expo-router";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSelectedTicket } from "@/store/booking/slice";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { setSelectedTicket } from "@/src/store/booking/slice";
 
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Button, Text } from "@/components/ui";
-import { formatDate, getMessageFromError, parseTime } from "@/utils/lib";
-import { bookBusRide } from "@/store/ride/actions";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Button, Text } from "@/src/components/ui";
+import { formatDate, getMessageFromError, parseTime } from "@/src/utils/lib";
+import { bookBusRide } from "@/src/store/ride/actions";
 
-import ActivityIndicator from "@/components/ui/ActivityIndicator";
-import RouteMap from "@/components/maps/RouteMap";
-import TicketItem from "@/components/lists/Ticket";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
+import RouteMap from "@/src/components/maps/RouteMap";
+import TicketItem from "@/src/components/lists/Ticket";
 
 const TicketDetailsPage: React.FC = () => {
     const [selectedSeats, setSelectedSeats] = useState<number[]>([]);

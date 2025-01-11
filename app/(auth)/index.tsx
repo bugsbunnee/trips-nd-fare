@@ -4,13 +4,13 @@ import Animated, { useAnimatedRef, useAnimatedScrollHandler, useSharedValue } fr
 import { ImageURISource, StyleSheet, View, ViewToken } from "react-native";
 import { Link } from "expo-router";
 
-import { OnboardingSlide } from "@/utils/models";
-import { Text } from "@/components/ui";
+import { OnboardingSlide } from "@/src/utils/models";
+import { Text } from "@/src/components/ui";
 
-import OnboardingItem from "@/components/ui/OnboardingItem";
-import OnboardingCTAButton from "@/components/ui/OnboardingCTAButton";
-import PaginationDot from "@/components/ui/PaginationDot";
-import Screen from "@/components/navigation/Screen";
+import OnboardingItem from "@/src/components/ui/OnboardingItem";
+import OnboardingCTAButton from "@/src/components/ui/OnboardingCTAButton";
+import PaginationDot from "@/src/components/ui/PaginationDot";
+import Screen from "@/src/components/navigation/Screen";
 
 interface ListItem { 
     item: OnboardingSlide; 
@@ -22,17 +22,17 @@ const SLIDES: OnboardingSlide[] = [
     coloredText: 'ClickRide',
       title: 'The best car in your hands with ',
       description: 'Discover the convenience of finding your perfect ride with our App',
-      image: require('@/assets/images/danfo.png'),
+      image: require('@/src/assets/images/danfo.png'),
     },
     {
       title: 'The perfect ride is just a tap away!',
       description: 'Your journey begins with ClickRide. Find your ideal ride effortlessly.',
-      image: require('@/assets/images/onboarding_two.png'),
+      image: require('@/src/assets/images/onboarding_two.png'),
     },
     {
       title: 'Your ride, your way. Let\'s get started!',
       description: 'Enter your destination, sit back, and let us take care of the rest.',
-      image: require('@/assets/images/onboarding.png'),
+      image: require('@/src/assets/images/onboarding.png'),
     },
 ];
 

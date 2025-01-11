@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { router } from "expo-router";
 
-import ActivityIndicator from "@/components/ui/ActivityIndicator";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
 
 const OAuthRedirectPage: React.FC = () => {
     useEffect(() => {

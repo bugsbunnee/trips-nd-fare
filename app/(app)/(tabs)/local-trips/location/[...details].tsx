@@ -6,11 +6,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Image, Text } from "@/components/ui";
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Destination as DestinationModel } from "@/utils/models";
+import { Image, Text } from "@/src/components/ui";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Destination as DestinationModel } from "@/src/utils/models";
 
-import Destination from "@/components/lists/Destination";
+import Destination from "@/src/components/lists/Destination";
 
 const LocationDetailsPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -18,31 +18,31 @@ const LocationDetailsPage : React.FC= () => {
     const DESTINATIONS: DestinationModel[] = [
         {
             id: 1,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Ajah, Under Bridge',
             minimumCost: 700,
         },
         {
             id: 2,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Shoprite, Sangotedo',
             minimumCost: 700,
         },
         {
             id: 3,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Agungi, Lekki',
             minimumCost: 700,
         },
         {
             id: 4,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Marwa, Lekki',
             minimumCost: 700,
         },
         {
             id: 5,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Agege, Lagos',
             minimumCost: 700,
         },
@@ -51,7 +51,7 @@ const LocationDetailsPage : React.FC= () => {
     const AVAILABLE_RIDERS = [
         {
             id: 1,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Aminu',
             lastName: 'Gabriel',
             location: 'Ogombo road',
@@ -59,7 +59,7 @@ const LocationDetailsPage : React.FC= () => {
         },
         {
             id: 2,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Yemi',
             lastName: 'Gabriel',
             location: 'Ogombo road',
@@ -67,7 +67,7 @@ const LocationDetailsPage : React.FC= () => {
         },
         {
             id: 3,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Femi',
             lastName: 'Gabriel',
             location: 'Ogombo road',
@@ -75,7 +75,7 @@ const LocationDetailsPage : React.FC= () => {
         },
         {
             id: 4,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Bunmi',
             lastName: 'Gabriel',
             location: 'Ogombo road',

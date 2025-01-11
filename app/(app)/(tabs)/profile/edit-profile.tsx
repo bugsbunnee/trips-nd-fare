@@ -10,18 +10,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import * as yup from 'yup';
 import 'yup-phone';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { colors, styles as defaultStyles, icons } from '@/constants';
-import { Form, FormError, FormField, FormImagePicker, SubmitButton } from '@/components/forms';
-import { updateUser } from '@/store/auth/actions';
-import { getFieldErrorsFromError } from '@/utils/lib';
-import { Notification, Text } from '@/components/ui';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { colors, styles as defaultStyles, icons } from '@/src/constants';
+import { Form, FormError, FormField, FormImagePicker, SubmitButton } from '@/src/components/forms';
+import { updateUser } from '@/src/store/auth/actions';
+import { getFieldErrorsFromError } from '@/src/utils/lib';
+import { Notification, Text } from '@/src/components/ui';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import Conditional from '@/components/common/Conditional';
-import Screen from '@/components/navigation/Screen';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import Conditional from '@/src/components/common/Conditional';
+import Screen from '@/src/components/navigation/Screen';
 
-import storage from '@/utils/storage';
+import storage from '@/src/utils/storage';
 
 
 interface FormValues {

@@ -6,11 +6,11 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 
-import { useAppSelector } from '@/store/hooks';
-import { colors, styles as defaultStyles, icons } from '@/constants';
-import { Image, Text } from '@/components/ui';
+import { useAppSelector } from '@/src/store/hooks';
+import { colors, styles as defaultStyles, icons } from '@/src/constants';
+import { Image, Text } from '@/src/components/ui';
 
-import Screen from '@/components/navigation/Screen';
+import Screen from '@/src/components/navigation/Screen';
 
 const ROUTES = [
   {
@@ -72,7 +72,7 @@ const ProfilePage: React.FC = () => {
           </View>
 
           <Image
-              src={auth.user!.profilePhoto ?? require('../../../../assets/images/map.png')}
+              src={auth.user!.profilePhoto ?? require('@/src/assets/images/map.png')}
               style={[styles.image, defaultStyles.shadow]}
           />
         </View>

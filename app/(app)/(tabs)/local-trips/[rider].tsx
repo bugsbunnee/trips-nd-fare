@@ -5,12 +5,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Image, Text } from "@/components/ui";
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Destination as DestinationModel } from "@/utils/models";
+import { Image, Text } from "@/src/components/ui";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Destination as DestinationModel } from "@/src/utils/models";
 
-import Destination from "@/components/lists/Destination";
-import AvailableRider from "@/components/lists/AvailableRider";
+import Destination from "@/src/components/lists/Destination";
+import AvailableRider from "@/src/components/lists/AvailableRider";
 
 const SingleRiderPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -18,13 +18,13 @@ const SingleRiderPage : React.FC= () => {
     const ROUTES: DestinationModel[] = [
         {
             id: 1,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Ajah, Under Bridge',
             minimumCost: 700,
         },
         {
             id: 2,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Shoprite, Sangotedo',
             minimumCost: 700,
         },
@@ -33,7 +33,7 @@ const SingleRiderPage : React.FC= () => {
     const SIMILAR_RIDERS = [
         {
             id: 1,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Aminu',
             lastName: 'Gabriel',
             location: 'Ogombo road',
@@ -65,7 +65,7 @@ const SingleRiderPage : React.FC= () => {
                 <View style={styles.center}>
                     <View style={styles.imageContainer}>
                         <Image 
-                            src={require("@/assets/images/rider.png")} 
+                            src={require("@/src/assets/images/rider.png")} 
                             style={styles.image}
                         />
 

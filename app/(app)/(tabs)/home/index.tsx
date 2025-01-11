@@ -7,15 +7,15 @@ import { router } from "expo-router";
 import { useSharedValue } from "react-native-reanimated";
 import { ExpandingDot } from "react-native-animated-pagination-dots";
 
-import Conditional from "@/components/common/Conditional";
-import DashboardTrips from '@/components/lists/DashboardTrip';
-import Screen from "@/components/navigation/Screen";
+import Conditional from "@/src/components/common/Conditional";
+import DashboardTrips from '@/src/components/lists/DashboardTrip';
+import Screen from "@/src/components/navigation/Screen";
 
-import { Notification, Skeleton, Text } from "@/components/ui";
-import { colors, styles as defaultStyles } from "@/constants";
-import { formatAmount } from "@/utils/lib";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { getServices } from "@/store/data/actions";
+import { Notification, Skeleton, Text } from "@/src/components/ui";
+import { colors, styles as defaultStyles } from "@/src/constants";
+import { formatAmount } from "@/src/utils/lib";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getServices } from "@/src/store/data/actions";
 
 
 const HomeIndexPage: React.FC = () => {
@@ -76,7 +76,7 @@ const HomeIndexPage: React.FC = () => {
                             </View>
                             <View style={styles.cardImageContainer}>
                                 <Image 
-                                    source={require('@/assets/images/home-cta.png')}
+                                    source={require('@/src/assets/images/home-cta.png')}
                                     style={styles.cardImage}
                                 />
                             </View>
@@ -144,14 +144,14 @@ const news = [
         cta: 'smooth ride?',
         description: 'Sit back, relax and enjoy rides from your comfort.',
         button: 'Ride with ClickRide',
-        img: require('@/assets/images/home-cta.png'),
+        img: require('@/src/assets/images/home-cta.png'),
     },
     {
         title: 'Get the most',
         cta: 'affordable rates',
         description: 'Sit back, relax and enjoy rides from your comfort.',
         button: 'Ride with ClickRide',
-        img: require('@/assets/images/home-cta.png'),
+        img: require('@/src/assets/images/home-cta.png'),
     },
 ];
 

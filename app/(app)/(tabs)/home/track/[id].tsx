@@ -5,13 +5,13 @@ import { Octicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 
-import { colors, icons, styles as defaultStyles } from '@/constants';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { Button, Image, RiderLayout, Text } from '@/components/ui';
-import { trackRide } from '@/store/ride/actions';
+import { colors, icons, styles as defaultStyles } from '@/src/constants';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { Button, Image, RiderLayout, Text } from '@/src/components/ui';
+import { trackRide } from '@/src/store/ride/actions';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import RouteMap from '@/components/maps/RouteMap';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import RouteMap from '@/src/components/maps/RouteMap';
 
 const RideTrackingPage = () => {
     const ride = useAppSelector((state) => state.ride);

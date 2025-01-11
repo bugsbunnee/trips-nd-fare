@@ -2,22 +2,22 @@
 import React, { useMemo, useState } from "react";
 import _ from "lodash";
 
-import { Text } from "@/components/ui";
+import { Text } from "@/src/components/ui";
 import { FlatList, StyleSheet, View } from "react-native";
 
-import BookingListItem from "@/components/lists/BookinglistItem";
-import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
-import Conditional from "@/components/common/Conditional";
-import EmptyItem from "@/components/lists/EmptyItem";
-import Picker from "@/components/lists/Picker";
-import RidePicker from "@/components/lists/RidePicker";
-import Screen from "@/components/navigation/Screen";
+import BookingListItem from "@/src/components/lists/BookinglistItem";
+import BookingListItemSkeleton from "@/src/components/lists/BookinglistItemSkeleton";
+import Conditional from "@/src/components/common/Conditional";
+import EmptyItem from "@/src/components/lists/EmptyItem";
+import Picker from "@/src/components/lists/Picker";
+import RidePicker from "@/src/components/lists/RidePicker";
+import Screen from "@/src/components/navigation/Screen";
 
-import useBookings from "@/hooks/useRecentBookings";
+import useBookings from "@/src/hooks/useRecentBookings";
 
-import { colors } from "@/constants";
-import { PickerItemModel } from "@/utils/models";
-import { SORT_ORDER } from "@/constants/app";
+import { colors } from "@/src/constants";
+import { PickerItemModel } from "@/src/utils/models";
+import { SORT_ORDER } from "@/src/constants/app";
 
 const HistoryIndexPage : React.FC= () => {
     const [selectedOrder, setSelectedOrder] = useState<PickerItemModel | null>(null);

@@ -6,13 +6,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Text } from "@/components/ui";
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Destination as DestinationModel } from "@/utils/models";
+import { Text } from "@/src/components/ui";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Destination as DestinationModel } from "@/src/utils/models";
 
-import AvailableRider from "@/components/lists/AvailableRider";
-import Destination from "@/components/lists/Destination";
-import CityPicker from "@/components/lists/CityPicker";
+import AvailableRider from "@/src/components/lists/AvailableRider";
+import Destination from "@/src/components/lists/Destination";
+import CityPicker from "@/src/components/lists/CityPicker";
 
 const SingleLocationPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -22,31 +22,31 @@ const SingleLocationPage : React.FC= () => {
     const DESTINATIONS: DestinationModel[] = [
         {
             id: 1,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Ajah, Under Bridge',
             minimumCost: 700,
         },
         {
             id: 2,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Shoprite, Sangotedo',
             minimumCost: 700,
         },
         {
             id: 3,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Agungi, Lekki',
             minimumCost: 700,
         },
         {
             id: 4,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Marwa, Lekki',
             minimumCost: 700,
         },
         {
             id: 5,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Agege, Lagos',
             minimumCost: 700,
         },
@@ -55,7 +55,7 @@ const SingleLocationPage : React.FC= () => {
     const AVAILABLE_RIDERS = [
         {
             id: 1,
-            image: require("@/assets/images/rider.png"),
+            image: require("@/src/assets/images/rider.png"),
             firstName: 'Aminu',
             lastName: 'Gabriel',
             location: 'Ogombo road',

@@ -3,12 +3,12 @@ import React from "react";
 import { Link, router } from "expo-router";
 import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
-import { Button, GoogleSignInButton, Image, OrDivider, Text } from "@/components/ui";
-import { APP_COLORS } from "@/constants/colors";
-import { useAppSelector } from "@/store/hooks";
+import { Button, GoogleSignInButton, Image, OrDivider, Text } from "@/src/components/ui";
+import { APP_COLORS } from "@/src/constants/colors";
+import { useAppSelector } from "@/src/store/hooks";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import ActivityIndicator from "@/components/ui/ActivityIndicator";
+import ParallaxScrollView from "@/src/components/ParallaxScrollView";
+import ActivityIndicator from "@/src/components/ui/ActivityIndicator";
 
 const GetStartedPage: React.FC = () => {
     const { height } = useWindowDimensions();
@@ -21,7 +21,7 @@ const GetStartedPage: React.FC = () => {
             headerImage={
                 <Image
                     contentFit='cover'
-                    src={require('@/assets/images/welcome.png')}
+                    src={require('@/src/assets/images/welcome.png')}
                     style={styles.image}
                 />
             }

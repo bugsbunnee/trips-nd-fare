@@ -2,13 +2,13 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { colors, styles as defaultStyles, icons } from '@/constants';
-import { Text } from '@/components/ui';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { colors, styles as defaultStyles, icons } from '@/src/constants';
+import { Text } from '@/src/components/ui';
 
-import Logout from '@/components/common/Logout';
-import Screen from '@/components/navigation/Screen';
-import EmptyItem from '@/components/lists/EmptyItem';
+import Logout from '@/src/components/common/Logout';
+import Screen from '@/src/components/navigation/Screen';
+import EmptyItem from '@/src/components/lists/EmptyItem';
 
 const MessagesHomePage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
@@ -30,7 +30,7 @@ const MessagesHomePage: React.FC = () => {
           )}
           ListEmptyComponent={() => (
             <EmptyItem 
-              src={require('@/assets/images/message.png')}
+              src={require('@/src/assets/images/message.png')}
               label='No Messages Yet' 
               description='No messages in your inbox, yet!' 
             />

@@ -5,9 +5,9 @@ import { MaterialCommunityIcons  } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Link, router } from 'expo-router';
 
-import { useAppSelector } from '@/store/hooks';
-import { Button, Text } from '@/components/ui';
-import { colors, icons, styles as defaultStyles } from '@/constants';
+import { useAppSelector } from '@/src/store/hooks';
+import { Button, Text } from '@/src/components/ui';
+import { colors, icons, styles as defaultStyles } from '@/src/constants';
 
 const BookingConfirmationPage = () => {
     const rideDetails = useAppSelector((state) => state.ride);

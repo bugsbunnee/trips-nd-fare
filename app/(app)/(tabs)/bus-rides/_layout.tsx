@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Stack } from "expo-router";
 
-import { useAppDispatch } from "@/store/hooks";
-import { getBusTickets } from "@/store/data/actions";
+import { useAppDispatch } from "@/src/store/hooks";
+import { getBusTickets } from "@/src/store/data/actions";
 
 const BookingLayout: React.FC = () => {
     const dispatch = useAppDispatch();

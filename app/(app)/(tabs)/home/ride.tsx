@@ -6,21 +6,21 @@ import { FormikHelpers } from 'formik';
 
 import * as yup from 'yup';
 
-import { colors, styles as defaultStyles } from '@/constants';
-import { Form, FormError, FormLocationField, SubmitButton } from '@/components/forms';
+import { colors, styles as defaultStyles } from '@/src/constants';
+import { Form, FormError, FormLocationField, SubmitButton } from '@/src/components/forms';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setLocationDetails, setLocationFrom, setLocationTo } from '@/store/ride/slice';
-import { getRidersForTrip } from '@/store/data/actions';
-import { Location } from '@/utils/models';
-import { getFieldErrorsFromError } from '@/utils/lib';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { setLocationDetails, setLocationFrom, setLocationTo } from '@/src/store/ride/slice';
+import { getRidersForTrip } from '@/src/store/data/actions';
+import { Location } from '@/src/utils/models';
+import { getFieldErrorsFromError } from '@/src/utils/lib';
 
-import ActivityIndicator from '@/components/ui/ActivityIndicator';
-import GeofencingMap from '@/components/maps/GeofencingMap';
-import RiderLayout from '@/components/ui/RiderLayout';
+import ActivityIndicator from '@/src/components/ui/ActivityIndicator';
+import GeofencingMap from '@/src/components/maps/GeofencingMap';
+import RiderLayout from '@/src/components/ui/RiderLayout';
 
-import useNearbyRiders from '@/hooks/useNearbyRiders';
-import useLocation from '@/hooks/useLocation';
+import useNearbyRiders from '@/src/hooks/useNearbyRiders';
+import useLocation from '@/src/hooks/useLocation';
 
 
 interface FormValues {

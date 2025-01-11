@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack } from "expo-router";
 
-import usePushNotification from "@/hooks/usePushNotification";
+import usePushNotification from "@/src/hooks/usePushNotification";
 
 export const unstable_settings = {
     initialRouteName: '(tabs)',

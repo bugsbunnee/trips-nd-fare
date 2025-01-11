@@ -5,19 +5,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
 
-import { Text } from "@/components/ui";
-import { colors, icons, styles as defaultStyles } from "@/constants";
+import { Text } from "@/src/components/ui";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
 
-import Conditional from "@/components/common/Conditional";
-import EmptyItem from "@/components/lists/EmptyItem";
-import OneWayTrip from "@/components/booking/OneWayTrip";
-import TicketItemSkeleton from "@/components/lists/TicketSkeleton";
-import TicketItem from "@/components/lists/Ticket";
+import Conditional from "@/src/components/common/Conditional";
+import EmptyItem from "@/src/components/lists/EmptyItem";
+import OneWayTrip from "@/src/components/booking/OneWayTrip";
+import TicketItemSkeleton from "@/src/components/lists/TicketSkeleton";
+import TicketItem from "@/src/components/lists/Ticket";
 
-import { BOOKING_TYPES } from "@/constants/app";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setBookingType } from "@/store/booking/slice";
-import { getBusTickets } from "@/store/data/actions";
+import { BOOKING_TYPES } from "@/src/constants/app";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { setBookingType } from "@/src/store/booking/slice";
+import { getBusTickets } from "@/src/store/data/actions";
 
 const BookingIndexPage : React.FC= () => {
     const data = useAppSelector((state) => state.data);

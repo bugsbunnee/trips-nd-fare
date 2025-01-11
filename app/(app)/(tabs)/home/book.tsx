@@ -2,28 +2,28 @@
 import React, { useCallback, useEffect } from "react";
 import _ from "lodash";
 
-import { Text } from "@/components/ui";
+import { Text } from "@/src/components/ui";
 import { router } from "expo-router";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import CurrentLocationMap from "@/components/maps/CurrentLocationMap";
-import GoogleTextInput from "@/components/ui/GoogleTextInput";
-import BookingListItem from "@/components/lists/BookinglistItem";
-import Logout from "@/components/common/Logout";
+import CurrentLocationMap from "@/src/components/maps/CurrentLocationMap";
+import GoogleTextInput from "@/src/components/ui/GoogleTextInput";
+import BookingListItem from "@/src/components/lists/BookinglistItem";
+import Logout from "@/src/components/common/Logout";
 
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setLocationTo } from "@/store/ride/slice";
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { Location } from "@/utils/models";
-import { getNearbyRiders } from "@/store/data/actions";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { setLocationTo } from "@/src/store/ride/slice";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { Location } from "@/src/utils/models";
+import { getNearbyRiders } from "@/src/store/data/actions";
 
-import useNearbyRiders from "@/hooks/useNearbyRiders";
-import useLocation from "@/hooks/useLocation";
-import useBookings from "@/hooks/useRecentBookings";
-import EmptyItem from "@/components/lists/EmptyItem";
-import BookingListItemSkeleton from "@/components/lists/BookinglistItemSkeleton";
-import Conditional from "@/components/common/Conditional";
+import useNearbyRiders from "@/src/hooks/useNearbyRiders";
+import useLocation from "@/src/hooks/useLocation";
+import useBookings from "@/src/hooks/useRecentBookings";
+import EmptyItem from "@/src/components/lists/EmptyItem";
+import BookingListItemSkeleton from "@/src/components/lists/BookinglistItemSkeleton";
+import Conditional from "@/src/components/common/Conditional";
 
 const BookRidePage: React.FC = () => {
     const auth = useAppSelector((state) => state.auth);

@@ -7,20 +7,20 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Text } from "@/components/ui";
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { getAvailableLocalRiders } from "@/store/data/actions";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { Destination as DestinationModel } from "@/utils/models";
+import { Text } from "@/src/components/ui";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { getAvailableLocalRiders } from "@/src/store/data/actions";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { Destination as DestinationModel } from "@/src/utils/models";
 
-import AvailableRider from "@/components/lists/AvailableRider";
-import Destination from "@/components/lists/Destination";
-import GoogleTextInput from "@/components/ui/GoogleTextInput";
-import Screen from "@/components/navigation/Screen";
+import AvailableRider from "@/src/components/lists/AvailableRider";
+import Destination from "@/src/components/lists/Destination";
+import GoogleTextInput from "@/src/components/ui/GoogleTextInput";
+import Screen from "@/src/components/navigation/Screen";
 
-import useLocation from "@/hooks/useLocation";
-import AvailableRiderSkeleton from "@/components/lists/AvailableRiderSkeleton";
-import Conditional from "@/components/common/Conditional";
+import useLocation from "@/src/hooks/useLocation";
+import AvailableRiderSkeleton from "@/src/components/lists/AvailableRiderSkeleton";
+import Conditional from "@/src/components/common/Conditional";
 
 const LocalTripsIndexPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -34,13 +34,13 @@ const LocalTripsIndexPage : React.FC= () => {
     const DESTINATIONS: DestinationModel[] = [
         {
             id: 1,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Ajah, Under Bridge',
             minimumCost: 700,
         },
         {
             id: 2,
-            image: require("@/assets/images/map.png"),
+            image: require("@/src/assets/images/map.png"),
             label: 'Shoprite, Sangotedo',
             minimumCost: 700,
         },

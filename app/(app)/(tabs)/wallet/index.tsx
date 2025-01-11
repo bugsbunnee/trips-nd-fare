@@ -5,14 +5,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from "@gorhom/bottom-sheet";
 import { router } from "expo-router";
 
-import Screen from "@/components/navigation/Screen";
-import Transaction from "@/components/lists/Transaction";
+import Screen from "@/src/components/navigation/Screen";
+import Transaction from "@/src/components/lists/Transaction";
 
-import { colors, icons, styles as defaultStyles } from "@/constants";
-import { DATE_FORMAT } from "@/constants/app";
-import { Image, Text } from "@/components/ui";
-import { formatAmount, formatDate, getTransactionStatusColors } from '@/utils/lib';
-import { Transaction as TransactionModel } from "@/utils/models";
+import { colors, icons, styles as defaultStyles } from "@/src/constants";
+import { DATE_FORMAT } from "@/src/constants/app";
+import { Image, Text } from "@/src/components/ui";
+import { formatAmount, formatDate, getTransactionStatusColors } from '@/src/utils/lib';
+import { Transaction as TransactionModel } from "@/src/utils/models";
 
 const WalletHomePage: React.FC = () => {
     const [activeTransaction, setActiveTransaction] = useState<TransactionModel | null>(null);
@@ -58,7 +58,7 @@ const WalletHomePage: React.FC = () => {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                 >
-                    <Image contentFit="cover" src={require('@/assets/images/polygons.png')} style={styles.image} />
+                    <Image contentFit="cover" src={require('@/src/assets/images/polygons.png')} style={styles.image} />
                     
                     <View style={styles.balanceContainerPaddingHorizontal}>
                         <Text type='default' style={styles.balanceLabel}>Click Ride Cash</Text>
