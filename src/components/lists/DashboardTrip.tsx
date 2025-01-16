@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Animated from "react-native-reanimated";
@@ -11,7 +11,7 @@ import EmptyItem from "@/src/components/lists/EmptyItem";
 
 import { Skeleton, Text } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from "@/src/constants";
-import { formatAmount } from "@/src/utils/lib";
+import { formatAmount, summarize } from "@/src/utils/lib";
 
 import useFluidButtonStyle from "@/src/hooks/useFluidButtonStyle";
 import useBookings from "@/src/hooks/useRecentBookings";
@@ -40,46 +40,38 @@ const TableHeaderCell: React.FC<TableCellProps> = ({ isActive, label, onPress })
 };
 
 const DashboardTrips: React.FC = () => {
-    const [orderBy, setOrderBy] = useState('date');
+    const [orderBy, setOrderBy] = useState(columns[0].path);
     const bookings = useBookings();
+
+    const trips = useMemo(() => {
+        return _.orderBy(bookings.bookings, [orderBy], ['desc']);
+    }, [bookings.bookings, orderBy]);
 
     return ( 
         <View style={styles.container}>
             <FlatList
-                data={bookings.bookings.slice(0, 4)}
+                data={trips.slice(0, 4)}
                 refreshing={bookings.isLoading}
                 onRefresh={bookings.onRefresh}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item, index }) => (
                     <View style={[styles.tableRow, { backgroundColor: index % 2 === 0 ? colors.light.borderLight : colors.light.background }]}>
                         <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('DD MMM.')}</Text>
-                        <Text type='default-semibold' style={styles.tableRowText}>{item.driver.serviceCode}</Text>
+                        <Text type='default-semibold' style={styles.tableRowText}>{summarize(item.from.address, 10)}</Text>
                         <Text type='default-semibold' style={styles.tableRowText}>{dayjs(item.createdAt).format('HH:mm A')}</Text>
                         <Text type='default-semibold' style={styles.tableRowText}>{formatAmount(item.price)}</Text>
                     </View>
                 )}
                 ListHeaderComponent={() => (
                     <View style={styles.tableHeader}>
-                        <TableHeaderCell 
-                            isActive={orderBy === 'date'} 
-                            label="Date" 
-                            onPress={() => setOrderBy('date')}
-                        />
-                        <TableHeaderCell 
-                            isActive={orderBy === 'type'} 
-                            label="Location" 
-                            onPress={() => setOrderBy('type')}
-                        />
-                        <TableHeaderCell 
-                            isActive={orderBy === 'time'} 
-                            label="Time" 
-                            onPress={() => setOrderBy('time')}
-                        />
-                        <TableHeaderCell 
-                            isActive={orderBy === 'price'} 
-                            label="Price" 
-                            onPress={() => setOrderBy('price')}
-                        />
+                        {columns.map((column) => (
+                            <TableHeaderCell 
+                                key={column.label}
+                                isActive={orderBy === column.path} 
+                                label={column.label}
+                                onPress={() => setOrderBy(column.path)}
+                            />
+                        ))}
                     </View>
                 )}
                 ListEmptyComponent={() => (
@@ -108,6 +100,25 @@ const DashboardTrips: React.FC = () => {
         </View>
     );
 };
+
+const columns = [
+    {
+        path: 'createdAt',
+        label: 'Date',
+    },
+    {
+        path: 'from.address',
+        label: 'Location'
+    },
+    {
+        path: 'time',
+        label: 'Time',
+    },
+    {
+        path: 'price',
+        label: 'Price',
+    },
+];
 
 const styles = StyleSheet.create({
     container: {  },

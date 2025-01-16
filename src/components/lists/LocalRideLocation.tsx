@@ -5,30 +5,30 @@ import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-
 import { Image, Text } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from "@/src/constants";
 
-import { Destination as DestinationModel } from "@/src/utils/models";
 import { formatAmount } from "@/src/utils/lib";
+import { Route } from "@/src/store/data/slice";
 
 interface Props {
-    destination: DestinationModel;
+    route: Route;
     onPress: () => void;
     style?: StyleProp<ViewStyle>
 }
 
-const Destination: React.FC<Props> = ({ destination, onPress, style }) => {
+const LocalRideLocation: React.FC<Props> = ({ route, onPress, style }) => {
     return (  
         <TouchableOpacity style={[styles.container, defaultStyles.shadow, styles.shadow, style]} onPress={onPress}>
             <Image
                 contentFit="cover"
-                src={destination.image}
+                src={require("@/src/assets/images/map.png")}
                 style={styles.image}
             />
 
             <View style={{ marginTop: 6 }}>
-                <Text type="default-semibold" style={styles.label}>{destination.label}</Text>
+                <Text type="default-semibold" style={styles.label}>{route.route}</Text>
                 <Text type="default-semibold">
                     <Text type="default" style={styles.sublabel}>Trips starting from </Text>
                     <Text type="default" style={[styles.sublabel, { color: colors.light.primary }]}>
-                        {formatAmount(destination.minimumCost)}
+                        {formatAmount(route.price)}
                     </Text>
                 </Text>
             </View>
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     },
 })
  
-export default Destination;
+export default LocalRideLocation;

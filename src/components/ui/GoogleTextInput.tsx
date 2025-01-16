@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
         minHeight: 150,
         borderRadius: 8,
         overflow: 'hidden',
+        zIndex: 100000000,
         borderWidth: 1,
         borderColor: colors.light.dew
     },

@@ -134,3 +134,9 @@ export const sendLocalNotification = (content: NotificationContentInput) => {
     scheduleNotificationAsync({ content, trigger: null });
 };
 
+export const summarize = (text: string, limit: number = 30) => {
+    if (text.length <= limit) return text;
+
+    return text.substring(0, limit) + '...';
+}
+

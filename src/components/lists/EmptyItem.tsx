@@ -27,8 +27,10 @@ const EmptyItem: React.FC<Props> = ({ src = require('@/src/assets/images/empty.p
             </View>
 
             <View style={styles.topMargin}>
-                <Text type='default-semibold' style={styles.title}>{label}</Text>
-                <Text type='default' style={styles.description}>{description}</Text>
+                <View style={{ maxWidth: dimensions.width * 0.7 }}>
+                    <Text type='default-semibold' style={styles.title}>{label}</Text>
+                    <Text type='default' style={styles.description}>{description}</Text>
+                </View>
             </View>
 
             {onRefresh ? (
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
       color: colors.light.gray,
       marginTop: 10
     },
-    topMargin: { marginTop: 48 },
+    topMargin: { marginTop: 48, justifyContent: 'center', alignItems: 'center' },
     container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     flex: { flex: 1, },
     imageContainer: {

@@ -9,7 +9,7 @@ import { Image, Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
 import { Destination as DestinationModel } from "@/src/utils/models";
 
-import Destination from "@/src/components/lists/Destination";
+import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
 import AvailableRider from "@/src/components/lists/AvailableRider";
 
 const SingleRiderPage : React.FC= () => {
@@ -111,7 +111,7 @@ const SingleRiderPage : React.FC= () => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {ROUTES.map((route) => (
                         <View key={route.id} style={{ marginRight: 16 }}>
-                            <Destination destination={route} onPress={() => {}} />
+                            <LocalRideLocation route={route} onPress={() => {}} />
                         </View>
                     ))}
                 </ScrollView>

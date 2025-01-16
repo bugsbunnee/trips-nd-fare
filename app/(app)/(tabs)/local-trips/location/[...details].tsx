@@ -10,7 +10,7 @@ import { Image, Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
 import { Destination as DestinationModel } from "@/src/utils/models";
 
-import Destination from "@/src/components/lists/Destination";
+import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
 
 const LocationDetailsPage : React.FC= () => {
     const insets = useSafeAreaInsets();
@@ -140,10 +140,10 @@ const LocationDetailsPage : React.FC= () => {
 
                     <ScrollView horizontal contentContainerStyle={{ alignSelf: "flex-start" }} showsHorizontalScrollIndicator={false}>
                         {DESTINATIONS.map((destination) => (
-                            <Destination 
+                            <LocalRideLocation 
                                 key={destination.id}
                                 style={styles.locality}
-                                destination={destination} 
+                                route={destination} 
                                 onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}
                             />
                         ))}

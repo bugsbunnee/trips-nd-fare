@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
+import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
 import { getMessageFromError } from "@/src/utils/lib";
 import { Booking, BusTicket, Coordinates, PickerItemModel } from "@/src/utils/models";
 
@@ -33,12 +33,20 @@ export interface BusLocations {
     destinations: PickerItemModel[];
 }
 
+export interface Route { 
+    views: number; 
+    route: string; 
+    price: number;
+}
+
 export interface DataState {
+    popularLocations: Route[];
     busTickets: BusTicket[];
     busLocations: BusLocations;
     localRiders: NearbyRider[];
     bookings: Booking[];
     services: Service[];
+    localRideTypes: PickerItemModel[];
     nearbyRiders: NearbyRider[];
     isLoading: boolean;
     error: string;
@@ -46,7 +54,9 @@ export interface DataState {
 
 const initialState: DataState = {
     busTickets: [],
+    popularLocations: [],
     busLocations: { origins: [], destinations: [] },
+    localRideTypes: [],
     localRiders: [],
     bookings: [],
     services: [],
@@ -144,11 +154,25 @@ const dataSlice = createSlice({
             state.error = '';
         })
         .addCase(getAvailableLocalRiders.fulfilled, (state, action) => {
-            state.localRiders = action.payload!;
+            state.localRiders = action.payload!.availableRiders;
+            state.popularLocations = action.payload!.popularLocations;
             state.isLoading = false;
             state.error = '';
         })
         .addCase(getAvailableLocalRiders.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getLocalRideTypes.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getLocalRideTypes.fulfilled, (state, action) => {
+            state.localRideTypes = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getLocalRideTypes.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })

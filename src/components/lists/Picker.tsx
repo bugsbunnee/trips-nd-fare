@@ -24,6 +24,7 @@ export interface PickerProps {
 const Picker: React.FC<PickerProps> = ({
   label,
   items,
+  icon,
   onSelectItem,
   PickerItemComponent = PickerItem,
   PickerTriggerComponent = PickerTrigger,
@@ -63,6 +64,7 @@ const Picker: React.FC<PickerProps> = ({
       <PickerTriggerComponent 
         width={width}
         label={label}
+        icon={icon}
         value={selectedItem?.label} 
         placeholder={placeholder} 
         onPress={() => setVisible(true)} 

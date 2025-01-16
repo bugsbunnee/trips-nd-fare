@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { BusLocations, NearbyRider, Service } from '@/src/store/data/slice';
-import { Booking, BusTicket, Coordinates, Location } from '@/src/utils/models';
+import { BusLocations, NearbyRider, Route, Service } from '@/src/store/data/slice';
+import { Booking, BusTicket, Coordinates, Location, PickerItemModel } from '@/src/utils/models';
 import { RootState } from '@/src/store';
 import { AuthResponse } from '@/src/store/auth/actions';
 
@@ -16,6 +16,7 @@ export const busLocationsAction = createAction<number | undefined>('data/busLoca
 export const busTicketsAction = createAction<number | undefined>('data/busTickets');
 export const busAvailableTicketsAction = createAction<number | undefined>('data/busAvailableTickets');
 export const localRidersAvailableAction = createAction<number | undefined>('data/localRidersAvailable');
+export const localRideTypesAction = createAction<number | undefined>('data/localRideTypes');
 
 interface TripPreparationPayload {
     from: Location;
@@ -31,6 +32,18 @@ interface AvailableBusTicketsPayload {
     returnDate?: string;
     numberOfSeats: number;
 }
+
+interface LocalRidersResponse { 
+    popularLocations: Route[]; 
+    availableRiders: NearbyRider[];
+}
+
+export const getLocalRideTypes = createAsyncThunk(localRideTypesAction.type, async (_: undefined, thunkAPI) => {
+    const response = await http.get<PickerItemModel[]>('/local-ride-types');
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
 
 export const getServices = createAsyncThunk(serviceAction.type, async (_: undefined, thunkAPI) => {
     const response = await http.get<Service[]>('/services/user');
@@ -60,7 +73,7 @@ export const getBusLocations = createAsyncThunk(busLocationsAction.type, async (
 });
 
 export const getAvailableLocalRiders = createAsyncThunk(localRidersAvailableAction.type, async (coords: Coordinates, thunkAPI) => {
-    const response = await http.post<NearbyRider[]>('/geolocation/available-riders', coords);
+    const response = await http.post<LocalRidersResponse>('/geolocation/available-riders', coords);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);

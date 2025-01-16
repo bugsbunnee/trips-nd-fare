@@ -1,63 +1,72 @@
 
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import _ from "lodash";
 
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-import { Text } from "@/src/components/ui";
+import { Skeleton, Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
-import { getAvailableLocalRiders } from "@/src/store/data/actions";
+import { getAvailableLocalRiders, getLocalRideTypes } from "@/src/store/data/actions";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
-import { Destination as DestinationModel } from "@/src/utils/models";
+import { PickerItemModel } from "@/src/utils/models";
 
 import AvailableRider from "@/src/components/lists/AvailableRider";
-import Destination from "@/src/components/lists/Destination";
-import GoogleTextInput from "@/src/components/ui/GoogleTextInput";
+import AvailableRiderSkeleton from "@/src/components/lists/AvailableRiderSkeleton";
+import Conditional from "@/src/components/common/Conditional";
+import EmptyItem from "@/src/components/lists/EmptyItem";
+import LocationPickerTrigger from "@/src/components/lists/LocationPickerTrigger";
+import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
+import LocalRideLocationSkeleton from '@/src/components/lists/LocalRideLocationSkeleton';
+import Picker from "@/src/components/lists/Picker";
 import Screen from "@/src/components/navigation/Screen";
 
 import useLocation from "@/src/hooks/useLocation";
-import AvailableRiderSkeleton from "@/src/components/lists/AvailableRiderSkeleton";
-import Conditional from "@/src/components/common/Conditional";
 
 const LocalTripsIndexPage : React.FC= () => {
-    const insets = useSafeAreaInsets();
+    const [selectedItem, setSelectedItem] = useState<PickerItemModel | null>(null);
+
     const dispatch = useAppDispatch();
     const data = useAppSelector((state) => state.data);
-
     const location = useLocation();
 
-    const RIDE_TYPES = ['Keke', 'Danfo', 'Bike', 'Boat', 'Uber'];
+    const allLocations = useMemo(() => {
+        return data.popularLocations.map((location) => ({
+            label: location.route,
+            value: location.route,
+        }));
+    }, [data.popularLocations]);
 
-    const DESTINATIONS: DestinationModel[] = [
-        {
-            id: 1,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Ajah, Under Bridge',
-            minimumCost: 700,
-        },
-        {
-            id: 2,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Shoprite, Sangotedo',
-            minimumCost: 700,
-        },
-    ];
+    const getLocalRides = useCallback(() => {
+        dispatch(getLocalRideTypes());
+    }, [dispatch]);
+
+    const getRiders = useCallback(() => {
+        if (location) {
+            dispatch(getAvailableLocalRiders({
+                latitude: location.latitude,
+                longitude: location.longitude,
+            }))
+        }
+    }, [dispatch, location]);
 
     useEffect(() => {
-        function getRiders() {
-            if (location) {
-                dispatch(getAvailableLocalRiders({
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                }))
-            }
-        }
-
         getRiders();
-    }, [dispatch, location]);
+    }, [getRiders]);
+
+    useEffect(() => {
+        getLocalRides();
+    }, [getLocalRides]);
+
+    useEffect(() => {
+        if (selectedItem) {
+            router.push({
+                pathname: '/local-trips/location/[id]',
+                params: { id: 1 }
+            });
+        }
+    }, [selectedItem]);
 
     return ( 
         <Screen style={styles.container}>
@@ -81,29 +90,36 @@ const LocalTripsIndexPage : React.FC= () => {
                 </View>
             
                 <View style={styles.inputContainer}>
-                    <GoogleTextInput
-                        placeholderStyle={styles.placeholder}
-                        containerStyle={styles.input}
-                        leftIcon="magnifier"
-                        placeholder="Search location"
-                        onPress={() => {
-                            router.push({
-                                pathname: '/local-trips/location/[id]',
-                                params: { id: 1 }
-                            });
-                        }}
+                    <Picker 
+                        label=''
+                        items={allLocations}
+                        selectedItem={selectedItem}
+                        placeholder='Search location...'
+                        icon='magnifier'
+                        PickerTriggerComponent={LocationPickerTrigger}
+                        onSelectItem={(item) => setSelectedItem(item)}
                     />
                 </View>
 
-                <View style={styles.rides}>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {RIDE_TYPES.map((rideType) => (
-                            <TouchableOpacity key={rideType} style={styles.rideType}>
-                                <Text type="default-semibold" style={styles.rideTypeText}>{rideType}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
-                </View>
+                <Conditional visible={data.isLoading || data.localRideTypes.length > 0}>
+                    <View style={styles.rides}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                            <Conditional visible={!data.isLoading}>
+                                {data.localRideTypes.map((rideType) => (
+                                    <TouchableOpacity key={rideType.value} style={styles.rideType}>
+                                        <Text type="default-semibold" style={styles.rideTypeText}>{rideType.label}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </Conditional>
+                            
+                            <Conditional visible={data.isLoading}>
+                                {_.range(1, 6).map((fill) => (
+                                    <Skeleton key={fill} style={styles.rideTypeSkeleton} />
+                                ))}
+                            </Conditional>
+                        </ScrollView>
+                    </View>
+                </Conditional>
             </View>
 
             <View style={[styles.bottom, styles.horizontalPadding]}>
@@ -116,14 +132,22 @@ const LocalTripsIndexPage : React.FC= () => {
                     </View>
 
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {DESTINATIONS.map((destination) => (
-                            <Destination 
-                                key={destination.id} 
-                                style={{ marginRight: 16 }}
-                                destination={destination} 
-                                onPress={() => {}} 
-                            />
-                        ))}
+                        <Conditional visible={data.isLoading}>
+                            {_.range(1, 4).map((fill) => (
+                                <LocalRideLocationSkeleton key={fill} />
+                            ))}
+                        </Conditional>
+
+                        <Conditional visible={!data.isLoading}>
+                            {data.popularLocations.map((location, index) => (
+                                <LocalRideLocation 
+                                    key={index} 
+                                    style={{ marginRight: 16 }}
+                                    route={location} 
+                                    onPress={() => {}} 
+                                />
+                            ))}
+                        </Conditional>
                     </ScrollView>
                     
                     <View style={[styles.row, styles.sectionMargin]}>
@@ -140,7 +164,7 @@ const LocalTripsIndexPage : React.FC= () => {
                             ))}
                         </Conditional>
 
-                        <Conditional visible={!data.isLoading}>
+                        <Conditional visible={!data.isLoading && data.localRiders.length > 0}>
                             {data.localRiders.map((rider) => (
                                 <AvailableRider 
                                     key={rider._id}
@@ -154,6 +178,14 @@ const LocalTripsIndexPage : React.FC= () => {
                             ))}
                         </Conditional>
                     </ScrollView>
+
+                    <Conditional visible={!data.isLoading && data.localRiders.length === 0}>
+                        <EmptyItem
+                            label="No Available Riders"
+                            description="Looks like there are no available riders at the moment."
+                            onRefresh={getRiders}
+                        />
+                    </Conditional>
                 </ScrollView>
             </View>   
         </Screen>
@@ -193,7 +225,7 @@ const styles = StyleSheet.create({
     inputContainer: { marginTop: 33 },
     placeholder: { flex: 1, color: colors.light.black, fontFamily: defaultStyles.urbanistBold.fontFamily, marginLeft: 4, fontSize: 16 },
     row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-    rides: { borderRadius: 20, marginTop: 80, paddingHorizontal: 11, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100000 },
+    rides: { borderRadius: 20, marginTop: 18, paddingHorizontal: 11, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100 },
     rideType: { 
         alignSelf: 'flex-start', 
         paddingHorizontal: 18, 
@@ -201,6 +233,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light.primaryLight, 
         borderRadius: 8,
         marginRight: 8
+    },
+    rideTypeSkeleton: { 
+        width: 80,
+        height: 20,
+        borderRadius: 4,
+        marginRight: 10
     },
     rideTypeText: {
         fontFamily: defaultStyles.urbanistBold.fontFamily,

@@ -11,7 +11,7 @@ import { colors, icons, styles as defaultStyles } from "@/src/constants";
 import { Destination as DestinationModel } from "@/src/utils/models";
 
 import AvailableRider from "@/src/components/lists/AvailableRider";
-import Destination from "@/src/components/lists/Destination";
+import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
 import CityPicker from "@/src/components/lists/CityPicker";
 
 const SingleLocationPage : React.FC= () => {
@@ -113,7 +113,7 @@ const SingleLocationPage : React.FC= () => {
                     <ScrollView contentContainerStyle={{ flexDirection: 'row', gap: 18, flexWrap: 'wrap' }}>
                         {DESTINATIONS.map((destination) => (
                             <View key={destination.id}>
-                                <Destination destination={destination} onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}  />
+                                <LocalRideLocation route={destination} onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}  />
                             </View>
                         ))}
                     </ScrollView>
