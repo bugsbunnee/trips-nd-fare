@@ -11,7 +11,7 @@ import EmptyItem from "@/src/components/lists/EmptyItem";
 
 import { Skeleton, Text } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from "@/src/constants";
-import { formatAmount, summarize } from "@/src/utils/lib";
+import { formatAmount, getTimeFromDate, summarize } from "@/src/utils/lib";
 
 import useFluidButtonStyle from "@/src/hooks/useFluidButtonStyle";
 import useBookings from "@/src/hooks/useRecentBookings";
@@ -44,7 +44,7 @@ const DashboardTrips: React.FC = () => {
     const bookings = useBookings();
 
     const trips = useMemo(() => {
-        return _.orderBy(bookings.bookings, [orderBy], ['desc']);
+        return _.orderBy(bookings.bookings, (item) => orderBy === 'time' ? getTimeFromDate(item.createdAt) : _.get(item, orderBy), ['desc']);
     }, [bookings.bookings, orderBy]);
 
     return ( 

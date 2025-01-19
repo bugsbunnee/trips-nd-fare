@@ -23,10 +23,10 @@ const TicketDetailsPage: React.FC = () => {
 
     const { isBooking } = useAppSelector((state) => state.booking);
     const { top: paddingTop, bottom: paddingBottom } = useSafeAreaInsets();
-    const { id } = useLocalSearchParams();
+    const { id } = useLocalSearchParams<{ id: string }>();
     const { busTickets } = useAppSelector((state) => state.data);
 
-    const ticket = busTickets.find((ticket) => ticket.details.ticketId === id);
+    const ticket = busTickets.find((_, index) => index === +id);
 
     const getSeatColor = useCallback((seat: number) => {
         if (ticket!.details.bookedSeats.includes(seat)) {

@@ -97,7 +97,7 @@ const BookingIndexPage : React.FC= () => {
                                         ticket={ticket}
                                         onPress={() => router.push({
                                             pathname: '/bus-rides/tickets/[id]',
-                                            params: { id: ticket.details.ticketId }
+                                            params: { id: index }
                                         })}
                                     />
                                 ))}

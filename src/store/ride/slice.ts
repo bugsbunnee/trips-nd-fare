@@ -1,4 +1,4 @@
-import { Booking, Location, RideDetails } from "@/src/utils/models";
+import { Booking, Location, PickerItemModel, RideDetails } from "@/src/utils/models";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { bookBusRide, bookCarRide, trackRide } from "@/src/store/ride/actions";
 import { getMessageFromError } from "@/src/utils/lib";
@@ -10,6 +10,8 @@ interface RideState {
     to: Location | null;
     rider: string;
     booking: Booking | null;
+    selectedRoute: PickerItemModel | null;
+    selectedRideType: string;
     rideDetails: RideDetails | null;
 }
 
@@ -20,6 +22,8 @@ const initialState: RideState = {
     to: null,
     rider: '',
     booking: null,
+    selectedRoute: null,
+    selectedRideType: '',
     rideDetails: null,
 };
 
@@ -39,7 +43,13 @@ const riderSlice = createSlice({
         },
         setRider: (state, action: PayloadAction<string>) => {
             state.rider = action.payload;
-        }
+        },
+        setSelectedRoute: (state, action: PayloadAction<PickerItemModel | null>) => {
+            state.selectedRoute = action.payload;
+        },
+        setSelectedRideType: (state, action: PayloadAction<string>) => {
+            state.selectedRideType = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(bookCarRide.pending, (state) => {
@@ -70,5 +80,5 @@ const riderSlice = createSlice({
     },
 });
 
-export const { setLocationDetails, setLocationFrom, setLocationTo, setRider } = riderSlice.actions;
+export const { setSelectedRoute, setSelectedRideType, setLocationDetails, setLocationFrom, setLocationTo, setRider } = riderSlice.actions;
 export default riderSlice.reducer;

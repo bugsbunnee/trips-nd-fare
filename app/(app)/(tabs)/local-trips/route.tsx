@@ -1,68 +1,28 @@
 
 import React from "react";
+import _ from "lodash";
 
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
+import { useAppSelector } from "@/src/store/hooks";
 import { Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
-import { Destination as DestinationModel } from "@/src/utils/models";
 
 import AvailableRider from "@/src/components/lists/AvailableRider";
+import AvailableRiderSkeleton from "@/src/components/lists/AvailableRiderSkeleton";
+import Conditional from "@/src/components/common/Conditional";
 import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
-import CityPicker from "@/src/components/lists/CityPicker";
+import LocalRideLocationSkeleton from "@/src/components/lists/LocalRideLocationSkeleton";
+import LocalRideTypes from "@/src/components/lists/LocalRideTypes";
 
 const SingleLocationPage : React.FC= () => {
     const insets = useSafeAreaInsets();
-
-    const RIDE_TYPES = ['Keke', 'Danfo', 'Bike', 'Boat', 'Uber'];
-
-    const DESTINATIONS: DestinationModel[] = [
-        {
-            id: 1,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Ajah, Under Bridge',
-            minimumCost: 700,
-        },
-        {
-            id: 2,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Shoprite, Sangotedo',
-            minimumCost: 700,
-        },
-        {
-            id: 3,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Agungi, Lekki',
-            minimumCost: 700,
-        },
-        {
-            id: 4,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Marwa, Lekki',
-            minimumCost: 700,
-        },
-        {
-            id: 5,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Agege, Lagos',
-            minimumCost: 700,
-        },
-    ];
-   
-    const AVAILABLE_RIDERS = [
-        {
-            id: 1,
-            image: require("@/src/assets/images/rider.png"),
-            firstName: 'Aminu',
-            lastName: 'Gabriel',
-            location: 'Ogombo road',
-            distanceInKm: 7,
-        },
-    ];
-
+    const data = useAppSelector((state) => state.data);
+    const ride = useAppSelector((state) => state.ride);
+    
     return ( 
       <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.horizontalPadding}>
@@ -85,21 +45,20 @@ const SingleLocationPage : React.FC= () => {
                 </View>
             
                 <View style={styles.rides}>
-                    <CityPicker 
-                        selectedItem={{ label: 'Lagos', value: 'Lagos' }} 
-                        onSelectItem={() => {}} 
-                        items={[]}
-                        placeholder="Select a city"
-                        numberOfColumns={1}
-                        width="100%"
-                    />
+                    <TouchableWithoutFeedback onPress={() => router.back()}>
+                        <View style={styles.picker}>
+                            <Text type="default" style={styles.pickerLabel}>{ride.selectedRoute!.label}</Text>
+
+                            <Ionicons
+                                name="caret-down"
+                                size={icons.SIZES.SMALL}
+                                color={colors.light.dark}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
 
                     <ScrollView horizontal style={{ marginTop: 20 }}>
-                        {RIDE_TYPES.map((rideType) => (
-                            <TouchableOpacity key={rideType} style={styles.rideType}>
-                                <Text type="default-semibold" style={styles.rideTypeText}>{rideType}</Text>
-                            </TouchableOpacity>
-                        ))}
+                       <LocalRideTypes />
                     </ScrollView>
                 </View>
             </View>
@@ -111,11 +70,25 @@ const SingleLocationPage : React.FC= () => {
 
                 <ScrollView>
                     <ScrollView contentContainerStyle={{ flexDirection: 'row', gap: 18, flexWrap: 'wrap' }}>
-                        {DESTINATIONS.map((destination) => (
-                            <View key={destination.id}>
-                                <LocalRideLocation route={destination} onPress={() => router.push(`/local-trips/location/${destination.id}/details`)}  />
-                            </View>
-                        ))}
+                        <Conditional visible={data.isLoading}>
+                            {_.range(1, 4).map((fill) => (
+                                <LocalRideLocationSkeleton key={fill} />
+                            ))}
+                        </Conditional>
+
+                        <Conditional visible={!data.isLoading}>
+                            {data.popularLocations.map((location, index) => (
+                                <LocalRideLocation 
+                                    key={index} 
+                                    style={{ marginRight: 16, maxWidth: 129 }}
+                                    route={location} 
+                                    onPress={() => router.push({
+                                        pathname: '/local-trips/location/[location]',
+                                        params: { location: location.route },
+                                    })} 
+                                />
+                            ))}
+                        </Conditional>
                     </ScrollView>
                 
                     <View style={[styles.row, { marginBottom: 18, marginTop: 18 }]}>
@@ -126,22 +99,28 @@ const SingleLocationPage : React.FC= () => {
                     </View>
 
                     <ScrollView>
-                        {AVAILABLE_RIDERS.map((rider) => (
-                            <AvailableRider 
-                                key={rider.id}
-                                onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider.id }})}
-                                firstName={rider.firstName}
-                                lastName={rider.lastName}
-                                location={rider.location}
-                                distanceInKm={rider.distanceInKm}
-                                image={rider.image}
-                            />
-                        ))}
+                        <Conditional visible={data.isLoading}>
+                            {_.range(1, 4).map((fill) => (
+                                <AvailableRiderSkeleton key={fill} />
+                            ))}
+                        </Conditional>
+
+                        <Conditional visible={!data.isLoading && data.localRiders.length > 0}>
+                            {data.localRiders.map((rider) => (
+                                <AvailableRider 
+                                    key={rider._id}
+                                    onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider._id }})}
+                                    firstName={rider.firstName}
+                                    lastName={rider.lastName}
+                                    location={rider.rideType.name}
+                                    distanceInKm={rider.coordinates.distance}
+                                    image={rider.profileDisplayImage}
+                                />
+                            ))}
+                        </Conditional>
                     </ScrollView>
                 </ScrollView>
             </View>
-
-           
       </View>
     );
 };
@@ -155,7 +134,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20, 
         borderTopLeftRadius: 20, 
         marginTop: -40,
-        paddingBottom: 130 
+        paddingBottom: 70 
     },
     button: {
         width: 40,
@@ -176,6 +155,18 @@ const styles = StyleSheet.create({
         color: colors.light.primary
     },
     horizontalPadding: { paddingHorizontal: 20 },
+    picker: {
+        borderRadius: 25,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 4,
+    },
+    pickerLabel: {
+        fontSize: 20,
+        lineHeight: 28,
+        color: colors.light.dark,
+        fontFamily: defaultStyles.urbanistBold.fontFamily,
+    },
     row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
     rides: { borderRadius: 20, paddingHorizontal: 11, marginTop: 33, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100000 },
     rideType: { 
@@ -185,6 +176,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light.primaryLight, 
         borderRadius: 8,
         marginRight: 8
+    },
+    rideTypeSkeleton: { 
+        width: 80,
+        height: 20,
+        borderRadius: 4,
+        marginRight: 10
     },
     rideTypeText: {
         fontFamily: defaultStyles.urbanistBold.fontFamily,

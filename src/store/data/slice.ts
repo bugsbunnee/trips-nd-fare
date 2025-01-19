@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
+import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getLocalTripsInLocation, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
 import { getMessageFromError } from "@/src/utils/lib";
 import { Booking, BusTicket, Coordinates, PickerItemModel } from "@/src/utils/models";
-
 export interface Service {
     _id: string;
     name: string;
@@ -39,11 +38,24 @@ export interface Route {
     price: number;
 }
 
+export interface LocalRiderDetails {
+    contactCount: number;
+    phoneNumber: string;
+    rideType: { _id: string; name: string; };
+    rideCount: number;
+    reviewCount: number;
+    routes: Route[];
+}
+
+export type NearbyLocalRider = NearbyRider & LocalRiderDetails;
+
 export interface DataState {
     popularLocations: Route[];
+    localTripLocations: Route[];
     busTickets: BusTicket[];
     busLocations: BusLocations;
-    localRiders: NearbyRider[];
+    localRiders: NearbyLocalRider[];
+    localRidersInLocation: NearbyLocalRider[];
     bookings: Booking[];
     services: Service[];
     localRideTypes: PickerItemModel[];
@@ -55,6 +67,8 @@ export interface DataState {
 const initialState: DataState = {
     busTickets: [],
     popularLocations: [],
+    localRidersInLocation: [],
+    localTripLocations: [],
     busLocations: { origins: [], destinations: [] },
     localRideTypes: [],
     localRiders: [],
@@ -173,6 +187,20 @@ const dataSlice = createSlice({
             state.error = '';
         })
         .addCase(getLocalRideTypes.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getLocalTripsInLocation.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getLocalTripsInLocation.fulfilled, (state, action) => {
+            state.localRidersInLocation = action.payload!.ridersInLocation;
+            state.localTripLocations = action.payload!.routeLocations;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getLocalTripsInLocation.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })

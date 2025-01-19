@@ -1,4 +1,4 @@
-import { NearbyRider, Service } from "@/src/store/data/slice";
+import { NearbyRider, Route, Service } from "@/src/store/data/slice";
 import { ImageSource } from "expo-image";
 import { ImageURISource } from "react-native";
 

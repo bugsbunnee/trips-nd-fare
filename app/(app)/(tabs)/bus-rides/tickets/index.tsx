@@ -33,12 +33,12 @@ const AvailableTicketsPage: React.FC = () => {
                 data={data.busTickets}
                 refreshing={data.isLoading}
                 keyExtractor={(ticket, index) => ticket.details.ticketId + index}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                     <TicketItem
                         ticket={item}
                         onPress={() => router.push({
                             pathname: '/bus-rides/tickets/[id]',
-                            params: { id: item.details.ticketId }
+                            params: { id: index }
                         })}
                     />
                 )}

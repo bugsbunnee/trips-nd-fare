@@ -1,34 +1,22 @@
 
-import React from "react";
+import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useAppSelector } from "@/src/store/hooks";
 
 import { Image, Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
-import { Destination as DestinationModel } from "@/src/utils/models";
 
 import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
 import AvailableRider from "@/src/components/lists/AvailableRider";
 
 const SingleRiderPage : React.FC= () => {
     const insets = useSafeAreaInsets();
-
-    const ROUTES: DestinationModel[] = [
-        {
-            id: 1,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Ajah, Under Bridge',
-            minimumCost: 700,
-        },
-        {
-            id: 2,
-            image: require("@/src/assets/images/map.png"),
-            label: 'Shoprite, Sangotedo',
-            minimumCost: 700,
-        },
-    ];
+    
+    const { localRiders } = useAppSelector((state) => state.data);
+    const { rider: riderId } = useLocalSearchParams<{ rider: string; }>();
    
     const SIMILAR_RIDERS = [
         {
@@ -40,6 +28,10 @@ const SingleRiderPage : React.FC= () => {
             distanceInKm: 7,
         },
     ];
+
+    const riderMatch = useMemo(() => {
+        return localRiders.find((rider) => rider._id === riderId);
+    }, [localRiders, riderId]);
 
     return ( 
         <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -65,7 +57,7 @@ const SingleRiderPage : React.FC= () => {
                 <View style={styles.center}>
                     <View style={styles.imageContainer}>
                         <Image 
-                            src={require("@/src/assets/images/rider.png")} 
+                            src={riderMatch!.profileDisplayImage} 
                             style={styles.image}
                         />
 
@@ -79,27 +71,30 @@ const SingleRiderPage : React.FC= () => {
         <View style={styles.bottom}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View>
-                    <Text type="default-semibold" style={styles.name}>Aminu Gabriel</Text>
+                    <Text type="default-semibold" style={styles.name}>{riderMatch!.firstName} {riderMatch!.lastName}</Text>
+
                     <View style={styles.bullets}>
-                        <Text type="default" style={styles.bullet}>Keke rider</Text>
+                        <Text type="default" style={styles.bullet}>{riderMatch!.rideType!.name} rider</Text>
                         <View style={styles.dot} />
                         <Text type="default" style={styles.bullet}>Ogombo road</Text>
                         <View style={styles.dot} />
-                        <Text type="default" style={styles.bullet}>12km away</Text>
+                        <Text type="default" style={styles.bullet}>{riderMatch!.coordinates.distance.toFixed(2)}km away</Text>
                     </View>
                 </View>
 
                 <View style={styles.summary}>
                     <View style={styles.flex}>
-                        <Text type="default-semibold" style={styles.value}>125</Text>
+                        <Text type="default-semibold" style={styles.value}>{riderMatch!.contactCount}</Text>
                         <Text type="default-semibold" style={styles.label}>Contacted</Text>
                     </View>
+
                     <View style={styles.flex}>
-                        <Text type="default-semibold" style={styles.value}>74</Text>
+                        <Text type="default-semibold" style={styles.value}>{riderMatch!.rideCount}</Text>
                         <Text type="default-semibold" style={styles.label}>Trips</Text>
                     </View>
+
                     <View style={styles.flex}>
-                        <Text type="default-semibold" style={styles.value}>25</Text>
+                        <Text type="default-semibold" style={styles.value}>{riderMatch!.reviewCount}</Text>
                         <Text type="default-semibold" style={styles.label}>Reviews</Text>
                     </View>
                 </View>
@@ -109,10 +104,13 @@ const SingleRiderPage : React.FC= () => {
                 </View>
                 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {ROUTES.map((route) => (
-                        <View key={route.id} style={{ marginRight: 16 }}>
-                            <LocalRideLocation route={route} onPress={() => {}} />
-                        </View>
+                    {riderMatch!.routes.map((route, index) => (
+                        <LocalRideLocation 
+                            key={index} 
+                            style={{ marginRight: 16 }}
+                            route={route} 
+                            onPress={() => {}} 
+                        />
                     ))}
                 </ScrollView>
                 

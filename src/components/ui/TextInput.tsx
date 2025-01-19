@@ -86,7 +86,7 @@ const AppTextInput: React.FC<AppTextInputProps> = ({
 				<InputComponent
 					{...otherProps}
 					editable={isEditable}
-					style={styles.text}
+					style={[styles.text, otherProps.style]}
 					placeholderTextColor={colors.light.placeholder}
 					selectionColor={colors.light.primary}
 					onFocus={handleFocus}

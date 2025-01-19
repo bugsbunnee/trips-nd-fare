@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View, StyleSheet, TouchableWithoutFeedback, Modal, DimensionValue } from "react-native";
+import React, { useMemo, useState } from "react";
+import { View, ScrollView, StyleSheet, Modal, DimensionValue } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 
-import { Button, Text, TextInput } from "@/src/components/ui";
+import { Button, TextInput } from "@/src/components/ui";
 import { colors, styles as defaultStyles } from '@/src/constants';
 import { PickerItemModel } from "@/src/utils/models";
 
@@ -35,29 +34,17 @@ const Picker: React.FC<PickerProps> = ({
   const [isVisible, setVisible] = useState(false);
   const [query, setQuery] = useState('');
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const insets = useSafeAreaInsets();
 
-  const handleOpenSheet = useCallback(() => {
-    if (bottomSheetModalRef.current) {
-        bottomSheetModalRef.current.present();
-    }
-  }, []);
-
-  const handleCloseSheet = useCallback(() => {
-    if (bottomSheetModalRef.current) {
-        bottomSheetModalRef.current.dismiss();
-    }
-  }, []);
-
   const filteredItems = useMemo(() => {
-    return items.filter((item) => item.value.toString().toLowerCase().includes(query.toLowerCase()));
-  }, [query, items]);
+    return items.filter((item) => {
+      const valueToTraverse = item.value.toString().toLowerCase();
+      const labelToTraverse = item.label.toString().toLowerCase();
+      const queryToTraverse = query.toLowerCase();
 
-  useEffect(() => {
-    if (isVisible) handleOpenSheet();
-    else handleCloseSheet();
-  }, [isVisible]);
+      return valueToTraverse.includes(queryToTraverse) || labelToTraverse.includes(queryToTraverse);
+    });
+  }, [query, items]);
 
   return (
     <>
@@ -71,43 +58,34 @@ const Picker: React.FC<PickerProps> = ({
       />
 
       <Modal visible={isVisible} animationType="slide" >
-          <BottomSheetModalProvider> 
-            <View style={[{ paddingTop: insets.top, paddingBottom: insets.bottom }, styles.body]}>
-                <BottomSheetModal 
-                  animateOnMount 
-                  ref={bottomSheetModalRef} 
-                  enablePanDownToClose={false} 
-                  enableDynamicSizing={false} 
-                  index={0} 
-                  snapPoints={['75%']}
-                >
-                    <BottomSheetView style={styles.content}>
-                      <TextInput
-                        primaryIcon="magnifier"
-                        placeholder="Enter item to search"
-                        onChangeText={(text) => setQuery(text)}
-                        value={query}
-                      />
-                    </BottomSheetView>
+        <View style={[{ paddingTop: insets.top, paddingBottom: insets.bottom }, styles.body]}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              primaryIcon='magnifier'
+              placeholder="Enter item to search"
+              onChangeText={(text) => setQuery(text)}
+              value={query}
+              style={styles.inputText}
+              containerStyle={styles.input}
+            />
+          </View>
 
-                    <BottomSheetScrollView style={styles.content}>
-                      {filteredItems.map((item) => (
-                        <PickerItemComponent
-                          isActive={item.value === selectedItem?.value}
-                          item={item}
-                          key={item.value}
-                          label={item.label}
-                          onPress={() => onSelectItem(item)}
-                        />
-                      ))}
-                    </BottomSheetScrollView> 
+          <ScrollView bounces={false} contentContainerStyle={styles.content}>
+            {filteredItems.map((item) => (
+              <PickerItemComponent
+                isActive={item.value === selectedItem?.value}
+                item={item}
+                key={item.value}
+                label={item.label}
+                onPress={() => onSelectItem(item)}
+              />
+            ))}
+          </ScrollView> 
 
-                    <View style={[styles.close, styles.content]}>
-                        <Button label='Close' onPress={() => setVisible(false)} />
-                    </View>
-                </BottomSheetModal>
-            </View>
-          </BottomSheetModalProvider>
+          <View style={styles.footer}>
+            <Button label='Close' onPress={() => setVisible(false)} />
+          </View>
+        </View>
       </Modal>
     </>
   );
@@ -116,73 +94,85 @@ const Picker: React.FC<PickerProps> = ({
 const styles = StyleSheet.create({
   body: {
     flex: 1, 
-    backgroundColor: colors.light.modalOpaque,
+    backgroundColor: colors.light.white,
   },
   container: {
-		borderRadius: 8,
+    borderWidth: 1,
+		borderRadius: 50,
+		borderColor: colors.light.dew,
 		backgroundColor: colors.light.dew,
-		paddingVertical: 8,
-		paddingHorizontal: 12,
-    height: 70
-	},
-  close: {
-    marginTop: 10,
-    paddingBottom: 16
+		flexDirection: 'row',
+		alignItems: 'center',
+		height: 45,
+    gap: 4,
+		paddingHorizontal: 16,
+  },
+  footer: {
+    padding: 16,
+    borderTopColor: colors.light.dewDark,
+    borderTopWidth: 1,
   },
   content: { 
+    paddingVertical: 10,
     paddingHorizontal: 20,
+    backgroundColor: colors.light.white,
   },
   iconContainer: {
 		marginRight: 10,
 	},
+  input: { 
+    backgroundColor: colors.light.dew,
+    borderRadius: 8,
+  },
+  inputContainer: {
+    paddingHorizontal: 16,
+    borderBottomColor: colors.light.dewDark,
+    borderBottomWidth: 1,
+  },
+  inputText: {
+    fontSize: 14,
+    fontFamily: defaultStyles.urbanistSemibold.fontFamily,
+    flex: 1,
+    alignSelf: 'center'
+  },
   popup: {
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40
   },
   modal: {
-    backgroundColor: colors.light.modalOpaque,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
     flex: 1,
-    zIndex: 100000,
   },
-  separator: {
-    height: 5,
-    width: '100%'
+  modalContent: {
+      backgroundColor: colors.light.white,
+      flex: 1,
   },
+  label: {
+		color: colors.light.dark,
+		fontSize: 15,
+		lineHeight: 24,
+		marginBottom: 6,
+		fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+	},
   placeholder: {
     color: colors.light.placeholder,
-    fontSize: 15,
+    fontSize: 12,
     lineHeight: 20,
 		letterSpacing: 0.25,
 		flex: 1,
-    textAlign: 'left',
-		fontFamily: defaultStyles.urbanistBold.fontFamily,
+		fontFamily: defaultStyles.jakartaSemibold.fontFamily,
   },
   picker: {
-		marginBottom: 12,
+		marginBottom: 18,
   },
-  error: {
-		color: colors.light.danger,
-		fontSize: 13,
-		letterSpacing: 0.5,
-		textAlign: 'left',
-        marginTop: 4
-	},
-  input: {
-      marginTop: 7,
-      flex: 1,
-  },
-	text: {
-      color: colors.light.dark,
-      textAlign: 'left',
-      fontSize: 15,
-      lineHeight: 18,
-      fontFamily: defaultStyles.urbanistBold.fontFamily,
-  },
-  label: {
-      fontFamily: defaultStyles.urbanistBold.fontFamily,
-      fontSize: 10,
-      lineHeight: 12,
-      color: colors.light.grayDeep
+  text: {
+    color: colors.light.dark,
+    fontSize: 12,
+    lineHeight: 20,
+		letterSpacing: 0.25,
+		flex: 1,
+		fontFamily: defaultStyles.jakartaSemibold.fontFamily,
   },
 });
 

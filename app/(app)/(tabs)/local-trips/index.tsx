@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import _ from "lodash";
 
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -8,9 +8,10 @@ import { router } from "expo-router";
 
 import { Skeleton, Text } from "@/src/components/ui";
 import { colors, icons, styles as defaultStyles } from "@/src/constants";
-import { getAvailableLocalRiders, getLocalRideTypes } from "@/src/store/data/actions";
+import { getAvailableLocalRiders, getLocalRideTypes, getLocalTripsInLocation } from "@/src/store/data/actions";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { PickerItemModel } from "@/src/utils/models";
+import { setSelectedRideType, setSelectedRoute } from "@/src/store/ride/slice";
 
 import AvailableRider from "@/src/components/lists/AvailableRider";
 import AvailableRiderSkeleton from "@/src/components/lists/AvailableRiderSkeleton";
@@ -19,16 +20,16 @@ import EmptyItem from "@/src/components/lists/EmptyItem";
 import LocationPickerTrigger from "@/src/components/lists/LocationPickerTrigger";
 import LocalRideLocation from "@/src/components/lists/LocalRideLocation";
 import LocalRideLocationSkeleton from '@/src/components/lists/LocalRideLocationSkeleton';
+import LocalRideTypes from "@/src/components/lists/LocalRideTypes";
 import Picker from "@/src/components/lists/Picker";
 import Screen from "@/src/components/navigation/Screen";
 
 import useLocation from "@/src/hooks/useLocation";
 
 const LocalTripsIndexPage : React.FC= () => {
-    const [selectedItem, setSelectedItem] = useState<PickerItemModel | null>(null);
-
     const dispatch = useAppDispatch();
     const data = useAppSelector((state) => state.data);
+    const ride = useAppSelector((state) => state.ride);
     const location = useLocation();
 
     const allLocations = useMemo(() => {
@@ -38,7 +39,7 @@ const LocalTripsIndexPage : React.FC= () => {
         }));
     }, [data.popularLocations]);
 
-    const getLocalRides = useCallback(() => {
+    const fetchLocalRideTypes = useCallback(() => {
         dispatch(getLocalRideTypes());
     }, [dispatch]);
 
@@ -47,26 +48,29 @@ const LocalTripsIndexPage : React.FC= () => {
             dispatch(getAvailableLocalRiders({
                 latitude: location.latitude,
                 longitude: location.longitude,
+                rideType: ride.selectedRideType || undefined,
             }))
         }
-    }, [dispatch, location]);
+    }, [dispatch, location, ride.selectedRideType]);
+
+    const getRidersInLocation = useCallback(async (route: PickerItemModel) => {
+        await dispatch(getLocalTripsInLocation({ 
+            route: route.value, 
+            rideType: ride.selectedRideType,
+        }));
+
+        dispatch(setSelectedRoute(route));
+
+        router.push('/local-trips/route');
+    }, [dispatch, ride.selectedRideType])
 
     useEffect(() => {
         getRiders();
     }, [getRiders]);
 
     useEffect(() => {
-        getLocalRides();
-    }, [getLocalRides]);
-
-    useEffect(() => {
-        if (selectedItem) {
-            router.push({
-                pathname: '/local-trips/location/[id]',
-                params: { id: 1 }
-            });
-        }
-    }, [selectedItem]);
+        fetchLocalRideTypes();
+    }, [fetchLocalRideTypes]);
 
     return ( 
         <Screen style={styles.container}>
@@ -93,30 +97,18 @@ const LocalTripsIndexPage : React.FC= () => {
                     <Picker 
                         label=''
                         items={allLocations}
-                        selectedItem={selectedItem}
+                        selectedItem={ride.selectedRoute}
                         placeholder='Search location...'
                         icon='magnifier'
                         PickerTriggerComponent={LocationPickerTrigger}
-                        onSelectItem={(item) => setSelectedItem(item)}
+                        onSelectItem={(location) => getRidersInLocation(location)}
                     />
                 </View>
 
                 <Conditional visible={data.isLoading || data.localRideTypes.length > 0}>
                     <View style={styles.rides}>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            <Conditional visible={!data.isLoading}>
-                                {data.localRideTypes.map((rideType) => (
-                                    <TouchableOpacity key={rideType.value} style={styles.rideType}>
-                                        <Text type="default-semibold" style={styles.rideTypeText}>{rideType.label}</Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </Conditional>
-                            
-                            <Conditional visible={data.isLoading}>
-                                {_.range(1, 6).map((fill) => (
-                                    <Skeleton key={fill} style={styles.rideTypeSkeleton} />
-                                ))}
-                            </Conditional>
+                            <LocalRideTypes />
                         </ScrollView>
                     </View>
                 </Conditional>
@@ -144,7 +136,10 @@ const LocalTripsIndexPage : React.FC= () => {
                                     key={index} 
                                     style={{ marginRight: 16 }}
                                     route={location} 
-                                    onPress={() => {}} 
+                                    onPress={() => router.push({
+                                        pathname: '/local-trips/location/[location]',
+                                        params: { location: location.route },
+                                    })} 
                                 />
                             ))}
                         </Conditional>
@@ -171,7 +166,7 @@ const LocalTripsIndexPage : React.FC= () => {
                                     onPress={() => router.push({ pathname: '/local-trips/[rider]', params: { rider: rider._id }})}
                                     firstName={rider.firstName}
                                     lastName={rider.lastName}
-                                    location={rider.lastName}
+                                    location={rider.rideType.name}
                                     distanceInKm={rider.coordinates.distance}
                                     image={rider.profileDisplayImage}
                                 />
@@ -226,27 +221,6 @@ const styles = StyleSheet.create({
     placeholder: { flex: 1, color: colors.light.black, fontFamily: defaultStyles.urbanistBold.fontFamily, marginLeft: 4, fontSize: 16 },
     row: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
     rides: { borderRadius: 20, marginTop: 18, paddingHorizontal: 11, paddingVertical: 24, backgroundColor: colors.light.white, zIndex: 100 },
-    rideType: { 
-        alignSelf: 'flex-start', 
-        paddingHorizontal: 18, 
-        paddingVertical: 3, 
-        backgroundColor: colors.light.primaryLight, 
-        borderRadius: 8,
-        marginRight: 8
-    },
-    rideTypeSkeleton: { 
-        width: 80,
-        height: 20,
-        borderRadius: 4,
-        marginRight: 10
-    },
-    rideTypeText: {
-        fontFamily: defaultStyles.urbanistBold.fontFamily,
-        fontSize: 18,
-        lineHeight: 28,
-        color: colors.light.primary,
-        textTransform: 'capitalize'
-    },
     sectionMargin: { marginBottom: 18, marginTop: 30 },
     title: {
         fontSize: 20,
