@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getLocalTripsInLocation, getMyBookings, getNearbyRiders, getRidersForTrip, getServices } from "@/src/store/data/actions";
+import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getLocalTripsInLocation, getMyBookings, getNearbyRiders, getNotifications, getRidersForTrip, getServices, getUpcomingRides, updateNotification } from "@/src/store/data/actions";
 import { getMessageFromError } from "@/src/utils/lib";
-import { Booking, BusTicket, Coordinates, PickerItemModel } from "@/src/utils/models";
+import { Booking, BusTicket, Coordinates, Notification, PickerItemModel } from "@/src/utils/models";
 export interface Service {
     _id: string;
     name: string;
@@ -38,6 +38,15 @@ export interface Route {
     price: number;
 }
 
+export interface UpcomingRide {
+    _id: string;
+    name: string; 
+    code: string;
+    totalRides: number;
+    totalRevenue: number;
+    rides: Booking[];
+}
+
 export interface LocalRiderDetails {
     contactCount: number;
     phoneNumber: string;
@@ -47,9 +56,16 @@ export interface LocalRiderDetails {
     routes: Route[];
 }
 
+export interface Notifications {
+    hasUnread: boolean;
+    list: Notification[];
+}
+
 export type NearbyLocalRider = NearbyRider & LocalRiderDetails;
 
 export interface DataState {
+    upcomingRides: UpcomingRide[];
+    notifications: Notifications;
     popularLocations: Route[];
     localTripLocations: Route[];
     busTickets: BusTicket[];
@@ -65,7 +81,9 @@ export interface DataState {
 }
 
 const initialState: DataState = {
+    upcomingRides: [],
     busTickets: [],
+    notifications: { hasUnread: false, list: [] },
     popularLocations: [],
     localRidersInLocation: [],
     localTripLocations: [],
@@ -108,6 +126,19 @@ const dataSlice = createSlice({
             state.error = '';
         })
         .addCase(getRidersForTrip.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getUpcomingRides.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getUpcomingRides.fulfilled, (state, action) => {
+            state.upcomingRides = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(getUpcomingRides.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })
@@ -160,6 +191,28 @@ const dataSlice = createSlice({
             state.error = '';
         })
         .addCase(getAvailableBusTickets.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(getNotifications.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(getNotifications.fulfilled, (state, action) => {
+            state.notifications = action.payload!;
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(updateNotification.fulfilled, (state, action) => {
+            state.notifications.list = state.notifications.list.map((notification) => {
+                if (notification._id === action.meta.arg) {
+                    return { ...notification, isRead: true };
+                } 
+
+                return notification;
+            });
+        })
+        .addCase(updateNotification.rejected, (state, action) => {
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })

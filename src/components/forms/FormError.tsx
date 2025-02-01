@@ -1,10 +1,9 @@
 import React from 'react';
-import Animated, { ZoomIn } from 'react-native-reanimated';
 
 import { colors, icons } from '@/src/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text } from '@/src/components/ui';
 
 interface Props {
@@ -15,7 +14,7 @@ const FormError: React.FC<Props> = ({ error }) => {
     if (!error) return null;
 
     return (  
-        <Animated.View entering={ZoomIn} style={styles.container}>
+        <View style={styles.container}>
             <MaterialCommunityIcons
               name='information' 
               color={colors.light.danger} 
@@ -23,7 +22,7 @@ const FormError: React.FC<Props> = ({ error }) => {
             />
 
             <Text type='default-semibold' style={styles.text} numberOfLines={2}>{error}</Text>
-        </Animated.View>
+        </View>
     );
 };
 

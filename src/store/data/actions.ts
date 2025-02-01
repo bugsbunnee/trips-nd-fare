@@ -1,11 +1,15 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { BusLocations, NearbyLocalRider, NearbyRider, Route, Service } from '@/src/store/data/slice';
-import { Booking, BusTicket, Coordinates, Location, PickerItemModel } from '@/src/utils/models';
+import { BusLocations, NearbyLocalRider, NearbyRider, Notifications, Route, Service, UpcomingRide } from '@/src/store/data/slice';
+import { Booking, BusTicket, Coordinates, Location, Notification, PickerItemModel } from '@/src/utils/models';
 import { RootState } from '@/src/store';
 import { AuthResponse } from '@/src/store/auth/actions';
 
 import http from '@/src/api/http';
 
+export const localRideTypesAction = createAction<number | undefined>('data/localRideTypes');
+export const getNotificationsAction = createAction<number | undefined>('data/getNotifications');
+export const getUpcomingRidesAction = createAction<number | undefined>('data/getUpcomingRides');
+export const updateNotificationAction = createAction<number | undefined>('data/updateNotification');
 export const serviceAction = createAction<number | undefined>('data/services');
 export const nearbyRidersAction = createAction<number | undefined>('data/nearbyRiders');
 export const ridersForTripAction = createAction<number | undefined>('data/ridersForTrip');
@@ -16,7 +20,6 @@ export const busLocationsAction = createAction<number | undefined>('data/busLoca
 export const busTicketsAction = createAction<number | undefined>('data/busTickets');
 export const busAvailableTicketsAction = createAction<number | undefined>('data/busAvailableTickets');
 export const localRidersAvailableAction = createAction<number | undefined>('data/localRidersAvailable');
-export const localRideTypesAction = createAction<number | undefined>('data/localRideTypes');
 export const localRidersInLocation = createAction<number | undefined>('data/localRidersInLocation');
 
 interface TripPreparationPayload {
@@ -53,8 +56,23 @@ interface LocalRidersInLocationResponse {
     routeLocations: Route[];
 }
 
+
+
 export const getLocalRideTypes = createAsyncThunk(localRideTypesAction.type, async (_: undefined, thunkAPI) => {
     const response = await http.get<PickerItemModel[]>('/local-ride-types');
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const getUpcomingRides = createAsyncThunk(getUpcomingRidesAction.type, async (_: undefined, thunkAPI) => {
+    const config = {
+        headers: {
+            'x-auth-token': (thunkAPI.getState() as RootState).auth.token
+        },
+    };
+
+    const response = await http.get<UpcomingRide[]>('/ride/upcoming', undefined, config);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);
@@ -139,6 +157,32 @@ export const getRidersForTrip = createAsyncThunk(ridersForTripAction.type, async
     };
 
     const response = await http.post<NearbyRider[]>('/geolocation/trip-preparation', payload, config);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const getNotifications = createAsyncThunk(getNotificationsAction.type, async (_, thunkAPI) => {
+    const config = {
+        headers: {
+            'x-auth-token': (thunkAPI.getState() as RootState).auth.token
+        },
+    };
+
+    const response = await http.get<Notifications>('/notifications', {}, config);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const updateNotification = createAsyncThunk(updateNotificationAction.type, async (notificationId: string, thunkAPI) => {
+    const config = {
+        headers: {
+            'x-auth-token': (thunkAPI.getState() as RootState).auth.token
+        },
+    };
+
+    const response = await http.patch('/notifications/' + notificationId, {}, config);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);

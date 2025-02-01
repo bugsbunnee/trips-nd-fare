@@ -5,6 +5,7 @@ const HistoryLayout: React.FC = () => {
     return ( 
         <Stack screenOptions={{ animation: 'flip', headerShown: false }}>
             <Stack.Screen name="index" />
+            <Stack.Screen name="upcoming" />
         </Stack>
      );
 };

@@ -61,7 +61,7 @@ const BookRidePage: React.FC = () => {
             data={bookings.bookings.slice(0, 3)}
             keyboardShouldPersistTaps='always'
             keyExtractor={(booking) => booking._id}
-            renderItem={({ item }) => <BookingListItem booking={item} />}
+            renderItem={({ item }) => <BookingListItem booking={item} date={item.createdAt} />}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
             ListHeaderComponent={() => (
               <>

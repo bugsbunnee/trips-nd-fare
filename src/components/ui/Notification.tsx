@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { colors, icons } from '@/src/constants';
+import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
+import { Link, useFocusEffect } from 'expo-router';
+import { getNotifications } from '@/src/store/data/actions';
 
-interface Props {
-    hasUnread: boolean;
-}
+const Notification: React.FC = () => {
+    const notifications = useAppSelector((state) => state.data.notifications);
+    const dispatch = useAppDispatch();
 
-const Notification: React.FC<Props> = ({ hasUnread }) => {
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(getNotifications());
+        }, [dispatch])
+    );
+
     return ( 
-        <TouchableOpacity style={styles.notification}>
-            {hasUnread && <View style={styles.dot} />}
-            
-            <Ionicons 
-                name='notifications-outline' 
-                size={icons.SIZES.NORMAL} 
-                color={colors.light.dark} 
-            />
-        </TouchableOpacity>
+        <Link href='/home/notifications' asChild>
+            <TouchableOpacity style={styles.notification}>
+                {notifications.hasUnread && <View style={styles.dot} />}
+                
+                <Ionicons 
+                    name='notifications-outline' 
+                    size={icons.SIZES.NORMAL} 
+                    color={colors.light.dark} 
+                />
+            </TouchableOpacity>
+        </Link>
      );
 }
 

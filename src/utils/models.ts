@@ -16,7 +16,7 @@ export interface Booking {
     price: number;
     rideStatus: string;
     paymentStatus: string;
-    seatNumbers: [];
+    bookedSeats: number[];
     createdAt: string;
     departureDate: Date;
     from: Location;
@@ -74,6 +74,14 @@ export interface Geolocation {
     timeToLocationText: string;
     distanceToLocation: string;
     timeToLocationInSeconds: number;
+}
+
+export interface Notification {
+    _id: string;
+    title: string;
+    body: string;
+    isRead: boolean;
+    createdAt: string;
 }
 
 export interface OnboardingSlide {

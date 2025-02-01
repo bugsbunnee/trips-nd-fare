@@ -161,7 +161,7 @@ const TicketDownloadPage: React.FC = () => {
                             
                                 <View style={styles.detailItem}>
                                     <Text type="default-semibold" style={styles.label}>Seats</Text>
-                                    <Text type="default-semibold" style={styles.value}>{booking.receipt!.seatNumbers.map((seat) => `S${seat}`).join(', ')}</Text>
+                                    <Text type="default-semibold" style={styles.value}>{booking.receipt!.bookedSeats.map((seat) => `S${seat}`).join(', ')}</Text>
                                 </View>
                             </View>
                         

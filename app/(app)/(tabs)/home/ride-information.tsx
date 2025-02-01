@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { View,  StyleSheet, Alert } from 'react-native';
+import { View,  StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -53,7 +53,7 @@ const RideInformationPage: React.FC = () => {
 
     return (
         <RiderLayout 
-            label='Ride Information'
+            label='Choose a Rider'
             Map={() => (
                 <RouteMap
                     origin={rideDetails.from!}
@@ -64,6 +64,14 @@ const RideInformationPage: React.FC = () => {
             <ActivityIndicator visible={rideDetails.isLoading} />
             
             <FormError error={rideDetails.error} />
+
+            <View style={styles.header}>
+                <Text type="default-semibold" style={styles.title}>Ride Information</Text>
+
+                <TouchableOpacity onPress={() => router.back()}>
+                    <MaterialCommunityIcons name='close' size={icons.SIZES.NORMAL} color={colors.light.gray} />
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.content}>
                 <View style={styles.riderDetailsContainer}>
@@ -127,8 +135,9 @@ const RideInformationPage: React.FC = () => {
 const styles = StyleSheet.create({
     address: { color: colors.light.dark, fontSize: 15, lineHeight: 20, flex: 1 },
     content: { flex: 1, borderTopWidth: 1, borderTopColor: colors.light.grayLight, marginTop: 16, padding: 16 },
+    header: { paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 24 },
     location: { marginTop: 20 },
-    locationItem: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 16, borderTopColor: colors.light.grayLight, borderTopWidth: 1 },
+    locationItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16, borderTopColor: colors.light.grayLight, borderTopWidth: 1 },
     locationBorderBottom: { borderBottomColor: colors.light.grayLight, borderBottomWidth: 1 },
     metadata: { padding: 16, marginTop: 20, borderRadius: 16, backgroundColor: colors.light.primaryLight },
     metadataRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.light.white },
@@ -138,6 +147,13 @@ const styles = StyleSheet.create({
     riderDetails: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 12 },
     riderDetailsContainer: { justifyContent: 'center', alignItems: 'center' },
     riderImage: { width: 100, height: 100, borderRadius: 100 },
+    title: {
+        fontSize: 20,
+        lineHeight: 24,
+        fontFamily: defaultStyles.jakartaSemibold.fontFamily,
+        color: colors.light.dark,
+        flex: 1,
+    },
 });
 
 export default RideInformationPage;

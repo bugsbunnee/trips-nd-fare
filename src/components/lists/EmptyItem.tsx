@@ -22,7 +22,7 @@ const EmptyItem: React.FC<Props> = ({ src = require('@/src/assets/images/empty.p
                 <Image 
                     contentFit='contain'
                     src={src} 
-                    style={{ width: dimensions.width * 0.7, height: 115, }} 
+                    style={{ width: dimensions.width * 0.7, height: 115, resizeMode: 'contain' }} 
                 />
             </View>
 

@@ -1,77 +1,86 @@
-
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import _ from "lodash";
 
 import { Text } from "@/src/components/ui";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import BookingListItem from "@/src/components/lists/BookinglistItem";
 import BookingListItemSkeleton from "@/src/components/lists/BookinglistItemSkeleton";
 import Conditional from "@/src/components/common/Conditional";
 import EmptyItem from "@/src/components/lists/EmptyItem";
-import Picker from "@/src/components/lists/Picker";
-import RidePicker from "@/src/components/lists/RidePicker";
 import Screen from "@/src/components/navigation/Screen";
 
-import useBookings from "@/src/hooks/useRecentBookings";
+import { colors, styles as defaultStyles } from "@/src/constants";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { getUpcomingRides } from "@/src/store/data/actions";
 
-import { colors } from "@/src/constants";
-import { PickerItemModel } from "@/src/utils/models";
-import { SORT_ORDER } from "@/src/constants/app";
+const UpcomingRidesPage : React.FC= () => {
+    const [selectedRide, setSelectedRide] = useState('');
 
-const HistoryIndexPage : React.FC= () => {
-    const [selectedOrder, setSelectedOrder] = useState<PickerItemModel | null>(null);
-    const bookings = useBookings();
+    const dispatch = useAppDispatch();
+    const data = useAppSelector((state) => state.data);
 
-    const sortedBookings = useMemo(() => {
-      const sortOrder = selectedOrder ? selectedOrder.value : 'asc' as any;
-      return _.orderBy(bookings.bookings, ['createdAt'], sortOrder)
-    }, [selectedOrder]);
+    const handleFetchRides = () => {
+      dispatch(getUpcomingRides());
+    };
+
+    useEffect(() => {
+      handleFetchRides();
+    }, []);
+
+    useEffect(() => {
+      if (!selectedRide && data.upcomingRides.length > 0) {
+        setSelectedRide(data.upcomingRides[0]._id)
+      }
+    }, [selectedRide, data.upcomingRides]);
+
+    const upcomingRides = useMemo(() => {
+      const rideMatch = data.upcomingRides.find((ride) => ride._id === selectedRide);
+      return rideMatch ? rideMatch.rides : [];
+    }, [data.upcomingRides, selectedRide]);
 
     return ( 
       <Screen style={styles.container}>
         <View>
           <View style={styles.header}>
-            <Text type='subtitle' style={styles.subtitle}>Popular Car</Text>
+            <Text type='subtitle' style={styles.subtitle}>Upcoming Trips</Text>
+          </View>
 
-            <View style={styles.pickerContainer}>
-              <Picker
-                label=""
-                PickerTriggerComponent={RidePicker}
-                onSelectItem={(order) => setSelectedOrder(order)}
-                width="100%"
-                selectedItem={selectedOrder} 
-                placeholder="Select order" 
-                items={SORT_ORDER} 
-              />
-            </View>
+          <View style={styles.pickerContainer}>
+            {data.upcomingRides.map((ride) => (
+              <TouchableOpacity key={ride._id} onPress={() => setSelectedRide(ride._id)} style={[styles.tripButton, ride._id === selectedRide ? styles.selectedBG : styles.unselectedBG]}>
+                <Text type="default-semibold" style={[styles.tripButtonLabel, ride._id === selectedRide ? styles.selectedText : styles.unselectedText]}>{ride.code}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
           
         <View style={styles.flex}>
             <FlatList
-              data={sortedBookings}
-              refreshing={bookings.isLoading}
-              onRefresh={bookings.onRefresh}
+              data={upcomingRides}
+              refreshing={data.isLoading}
+              onRefresh={handleFetchRides}
               keyExtractor={(ride) => ride._id}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               renderItem={({ item }) => (
-                <BookingListItem 
+                <BookingListItem
+                  date={item.departureDate}
                   booking={item}
-                  backgroundColor={colors.light.input}
+                  backgroundColor={colors.light.primaryLight}
+                  isScheduled={true}
                 />
               )}
               ListEmptyComponent={() => (
                 <>
-                    <Conditional visible={!bookings.isLoading}>
+                    <Conditional visible={!data.isLoading}>
                       <EmptyItem
-                        label='No Rides Yet' 
-                        description="You haven't booked any rides yet!"
-                        onRefresh={bookings.onRefresh}
+                        label='No Upcoming Rides Yet' 
+                        description="Your upcoming rides will appear here."
+                        onRefresh={handleFetchRides}
                       />
                     </Conditional>
 
-                    <Conditional visible={bookings.isLoading}>
+                    <Conditional visible={data.isLoading}>
                         {_.range(1, 4).map((fill) => (
                           <BookingListItemSkeleton key={fill} />
                         ))}
@@ -89,8 +98,14 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   subtitle: { fontSize: 20, color: colors.light.dark, letterSpacing: 0.05 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',  marginBottom: 20, marginTop: 30 },
-  pickerContainer: { alignItems: 'flex-start', justifyContent: 'flex-start' },
+  pickerContainer: { flexDirection: 'row', alignItems: 'center', gap: 15, marginBottom: 22 },
   separator: { marginVertical: 10 },
+  selectedBG: { backgroundColor: colors.light.primary },
+  selectedText: { color: colors.light.white },
+  unselectedBG: { backgroundColor: colors.light.white },
+  unselectedText: { color: colors.light.primary },
+  tripButton: { flex: 1, paddingVertical: 9, borderRadius: 5 },
+  tripButtonLabel: { textAlign: 'center', textTransform: 'capitalize', fontSize: 16, lineHeight: 24, fontFamily: defaultStyles.jakartaSemibold.fontFamily },
 });
  
-export default HistoryIndexPage;
+export default UpcomingRidesPage;

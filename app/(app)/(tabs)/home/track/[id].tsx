@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     contentTitlePrimary: { color: colors.light.primary },
     horizontalPadding: { paddingHorizontal: 16 },
     location: { marginTop: 20 },
-    locationItem: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 16 },
+    locationItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 16 },
     metadata: { paddingVertical: 16, paddingHorizontal: 24, borderRadius: 16, backgroundColor: colors.light.primaryLight, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     metadataRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.light.white },
     metadataLabel: { color: colors.light.dark, fontSize: 17, lineHeight: 24, textTransform: 'capitalize' },

@@ -7,12 +7,14 @@ import { captureRef } from 'react-native-view-shot';
 
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import { CURRENCY } from "@/src/constants/app";
 import { colors } from "@/src/constants";
 import { Location, Transaction } from "@/src/utils/models";
 
 dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 export const excludeStateKeyword = (text: string) => {
     return text.toLowerCase().replace('state', '').trim();
@@ -67,6 +69,10 @@ export const getFieldErrorsFromError = (error: unknown) => {
     }
 
     return null;
+};
+
+export const getRelativeTime = (date: string | Date) => {
+    return dayjs(date).fromNow();
 };
 
 export const getMessageFromError = (error: any) => {

@@ -34,7 +34,7 @@ const RiderLayout: React.FC<Props> = ({ allowMapRecenter = false, children, labe
     }, []);
    
     const snapPoints = useMemo(() => {
-        return ['50%', '85%'];
+        return ['50%', '65%'];
     }, []);
 
     return (

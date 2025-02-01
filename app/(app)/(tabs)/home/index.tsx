@@ -47,7 +47,7 @@ const HomeIndexPage: React.FC = () => {
                         <Text type='default-semibold' style={styles.balanceText}>{formatAmount(6000)}</Text>
                     </View>
 
-                    <Notification hasUnread />
+                    <Notification />
                 </View>
             </View>
           </View>
