@@ -78,7 +78,7 @@ const ProfilePage: React.FC = () => {
         </View>
 
         <View style={styles.cardContainer}>
-         <Link href='/wallet' asChild>
+         <Link href='/wallet/setup' asChild>
             <TouchableOpacity style={styles.card}>
               <MaterialCommunityIcons 
                 name='wallet'

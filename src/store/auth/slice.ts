@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { AuthResponse, loginUser, loginWithGoogle, registerUser, updateUser, verifyEmail } from "@/src/store/auth/actions";
+import { AuthResponse, forgotPassword, loginUser, loginWithGoogle, registerUser, resetPassword, updateUser, verifyEmail } from "@/src/store/auth/actions";
 import { User } from "@/src/utils/models";
 import { getMessageFromError } from "@/src/utils/lib";
 import { AppDispatch } from "..";
@@ -13,12 +13,20 @@ interface Auth {
     user: User | null;
 }
 
+interface PasswordResetDetails {
+    error: string;
+    email: string;
+    code: string;
+    active: boolean;
+};
+
 interface AuthState extends Auth {
     error: string;
     isVerified: boolean;
     isInitializing: boolean;
     isAuthenticating: boolean;
     waitingRoom: Auth | null;
+    passwordResetDetails: PasswordResetDetails;
 }
 
 const initialState: AuthState = {
@@ -28,6 +36,7 @@ const initialState: AuthState = {
     isAuthenticating: false,
     token: '',
     user: null,
+    passwordResetDetails: { error: '', email: '', code: '', active: false, },
     waitingRoom: null,
 }
 
@@ -49,6 +58,13 @@ const authSlice = createSlice({
                 state.waitingRoom = null;
                 state.isVerified = false;
             }
+        },
+        setPasswordResetCode: (state, action: PayloadAction<string>) => {
+            state.passwordResetDetails.code = action.payload;
+            state.passwordResetDetails.active = false;
+        },
+        setCancelPasswordReset: (state) => {
+            state.passwordResetDetails = { error: '', email: '', code: '', active: false, };
         },
     },
     extraReducers: (builder) => {
@@ -93,6 +109,41 @@ const authSlice = createSlice({
             state.isAuthenticating = false;
             state.error = getMessageFromError(action.payload);
         })
+        .addCase(forgotPassword.pending, (state) => {
+            state.isAuthenticating = true;
+            state.passwordResetDetails.error = '';
+        })
+        .addCase(forgotPassword.fulfilled, (state, action) => {
+            state.error = '';
+            state.isAuthenticating = false;
+            state.passwordResetDetails = {
+                error: '',
+                active: true,
+                email: action.meta.arg.email,
+                code: '',
+            };
+        })
+        .addCase(forgotPassword.rejected, (state, action) => {
+            state.isAuthenticating = false;
+            state.passwordResetDetails.error = getMessageFromError(action.payload);
+        })
+        .addCase(resetPassword.pending, (state) => {
+            state.isAuthenticating = true;
+            state.passwordResetDetails.error = '';
+        })
+        .addCase(resetPassword.fulfilled, (state, action) => {
+            state.isAuthenticating = false;
+            state.passwordResetDetails = {
+                error: '',
+                active: false,
+                email: '',
+                code: '',
+            };
+        })
+        .addCase(resetPassword.rejected, (state, action) => {
+            state.isAuthenticating = false;
+            state.passwordResetDetails.error = getMessageFromError(action.payload);
+        })
         .addCase(updateUser.pending, (state) => {
             state.isAuthenticating = true;
         })
@@ -132,5 +183,5 @@ export const logout = () => async (dispatch: AppDispatch) => {
     await storage.removeUser();
 };
 
-export const { setBoardUser, setInitializing, setSession } = authSlice.actions;
+export const { setBoardUser, setInitializing, setPasswordResetCode, setCancelPasswordReset, setSession } = authSlice.actions;
 export default authSlice.reducer;

@@ -10,6 +10,7 @@ interface Props {
     src?: ImageSource;
     label: string;
     description: string;
+    cta?: string;
     onRefresh?: () => void;
 }
 
@@ -34,7 +35,7 @@ const EmptyItem: React.FC<Props> = ({ src = require('@/src/assets/images/empty.p
             </View>
 
             {onRefresh ? (
-                <View style={[styles.topMargin, { width: '60%' }]}>
+                <View style={[styles.topMargin, { width: '90%' }]}>
                     <Button label='Refresh' onPress={onRefresh} />
                 </View>
             ) : null}
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
       color: colors.light.gray,
       marginTop: 10
     },
-    topMargin: { marginTop: 48, justifyContent: 'center', alignItems: 'center' },
+    topMargin: { marginTop: 48, flex: 1, justifyContent: 'center', alignItems: 'center' },
     container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     flex: { flex: 1, },
     imageContainer: {

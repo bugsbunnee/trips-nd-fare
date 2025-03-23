@@ -9,6 +9,8 @@ export const loginGoogleAction = createAction<number | undefined>('auth/loginGoo
 export const registerAction = createAction<number | undefined>('auth/register');
 export const updateLocationAction = createAction<number | undefined>('auth/updateLocation');
 export const verifyEmailAction = createAction<number>('auth/verifyEmail');
+export const forgotPasswordAction = createAction<number>('auth/forgotPassword');
+export const resetPasswordAction = createAction<number>('auth/resetPassword');
 
 export interface AuthResponse {
     token: string;
@@ -18,6 +20,15 @@ export interface AuthResponse {
 interface VerifyEmailPayload {
     email: string;
     token: string;
+}
+
+interface ForgotPasswordPayload {
+    email: string;
+}
+
+interface ResetPasswordPayload {
+    password: string;
+    confirmPassword: string;
 }
 
 export const loginUser = createAsyncThunk(loginAction.type, async (authData: { email: string, password: string }, thunkAPI) => {
@@ -57,6 +68,28 @@ export const updateUser = createAsyncThunk(updateLocationAction.type, async (aut
 
 export const verifyEmail = createAsyncThunk(verifyEmailAction.type, async (payload: VerifyEmailPayload, thunkAPI) => {
     const response = await http.post('/auth/verify', payload);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const forgotPassword = createAsyncThunk(forgotPasswordAction.type, async (payload: ForgotPasswordPayload, thunkAPI) => {
+    const response = await http.post('/auth/forgot-password', payload);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const resetPassword = createAsyncThunk(resetPasswordAction.type, async (passwordDetails: ResetPasswordPayload, thunkAPI) => {
+    const details = (thunkAPI.getState() as RootState).auth.passwordResetDetails;
+    const payload = {
+        password: passwordDetails.password,
+        confirmPassword: passwordDetails.confirmPassword,
+        email: details.email,
+        token: details.code,
+    };
+
+    const response = await http.post('/auth/reset-password', payload);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);

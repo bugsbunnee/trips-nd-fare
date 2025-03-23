@@ -71,7 +71,7 @@ const SignUpPage: React.FC = () => {
           </View>
         }
     >
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView bounces={false}>
         <Form initialValues={{ name: '', email: '', password: '' }} onSubmit={handleSubmit} validationSchema={signupSchema}>
             <ActivityIndicator visible={auth.isAuthenticating} />
             

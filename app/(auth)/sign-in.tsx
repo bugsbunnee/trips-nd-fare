@@ -63,44 +63,53 @@ const SignInPage: React.FC = () => {
             </View>
         }
     >
-        <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView bounces={false}>
           <ActivityIndicator visible={auth.isAuthenticating} />
-            <Form ref={formikRef} initialValues={{ email: '', password: '' }} onSubmit={handleSubmit} validationSchema={authSchema}>
-                <FormField 
-                    autoCapitalize="none" 
-                    primaryIcon='envelope' 
-                    name="email" 
-                    label='Email' 
-                    placeholder="Enter email address"
-                    keyboardType='email-address'
-                />
+          
+          <Form ref={formikRef} initialValues={{ email: '', password: '' }} onSubmit={handleSubmit} validationSchema={authSchema}>
+              <FormField 
+                  autoCapitalize="none" 
+                  primaryIcon='envelope' 
+                  name="email" 
+                  label='Email' 
+                  placeholder="Enter email address"
+                  keyboardType='email-address'
+              />
 
-                <FormField 
-                    primaryIcon='lock' 
-                    name="password" 
-                    label='Password' 
-                    placeholder="Enter password"
-                    secureTextEntry
-                />
+              <FormField 
+                  primaryIcon='lock' 
+                  name="password" 
+                  label='Password' 
+                  placeholder="Enter password"
+                  secureTextEntry
+              />
 
-                <FormError error={auth.error} />
-                
-                <View style={styles.buttonContainer}>
-                    <SubmitButton label="Sign In" />
-                    
-                    <OrDivider />  
-                    
-                    <GoogleSignInButton label='Login with Google' />
+              <Link href='/forgot-password' asChild>
+                  <TouchableOpacity style={styles.forgotPassword}>
+                      <Text type='default' style={styles.signinText}>
+                          Forgot Your <Text type='default-semibold' style={styles.sigininTextCTA}>Password?</Text>
+                      </Text>
+                  </TouchableOpacity>
+              </Link>
 
-                    <Link href='/sign-up' asChild>
-                        <TouchableOpacity style={styles.signinContainer}>
-                            <Text type='default' style={styles.signinText}>
-                                Don't have an account? <Text type='default-semibold' style={styles.sigininTextCTA}>Sign up</Text>
-                            </Text>
-                        </TouchableOpacity>
-                    </Link>
-                </View>
-            </Form>
+              <FormError error={auth.error} />
+              
+              <View style={styles.buttonContainer}>
+                  <SubmitButton label="Sign In" />
+                  
+                  <OrDivider />  
+                  
+                  <GoogleSignInButton label='Login with Google' />
+
+                  <Link href='/sign-up' asChild>
+                      <TouchableOpacity style={styles.signinContainer}>
+                          <Text type='default' style={styles.signinText}>
+                              Don't have an account? <Text type='default-semibold' style={styles.sigininTextCTA}>Sign up</Text>
+                          </Text>
+                      </TouchableOpacity>
+                  </Link>
+              </View>
+          </Form>
         </KeyboardAwareScrollView>
     </ParallaxScrollView>
   );
@@ -112,6 +121,13 @@ const styles = StyleSheet.create({
     signinContainer: { marginVertical: 40 },
     signinText: { color: colors.light.gray, textAlign: 'center' },
     sigininTextCTA: { color: colors.light.primary },
+    forgotPassword: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      marginTop: 0,
+      marginBottom: 16
+    },
     title: { 
       color: colors.light.white, 
       letterSpacing: 0.7,

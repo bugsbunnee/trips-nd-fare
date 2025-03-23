@@ -28,8 +28,6 @@ const TicketDetailsPage: React.FC = () => {
 
     const ticket = busTickets.find((_, index) => index === +id);
 
-    console.log('ticket', ticket)
-
     const getSeatColor = useCallback((seat: number) => {
         if (ticket!.details.bookedSeats.includes(seat)) {
             return STATUS.UNAVAILABLE.value;

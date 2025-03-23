@@ -82,7 +82,7 @@ const EditProfilePage: React.FC = () => {
     <Screen style={styles.screen}>
       <View style={styles.rowBetween}>
           <Text type='subtitle' style={styles.greeting}>Your profile</Text>
-          <Notification hasUnread />
+          <Notification />
       </View>
 
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
