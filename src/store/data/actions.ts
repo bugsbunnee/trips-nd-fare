@@ -1,11 +1,13 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { BusLocations, NearbyLocalRider, NearbyRider, Notifications, Route, Service, UpcomingRide } from '@/src/store/data/slice';
-import { Booking, BusTicket, Coordinates, Location, Notification, PickerItemModel } from '@/src/utils/models';
+import { Booking, BusTicket, Coordinates, Location, Notification, PickerItemModel, Wallet } from '@/src/utils/models';
 import { RootState } from '@/src/store';
 import { AuthResponse } from '@/src/store/auth/actions';
 
 import http from '@/src/api/http';
 
+export const createVirtualAccountAction = createAction<number | undefined>('data/createVirtualAccount');
+export const updateVirtualAccountAction = createAction<number | undefined>('data/updateVirtualAccount');
 export const localRideTypesAction = createAction<number | undefined>('data/localRideTypes');
 export const getNotificationsAction = createAction<number | undefined>('data/getNotifications');
 export const getUpcomingRidesAction = createAction<number | undefined>('data/getUpcomingRides');
@@ -55,8 +57,6 @@ interface LocalRidersInLocationResponse {
     ridersInLocation: NearbyLocalRider[];
     routeLocations: Route[];
 }
-
-
 
 export const getLocalRideTypes = createAsyncThunk(localRideTypesAction.type, async (_: undefined, thunkAPI) => {
     const response = await http.get<PickerItemModel[]>('/local-ride-types');
@@ -214,4 +214,30 @@ export const updateDeviceToken = createAsyncThunk(updateDeviceAction.type, async
     return thunkAPI.rejectWithValue(response.originalError);
 });
 
+export const createVirtualAccount = createAsyncThunk(createVirtualAccountAction.type, async (_, thunkAPI) => {
+    const config = {
+        headers: {
+            'x-auth-token': (thunkAPI.getState() as RootState).auth.token,
+        },
+    };
 
+    const response = await http.post<AuthResponse>('/payments/account', {}, config);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});
+
+export const updateVirtualAccount = createAsyncThunk(updateVirtualAccountAction.type, async (_, thunkAPI) => {
+    const { token, wallet } = (thunkAPI.getState() as RootState).auth;
+
+    const config = {
+        headers: {
+            'x-auth-token': token,
+        },
+    };
+
+    const response = await http.patch<Wallet>('/payments/account/' + wallet!._id, {}, config);
+    if (response.ok) return response.data;
+
+    return thunkAPI.rejectWithValue(response.originalError);
+});

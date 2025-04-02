@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         fontFamily: defaultStyles.urbanistSemibold.fontFamily,
         color: colors.light.black,
     },
-    label: { color: colors.light.borderMid },
+    label: { color: colors.light.borderMid, lineHeight: 20 },
     read: { backgroundColor: colors.light.borderMid },
     unread: { backgroundColor: colors.light.primary }
 });

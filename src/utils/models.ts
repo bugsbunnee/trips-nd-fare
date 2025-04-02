@@ -101,6 +101,27 @@ export interface User {
     lastName: string;
     phoneNumber: string;
     profilePhoto?: string;
+    isVirtualAccountPending: boolean;
+}
+
+export interface Wallet {
+    _id: string;
+    is_viewed: boolean;
+    customer_code: string;
+
+    bank_name: string;
+    bank_slug: string;
+    bank_id: number;
+    
+    status: 'success' | 'failed';
+    active: boolean;
+    account_name: string;
+    account_number: string;
+    currency: string;
+    created_at: string;
+        
+    expired: boolean;
+    expired_at: string | null;
 }
 
 export interface PickerItemModel {

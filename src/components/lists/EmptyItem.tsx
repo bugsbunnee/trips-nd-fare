@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 
 import { colors, styles as defaultStyles } from '@/src/constants';
 import { Button, Image, Text } from '@/src/components/ui';
@@ -8,17 +8,18 @@ import { ImageSource } from 'expo-image';
 
 interface Props {
     src?: ImageSource;
+    style?: StyleProp<ViewStyle>;
     label: string;
     description: string;
     cta?: string;
     onRefresh?: () => void;
 }
 
-const EmptyItem: React.FC<Props> = ({ src = require('@/src/assets/images/empty.png'), label, description, onRefresh }) => {
+const EmptyItem: React.FC<Props> = ({ src = require('@/src/assets/images/empty.png'), style, label, description, onRefresh }) => {
     const dimensions = useWindowDimensions();
     
     return ( 
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <View style={styles.imageContainer}>
                 <Image 
                     contentFit='contain'
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
       color: colors.light.gray,
       marginTop: 10
     },
-    topMargin: { marginTop: 48, flex: 1, justifyContent: 'center', alignItems: 'center' },
+    topMargin: { marginTop: 48, justifyContent: 'center', alignItems: 'center' },
     container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     flex: { flex: 1, },
     imageContainer: {

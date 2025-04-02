@@ -27,7 +27,7 @@ const AppLoading: React.FC = () => {
 
   return (
     <GestureHandlerRootView>
-      <Slot />
+        <Slot />
     </GestureHandlerRootView>
   );
 };

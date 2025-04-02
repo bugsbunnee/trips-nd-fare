@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { AuthResponse, forgotPassword, loginUser, loginWithGoogle, registerUser, resetPassword, updateUser, verifyEmail } from "@/src/store/auth/actions";
-import { User } from "@/src/utils/models";
+import { User, Wallet } from "@/src/utils/models";
 import { getMessageFromError } from "@/src/utils/lib";
 import { AppDispatch } from "..";
-import { updateDeviceToken } from "@/src/store/data/actions";
+import { createVirtualAccount, updateDeviceToken, updateVirtualAccount } from "@/src/store/data/actions";
 
 import storage from "@/src/utils/storage";
 
 interface Auth {
     token: string;
+    chat: string;
     user: User | null;
+    wallet: Wallet | null;
 }
 
 interface PasswordResetDetails {
@@ -31,10 +33,12 @@ interface AuthState extends Auth {
 
 const initialState: AuthState = {
     error: '',
+    chat: '',
     isInitializing: true,
     isVerified: false,
     isAuthenticating: false,
     token: '',
+    wallet: null,
     user: null,
     passwordResetDetails: { error: '', email: '', code: '', active: false, },
     waitingRoom: null,
@@ -50,6 +54,8 @@ const authSlice = createSlice({
         setSession: (state, action: PayloadAction<AuthResponse>) => {
             state.user = action.payload.account;
             state.token = action.payload.token;
+            state.chat = action.payload.chat;
+            state.wallet = action.payload.wallet;
         },
         setBoardUser: (state) => {
             if (state.waitingRoom) {
@@ -74,6 +80,8 @@ const authSlice = createSlice({
         .addCase(loginUser.fulfilled, (state, action) => {
             state.token = action.payload!.token;
             state.user = action.payload!.account;
+            state.chat = action.payload!.chat;
+            state.wallet = action.payload!.wallet;
             state.isAuthenticating = false;
             state.error = '';
         })
@@ -90,6 +98,10 @@ const authSlice = createSlice({
             state.isAuthenticating = false;
             state.error = '';
         })
+        .addCase(createVirtualAccount.fulfilled, (state, action) => {
+            state.token = action.payload!.token;
+            state.user = action.payload!.account;
+        })
         .addCase(loginWithGoogle.rejected, (state, action) => {
             state.isAuthenticating = false;
             state.error = getMessageFromError(action.payload);
@@ -101,8 +113,10 @@ const authSlice = createSlice({
             state.error = '';
             state.isAuthenticating = false;
             state.waitingRoom = {
+                chat: action.payload!.chat,
                 token: action.payload!.token,
                 user: action.payload!.account!,
+                wallet: action.payload!.wallet,
             };
         })
         .addCase(registerUser.rejected, (state, action) => {
@@ -175,11 +189,14 @@ const authSlice = createSlice({
             state.isAuthenticating = false;
             state.error = '';
         })
+        .addCase(updateVirtualAccount.fulfilled, (state, action) => {
+            state.wallet = action.payload!;
+        })
     },
 });
 
 export const logout = () => async (dispatch: AppDispatch) => {
-    dispatch(setSession({ token: '', account: null }));
+    dispatch(setSession({ token: '', chat: '', account: null, wallet: null }));
     await storage.removeUser();
 };
 

@@ -7,12 +7,14 @@ const useBookings = () => {
     const data = useAppSelector((state) => state.data);
     
     const handleFetchBookings = useCallback(() => {
-        dispatch(getMyBookings())
+        dispatch(getMyBookings());
     }, [dispatch]);
 
     useEffect(() => {
         handleFetchBookings();
     }, [handleFetchBookings]);
+
+    console.log('data', data.bookings)
 
     return {
         bookings: data.bookings,

@@ -1,5 +1,5 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { User } from '@/src/utils/models';
+import { User, Wallet } from '@/src/utils/models';
 import { RootState } from '..';
 
 import http from '@/src/api/http';
@@ -14,7 +14,9 @@ export const resetPasswordAction = createAction<number>('auth/resetPassword');
 
 export interface AuthResponse {
     token: string;
+    chat: string;
     account: User | null;
+    wallet: Wallet | null;
 }
 
 interface VerifyEmailPayload {

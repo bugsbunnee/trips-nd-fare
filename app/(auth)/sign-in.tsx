@@ -87,7 +87,7 @@ const SignInPage: React.FC = () => {
               <Link href='/forgot-password' asChild>
                   <TouchableOpacity style={styles.forgotPassword}>
                       <Text type='default' style={styles.signinText}>
-                          Forgot Your <Text type='default-semibold' style={styles.sigininTextCTA}>Password?</Text>
+                          Forgot your <Text type='default-semibold' style={styles.sigininTextCTA}>password?</Text>
                       </Text>
                   </TouchableOpacity>
               </Link>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     sigininTextCTA: { color: colors.light.primary },
     forgotPassword: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       alignItems: 'center',
       marginTop: 0,
       marginBottom: 16

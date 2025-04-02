@@ -1,5 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getLocalTripsInLocation, getMyBookings, getNearbyRiders, getNotifications, getRidersForTrip, getServices, getUpcomingRides, updateNotification } from "@/src/store/data/actions";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Channel, DefaultGenerics, StreamChat } from "stream-chat";
+import { MessageType } from "stream-chat-expo";
+
+import { createVirtualAccount, getAvailableBusTickets, getAvailableLocalRiders, getBusLocations, getBusTickets, getLocalRideTypes, getLocalTripsInLocation, getMyBookings, getNearbyRiders, getNotifications, getRidersForTrip, getServices, getUpcomingRides, updateNotification, updateVirtualAccount } from "@/src/store/data/actions";
 import { getMessageFromError } from "@/src/utils/lib";
 import { Booking, BusTicket, Coordinates, Notification, PickerItemModel } from "@/src/utils/models";
 export interface Service {
@@ -64,6 +67,9 @@ export interface Notifications {
 export type NearbyLocalRider = NearbyRider & LocalRiderDetails;
 
 export interface DataState {
+    client: StreamChat<DefaultGenerics> | null;
+    channel: Channel | null;
+    thread: MessageType | null;
     upcomingRides: UpcomingRide[];
     notifications: Notifications;
     popularLocations: Route[];
@@ -81,6 +87,9 @@ export interface DataState {
 }
 
 const initialState: DataState = {
+    client: null,
+    channel: null,
+    thread: null,
     upcomingRides: [],
     busTickets: [],
     notifications: { hasUnread: false, list: [] },
@@ -100,7 +109,17 @@ const initialState: DataState = {
 const dataSlice = createSlice({
     name: 'data',
     initialState,
-    reducers: {},
+    reducers: {
+        setClient: (state, action: PayloadAction<StreamChat<DefaultGenerics> | null>) => {
+            state.client = action.payload;
+        },
+        setChannel: (state, action: PayloadAction<Channel | null>) => {
+            state.channel = action.payload;
+        },
+        setThread: (state, action: PayloadAction<MessageType | null>) => {
+            state.thread = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(getServices.pending, (state) => {
             state.isLoading = true;
@@ -257,7 +276,33 @@ const dataSlice = createSlice({
             state.isLoading = false;
             state.error = getMessageFromError(action.payload);
         })
+        .addCase(createVirtualAccount.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(createVirtualAccount.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(createVirtualAccount.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
+        .addCase(updateVirtualAccount.pending, (state) => {
+            state.isLoading = true;
+            state.error = '';
+        })
+        .addCase(updateVirtualAccount.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.error = '';
+        })
+        .addCase(updateVirtualAccount.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = getMessageFromError(action.payload);
+        })
     }
 });
+
+export const { setClient, setChannel, setThread } = dataSlice.actions;
 
 export default dataSlice.reducer;

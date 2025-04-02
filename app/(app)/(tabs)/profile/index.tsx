@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 
 import { useAppSelector } from '@/src/store/hooks';
 import { colors, styles as defaultStyles, icons } from '@/src/constants';
@@ -36,17 +36,34 @@ const ROUTES = [
   {
     label: 'Ferry Tickets',
     icon: 'ferry' as const,
-    route: '/local-trips',
-  },
-  {
-    label: 'Settings',
-    icon: 'cog' as const,
-    route: '/bus-rides',
+    route: '/ferry',
   },
 ];
 
 const ProfilePage: React.FC = () => {
   const auth = useAppSelector((state) => state.auth);
+
+  const handleWalletNavigation = () => {
+    if (auth.wallet) {
+      if (auth.wallet.is_viewed) {
+        return router.push('/wallet/account');
+      }
+
+      return router.push('/wallet/success');
+    }
+
+    if (auth.user) {
+      if (auth.user.isVirtualAccountPending) {
+        return router.push('/wallet/pending');
+      }
+
+      if (auth.user.phoneNumber) {
+        return router.push('/profile/edit-profile');
+      }
+    }
+
+    router.push('/wallet/setup');
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -78,19 +95,17 @@ const ProfilePage: React.FC = () => {
         </View>
 
         <View style={styles.cardContainer}>
-         <Link href='/wallet/setup' asChild>
-            <TouchableOpacity style={styles.card}>
-              <MaterialCommunityIcons 
-                name='wallet'
-                size={icons.SIZES.NORMAL}
-                color={colors.light.black}
-              />
+          <TouchableOpacity onPress={handleWalletNavigation} style={styles.card}>
+            <MaterialCommunityIcons 
+              name='wallet'
+              size={icons.SIZES.NORMAL}
+              color={colors.light.black}
+            />
 
-              <Text type='default-semibold' style={styles.cardText}>
-                Wallet
-              </Text>
-            </TouchableOpacity>
-         </Link>
+            <Text type='default-semibold' style={styles.cardText}>
+              Wallet
+            </Text>
+          </TouchableOpacity>
           
           <Link href='/history' asChild>
             <TouchableOpacity style={styles.card}>
