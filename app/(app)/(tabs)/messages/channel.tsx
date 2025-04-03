@@ -1,19 +1,19 @@
 
 import React from 'react';
 
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Channel, DefaultStreamChatGenerics, MessageInput, MessageList, MessageType } from "stream-chat-expo";
 import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { setThread } from '@/src/store/data/slice';
 import { colors, styles as defaultStyles, icons } from '@/src/constants';
 import { Text } from '@/src/components/ui';
 
-import Logout from '@/src/components/common/Logout';
 import Screen from '@/src/components/navigation/Screen';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ChannelPage: React.FC = () => {
   const data = useAppSelector((state) => state.data);
@@ -29,7 +29,7 @@ const ChannelPage: React.FC = () => {
   };
 
   return (
-    <Screen style={[styles.screen, { paddingBottom: insets.bottom }]}>
+    <Screen style={[styles.screen, { paddingBottom: 110 }]}>
        <View style={styles.rowBetween}>
             <TouchableOpacity onPress={() => router.back()} style={styles.button}>
                 <MaterialCommunityIcons name="arrow-left"  size={icons.SIZES.NORMAL} color={colors.light.white} />
@@ -39,9 +39,9 @@ const ChannelPage: React.FC = () => {
         </View>
 
       {data.channel && (
-          <Channel channel={data.channel} keyboardVerticalOffset={0}>
-            <MessageList onThreadSelect={handleSelectThread} />
-            <MessageInput />
+          <Channel channel={data.channel}>
+              <MessageList onThreadSelect={handleSelectThread} />
+              <MessageInput />
           </Channel>
       )}
     </Screen>

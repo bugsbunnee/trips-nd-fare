@@ -14,8 +14,6 @@ const useBookings = () => {
         handleFetchBookings();
     }, [handleFetchBookings]);
 
-    console.log('data', data.bookings)
-
     return {
         bookings: data.bookings,
         isLoading: data.isLoading,

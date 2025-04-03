@@ -3,7 +3,7 @@ import TabBarButton from '@/src/components/navigation/TabBarButton';
 
 import { View, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useSegments } from 'expo-router';
+import { usePathname, useSegments } from 'expo-router';
 
 import { colors, icons } from '@/src/constants';
 
@@ -11,9 +11,8 @@ type TabBarProps = Omit<BottomTabBarProps, 'insets'>;
 
 const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   const segments = useSegments();
-
-  const pagesToHide = ['ride', 'ferry', 'success', 'pending', 'choose-rider', 'banks', 'setup', 'channel', 'thread', 'ride-information', 'track', '[id]', 'wallet'];
   const screenName = segments.at(-1) as string;
+  const pagesToHide = ['ride', 'ferry', 'success', 'pending', 'choose-rider', 'banks', 'setup',  'thread', 'ride-information', 'track', '[id]', 'wallet'];
 
   return (
     <View style={[styles.container, { display: pagesToHide.includes(screenName) ? 'none' : 'flex', bottom: 0 }]}>

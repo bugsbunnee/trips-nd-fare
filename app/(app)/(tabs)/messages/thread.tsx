@@ -24,7 +24,7 @@ const ThreadPage: React.FC = () => {
       </View>
 
       {data.channel && data.thread && (
-          <Channel channel={data.channel} thread={data.thread} threadList keyboardVerticalOffset={0}>
+          <Channel channel={data.channel} thread={data.thread} threadList>
             <Thread onThreadDismount={() => dispatch(setThread(null))} />
           </Channel>
       )}
@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
       fontFamily: defaultStyles.jakartaBold.fontFamily,
     },
     headerContainer: { height: '100%', width: '100%' },
-    rowBetween: { flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
+    rowBetween: { flexDirection: 'row', width: '100%', padding: 16, alignItems: 'center', justifyContent: 'space-between' },
     imageContainer: {
       justifyContent: 'center',
       alignItems: 'center'
     },
-    screen: { backgroundColor: colors.light.white, padding: 16, flex: 1 },
+    screen: { backgroundColor: colors.light.white, flex: 1 },
     title: {
       fontSize: 28,
       fontFamily: defaultStyles.jakartaBold.fontFamily,

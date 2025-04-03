@@ -35,13 +35,16 @@ const RideInformationPage: React.FC = () => {
 
     const handleChatUpDriver = async () => {
         if (data.client) {
-            const channel = data.client.channel("messaging", {
-                members: [auth.user!._id, "677faff00bf9c48fea55832d"],
-                // members: [auth.user!._id, rider!._id],
-                name: "New Car Ride Request with " + rider!.firstName,
-            });
-    
-            await channel.create();
+            try {
+                const channel = data.client.channel("messaging", {
+                    members: [auth.user!._id, rider!._id],
+                    name: "New Car Ride Request with " + rider!.firstName,
+                });
+        
+                await channel.create();
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 

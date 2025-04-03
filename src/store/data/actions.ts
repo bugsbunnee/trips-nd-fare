@@ -107,7 +107,6 @@ export const getBusLocations = createAsyncThunk(busLocationsAction.type, async (
 
 export const getAvailableLocalRiders = createAsyncThunk(localRidersAvailableAction.type, async (payload: LocalRidersPayload, thunkAPI) => {
     const response = await http.post<LocalRidersResponse>('/geolocation/available-riders', payload);
-    console.log('result', response.data, response.config);
     if (response.ok) return response.data;
 
     return thunkAPI.rejectWithValue(response.originalError);
