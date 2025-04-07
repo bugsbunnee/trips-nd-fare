@@ -14,6 +14,8 @@ import useInitializeApp from '@/src/hooks/useInitializeApp';
 
 import 'react-native-reanimated';
 import 'react-native-get-random-values';
+import OfflineNotice from '@/src/components/common/OfflineNotice';
+import Updates from '@/src/components/common/Updates';
 
 configureReanimatedLogger({ level: ReanimatedLogLevel.warn, strict: false });
 WebBrowser.maybeCompleteAuthSession();
@@ -27,7 +29,9 @@ const AppLoading: React.FC = () => {
 
   return (
     <GestureHandlerRootView>
+        <OfflineNotice />
         <Slot />
+        <Updates />
     </GestureHandlerRootView>
   );
 };

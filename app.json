@@ -54,6 +54,12 @@
           "photosPermission": "The app accesses your photos so that you can update your profile."
         }
       ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "$(PRODUCT_NAME) would like to use your microphone for voice recording."
+        }
+      ],
       "expo-font"
     ],
     "experiments": {
