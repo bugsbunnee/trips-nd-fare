@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { AuthResponse } from '@/src/store/auth/actions';
 
-const key = "trips-nd-fare-user";
+const key = "trips-nd-fare-rider";
 
 const storeUser = async (session: AuthResponse) => {
     try {
