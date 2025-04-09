@@ -84,12 +84,12 @@ const ForgotPasswordPage: React.FC = () => {
                   </TouchableOpacity>
               </Link>
           </Form>
+          
+          <OTPVerification />
         </ParallaxScrollView>
       
         <ActivityIndicator visible={auth.isAuthenticating} />
       </KeyboardAwareScrollView>
-
-      <OTPVerification />
     </>
   );
 };
