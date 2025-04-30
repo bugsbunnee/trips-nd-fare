@@ -18,7 +18,13 @@ const AccountVerified: React.FC = () => {
 
   const handleProceed = () => {
       dispatch(setBoardUser());
-      storage.storeUser({ account: auth.waitingRoom!.user, token: auth.waitingRoom!.token });
+      
+      storage.storeUser({
+        account: auth.waitingRoom!.user,
+        token: auth.waitingRoom!.token,
+        chat: auth.waitingRoom!.chat,
+        wallet: auth.waitingRoom!.wallet,
+      });
 
       router.push('/home');
   };

@@ -17,6 +17,8 @@ const ChatWrapper: React.FC<PropsWithChildren> = ({ children }) => {
     const auth = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
+    console.log('auth', auth.chat)
+
     const client = useCreateChatClient({
         apiKey: process.env.EXPO_PUBLIC_STREAM_PUBLIC_KEY!,
         tokenOrProvider: auth.chat,

@@ -61,6 +61,8 @@ const authSlice = createSlice({
             if (state.waitingRoom) {
                 state.user = state.waitingRoom.user;
                 state.token = state.waitingRoom.token;
+                state.chat = state.waitingRoom.chat;
+                state.wallet = state.waitingRoom.wallet;
                 state.waitingRoom = null;
                 state.isVerified = false;
             }
