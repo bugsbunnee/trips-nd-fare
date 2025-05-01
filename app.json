@@ -36,7 +36,6 @@
         }
       },
       "package": "com.webiq.tripsndfare",
-      "package_name": "com.webiq.tripsndfare",
       "googleServicesFile": "./src/config/google-services.json"
     },
     "web": {
