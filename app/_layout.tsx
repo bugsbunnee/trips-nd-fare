@@ -13,6 +13,7 @@ import OfflineNotice from '@/src/components/common/OfflineNotice';
 import Updates from '@/src/components/common/Updates';
 import useInitializeApp from '@/src/hooks/useInitializeApp';
 
+import 'expo-dev-client';
 import 'react-native-reanimated';
 import 'react-native-get-random-values';
 

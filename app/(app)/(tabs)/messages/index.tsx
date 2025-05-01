@@ -117,7 +117,7 @@ const Channels: React.FC = () => {
                 </View>
               </TouchableOpacity>
             </Swipeable>
-          )
+          );
         }}
         EmptyStateIndicator={() => (
           <EmptyItem 

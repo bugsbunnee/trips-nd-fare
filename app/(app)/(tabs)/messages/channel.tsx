@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Channel, DefaultStreamChatGenerics, MessageInput, MessageList, MessageType } from "stream-chat-expo";
 import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
 import { router } from 'expo-router';
@@ -13,13 +13,10 @@ import { colors, styles as defaultStyles, icons } from '@/src/constants';
 import { Text } from '@/src/components/ui';
 
 import Screen from '@/src/components/navigation/Screen';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ChannelPage: React.FC = () => {
   const data = useAppSelector((state) => state.data);
-  
-  const dispatch = useAppDispatch();
-  const insets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();  
 
   const handleSelectThread = (thread: MessageType<DefaultStreamChatGenerics> | null) => {
     if (thread) {
