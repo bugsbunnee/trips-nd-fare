@@ -12,8 +12,9 @@ type TabBarProps = Omit<BottomTabBarProps, 'insets'>;
 const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   const segments = useSegments();
   const screenName = segments.at(-1) as string;
-  const pagesToHide = ['ride', 'ferry', 'success', 'pending', 'choose-rider', 'banks', 'setup',  'thread', 'ride-information', 'track', '[id]', 'wallet'];
+  const pagesToHide = ['ride', 'ferry', 'success', 'pending', 'choose-rider', 'banks', 'channel', 'setup',  'thread', 'ride-information', 'track', '[id]', 'wallet'];
 
+  console.log('screen', screenName);
   return (
     <View style={[styles.container, { display: pagesToHide.includes(screenName) ? 'none' : 'flex', bottom: 0 }]}>
       <View style={styles.content}>

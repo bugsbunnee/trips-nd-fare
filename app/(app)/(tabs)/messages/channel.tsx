@@ -5,7 +5,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Channel, DefaultStreamChatGenerics, MessageInput, MessageList, MessageType } from "stream-chat-expo";
 import { useAppDispatch, useAppSelector } from '@/src/store/hooks';
 import { router } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { setThread } from '@/src/store/data/slice';
@@ -26,7 +25,7 @@ const ChannelPage: React.FC = () => {
   };
 
   return (
-    <Screen style={[styles.screen, { paddingBottom: 110 }]}>
+    <Screen style={[styles.screen, { paddingBottom: 60 }]}>
        <View style={styles.rowBetween}>
             <TouchableOpacity onPress={() => router.back()} style={styles.button}>
                 <MaterialCommunityIcons name="arrow-left"  size={icons.SIZES.NORMAL} color={colors.light.white} />
